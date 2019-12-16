@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
+<link rel="stylesheet" href="/static/style.css">
+<script type="text/javascript">
+    function LoadMain() {
+            document.getElementByname("form-navbar").action ="";
+    }
+
+    function LoadSub() {
+            document.getElementByname("form-sub").action ="";
+    }
+
+    function clearmsg(){
+        document.getElementById("errorvalue").innerHTML = ''; 
+        document.getElementById("info").innerHTML = ''; 
+    }
+</script>
+<title>Admin</title>
+</head>
+<body>
+    <form id="form-navbar" method="POST">
+        <nav class="navbar navbar-light bg-dark">
+            <a class="navbar-brand text-white" href="#">
+                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                 Group Expense Manager 
+            </a>
+            <div class="align-right">
+                <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
+            </div>
+        </nav>            
+    </form>
+    
+    <div class="container add-income">
+        <div class="card text-left text-black bg-light mb-3">
+            <h5 class="card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <i class="fas fa-user-plus"></i>
+                        <font size="4px">Add Income</font>
+                    </div>
+                    <div class="col-4 text-right">
+                        <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                    </div>
+                </div>   
+            </h5>
+            <div class="card-body ">
+                <form id="form-sub" method="POST">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div id="select-category" class="select-category">
+                        <div class="category-card">
+                            {% for category in categories %}
+                                <button name="category-btn" value={{category}} type="submit" class="btn btn-light">
+                                    <img width="100px" height="80px" src="/static/btn-icons/{{category}}.svg"/><br>
+                                    <font size="2px">{{ category }}</font>
+                                </button>
+                            {% endfor %}                
+                        </div><br>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<script src="/static/js/jquery.slim.min.js"></script>
+<script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

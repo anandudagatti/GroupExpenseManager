@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
+<link rel="stylesheet" href="/static/style.css">
+<title>Login</title>
+<script type="text/javascript">
+    function LoadMain() {
+        document.getElementById("login-form").action ="authentication/"
+    }
+
+    function clearmsg(){
+        document.getElementById("alert").innerHTML=''
+        document.getElementById("alert").style.display='none'
+    }
+</script>
+</head>
+<body>
+<!-- Image and text -->
+    <nav class="navbar navbar-light bg-dark">
+        <a class="navbar-brand text-white" href="#">
+            <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+             Group Expense Manager
+        </a>
+    </nav>
+    <div class='container login-card'>
+        <div class="card text-center text-white bg-dark mb-3">
+            <h5 class="card-header">
+                <i class="fas fa-key"></i>
+                User Login
+            </h5>
+            <div class="card-body">
+                <form id="login-form" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="userid" id="userid" placeholder="User ID" onclick="clearmsg()">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" onclick="clearmsg()">
+                    </div>
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" name="admin" id="admin" onclick="clearmsg()">
+                        <label class="form-check-label" for="admin">Login as admin</label>
+                    </div>
+                    <button type="submit" name='login' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Login</button>
+                </form>
+            </div>
+        </div>    
+        <div class="card text-center text-white bg-dark mb-3">
+            <div class="card-body">
+                <a style="color:white" href="{% url 'signup' %}">New User? Sign Up</a><br>
+                <a style="color:white" href="{% url 'groups' %}">Looking to create new group?   lick here </a>
+            </div>
+        </div>        
+    </div>    
+<script src="/static/js/jquery.slim.min.js"></script>
+<script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

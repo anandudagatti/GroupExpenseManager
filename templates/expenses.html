@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
+<link rel="stylesheet" href="/static/style.css">
+<script type="text/javascript">
+    function LoadMain() {
+        document.getElementsByName("form-navbar").action ="";
+    }
+
+    function Update_SubCategory() {
+        document.getElementsByName("form-navbar").action ="group_expenses/";
+    } 
+
+    function take_to_subcat(){
+    }
+
+</script>
+<title>Group Expenses Manager</title>
+</head>
+<body>
+    <form id="form-navbar" method="POST">
+        <nav class="navbar navbar-light bg-dark">
+            <a class="navbar-brand text-white" href="#">
+                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                    Group Expense Manager
+            </a>
+            <div class="align-right">
+                <span class="text-white" id="userid"><i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
+            </div>
+        </nav>    
+        <div class="container expense-card card-body">
+            <div class="card text-left mb-3">
+                <h5 class="card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <i class="fas fa-user-minus"></i>
+                            <font size="4px">Add Expense</font>
+                        </div>
+                        <div class="col-4 text-right">
+                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                        </div>
+                    </div>       
+                </h5>
+                <div class="card-body">
+                    <form id="expense-form" method="POST">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                            {{message}}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div id="select-category" class="select-category">
+                            <div id="category" class="category-card">
+                                {% if not sub_categories %}
+                                <div>Category</div>
+                                {% for category in categories %}
+                                <button name="category-btn" value={{category}} type="submit" onclick="take_to_subcat()" class="btn btn-light">
+                                    <img width="100px" height="80px" src="/static/btn-icons/{{category}}.svg"/><br>
+                                    {{ category }}
+                                </button>
+                                {% endfor %}
+                                {% endif %}                
+                            </div>
+                            <div id="subcategory" class="subcategory-card">
+                                {% if sub_categories %}
+                                <h6><a href=""><<< Back to Category</a></h6>
+                                <div>Sub Category</div>
+                                {% for subcategory in sub_categories %}
+                                <button name="sub-category-btn" value={{subcategory}} type="submit" onclick="show_exp_details()" class="btn btn-light">
+                                    <img width="100px" height="80px" src="/static/btn-icons/{{subcategory}}.svg"/><br>
+                                    {{ subcategory }}
+                                </button>
+                                {% endfor %}
+                                {% endif %}                
+                            </div>            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>        
+    </form>
+<script type="text/javascript" src="/static/js/jquery.slim.min.js"></script>
+<script type="text/javascript" src="/static/js/popper.min.js"></script>
+<script type="text/javascript" src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>
