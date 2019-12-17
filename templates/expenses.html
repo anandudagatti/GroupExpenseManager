@@ -62,7 +62,7 @@
                                 <div>Category</div>
                                 {% for category in categories %}
                                 <button name="category-btn" value={{category}} type="submit" onclick="take_to_subcat()" class="btn btn-light">
-                                    <img width="100px" height="80px" src="/static/btn-icons/{{category}}.svg"/><br>
+                                    <img width="100px" height="80px" src="/static/{{category}}.svg"/><br>
                                     {{ category }}
                                 </button>
                                 {% endfor %}
