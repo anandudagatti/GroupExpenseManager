@@ -26,7 +26,7 @@ SECRET_KEY = 'ecz*659-w$@eaju9bms5_2s(at@t!3bm57pb8%vyu!83u@r5c('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.0.185","127.0.0.1"]
+ALLOWED_HOSTS = ["192.168.0.185","127.0.0.1","groupexpensemanager.pythonanywhere.com"]
 
 
 # Application definition
