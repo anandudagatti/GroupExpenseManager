@@ -120,6 +120,20 @@ def Get_Payer_List():
     conn.close()
     return payer_list
 
+def Insert_Payee(payee_list):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor()
+    ex_payee_list = Get_Payee_List()
+    payee_id = len(ex_payee_list)+1
+    for payee_name in payee_list:
+        if payee_name not in ex_payee_list:
+            insert_query = """INSERT INTO payee_list(payee_id,payee_name) VALUES("{}","{}");""".format(payee_id,payee_name) 
+            cur.execute(insert_query)
+            payee_id = payee_id +1
+    
+    conn.commit()
+    conn.close()
 
 def Update_Issue_Count_For_Key(key):
     conn = sqlite3.connect("db.sqlite3")

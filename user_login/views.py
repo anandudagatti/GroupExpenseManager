@@ -11,7 +11,8 @@ from django.db import IntegrityError
 import logging
 from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category, Get_SubCategoryTable, \
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
-    Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary
+    Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
+    Insert_Payee
 from datetime import datetime
 from django.views.generic import CreateView
 
@@ -146,7 +147,11 @@ def account(request):
     grouplist = list(get_groups)
     print(grouplist)
     user_opt = request.POST.get('user_opt')
+    request.session['user_opt'] = user_opt
+    sess_user_opt = request.session.get('user_opt')
     sel_group = request.POST.get('group_name')
+    request.session['group_name']= sel_group
+    sess_group = request.session.get('group_name')
     if(sel_group==None and len(grouplist)>0):
         sel_group = grouplist[0]
     else:
@@ -198,7 +203,7 @@ def account(request):
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
-                "group_user_exp":user_exp_summary})
+                "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group})
 
 @csrf_exempt
 def admin(request):
@@ -395,7 +400,6 @@ def group_expenses(request):
             messages.success(request,info)
             return redirect('home')
         elif request.POST.get('add-payee'):
-            print(request.POST.get('payee-name'))    
             fullname = request.user.get_full_name()
             get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
             grouplist = list(get_groups) 
@@ -407,6 +411,10 @@ def group_expenses(request):
             info = 'Expense Saved!!'
             logmsg = "Save Button Clicked"
             logging.info(logmsg)
+            tempvalue = request.POST.getlist('newpayee-list')
+            newpayee_list = tempvalue[0].split(",")
+            Insert_Payee(newpayee_list) 
+            logging.info(newpayee_list)
             group = request.POST.get('group')
             date = request.POST.get('date')
             amount = request.POST.get('amount')
@@ -498,6 +506,9 @@ def personal_expenses(request):
             info = 'Expense Saved!!'
             logmsg = "Save Button Clicked"
             logging.info(logmsg)
+            tempvalue = request.POST.getlist('newpayee-list')
+            newpayee_list = tempvalue[0].split(",")
+            Insert_Payee(newpayee_list) 
             group = 'Personal Expenses'
             date = request.POST.get('date')
             amount = request.POST.get('amount')

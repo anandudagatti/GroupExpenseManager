@@ -95,7 +95,11 @@
                                 <label class="input-group-text" style="font-size: 14px;" for="select-group"> Group</label>
                                 <select style="width:130px" name="group_name" id="group_name">
                                     {% for group in grouplist %}
-                                        <option value="{{group}}">{{group}}</option>
+                                        {% if sess_group == group %}
+                                            <option selected value="{{group}}">{{group}}</option>
+                                        {% else %}
+                                            <option value="{{group}}">{{group}}</option>
+                                        {% endif %}
                                     {% endfor %}
                                 </select>
                             </div>
@@ -146,9 +150,19 @@
                             <div class="input-group-prepend form-control-md">
                                 <label class="input-group-text"  style="font-size: 14px;" for="select-group"> Period</label>
                                 <select style="width:120px" name="user_opt" id="user_opt">
-                                    <option value="Today">Today</option>
-                                    <option value="This Week">This Week</option>
-                                    <option value="This Month">This Month</option>
+                                    {% if sess_user_opt == "Today" %}
+                                        <option selected value="Today">Today</option>
+                                        <option value="This Week">This Week</option>
+                                        <option value="This Month">This Month</option>
+                                    {% elif sess_user_opt == "This Week"%}
+                                        <option value="Today">Today</option>
+                                        <option selected value="This Week">This Week</option>
+                                        <option value="This Month">This Month</option>
+                                    {% else  %}
+                                        <option value="Today">Today</option>
+                                        <option value="This Week">This Week</option>
+                                        <option selected value="This Month">This Month</option>
+                                    {% endif %}                                                                    
                                 </select>
                             </div>
                             <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>        

@@ -28,6 +28,10 @@
         if(input!="" && ddlArray.indexOf(input)==-1){
             option.text = option.value = document.getElementById("payee-name").value;
             dropdown.add(option);
+            for (i=0;i<ddl.options.length; i++){
+                ddlArray[i]=ddl.options[i].value;
+            }
+            document.getElementById("newpayee-list").value = ddlArray;
             document.getElementById("success").innerHTML="Payee inserted to the dropdown!!"
             document.getElementById("saveicon").className = "fas fa-check"
             document.getElementById("msg").className = "alert alert-success"
@@ -112,6 +116,9 @@
                                     <option value="{{payee}}">{{payee}}</option>
                                 {% endfor %}
                             </select>
+                            <div style="display: none;"> 
+                                <input type="text" id="newpayee-list" name="newpayee-list">
+                            </div>
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-payee">
                                 <i class="fas fa-plus"></i> Add Payee
                             </button>
