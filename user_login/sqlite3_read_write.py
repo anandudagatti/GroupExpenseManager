@@ -257,7 +257,7 @@ def Get_Personal_Exp_Summary(userid):
     summary_list = [total_today,total_thisWeek, total_thisMonth, total_group_exp, current_balance]
     return summary_list
 
-def Get_User_Exp_Summary(trans_type,from_date,to_date,userid):
+def Get_User_Exp_Summary(trans_type,from_date,to_date):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
@@ -274,8 +274,8 @@ def Get_User_Exp_Summary(trans_type,from_date,to_date,userid):
     tran_dict = {'total':group_tag, 'expense':0}
     
     query = '''SELECT trans_type, sum(amount) as Total_Amount FROM transaction_master 
-    WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" and user="{}" 
-    GROUP by trans_type;'''.format(trans_type,from_date,to_date,userid)
+    WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" 
+    GROUP by trans_type;'''.format(trans_type,from_date,to_date)
     cur.execute(query)
     result = cur.fetchall()
     if result:
@@ -300,25 +300,25 @@ def Get_Total_Group_Expense(from_date, to_date, userid):
     
     return exp
 
-def Get_Group_Exp_Summary(group_name,userid):
+def Get_Group_Exp_Summary(group_name):
     cur_day = str(datetime.date(datetime.now()))
     from_date = cur_day
     to_date = cur_day
-    total_today = Get_User_Exp_Summary(group_name,from_date,to_date,userid)
+    total_today = Get_User_Exp_Summary(group_name,from_date,to_date)
 
     dt = datetime.strptime(cur_day, "%Y-%m-%d")
     start = dt - timedelta(days=dt.weekday())
     end = start + timedelta(days=6)
     from_date = start.strftime("%Y-%m-%d")
     to_date = end.strftime("%Y-%m-%d")
-    total_thisWeek = Get_User_Exp_Summary(group_name,from_date,to_date,userid)
+    total_thisWeek = Get_User_Exp_Summary(group_name,from_date,to_date)
 
     cur_day = datetime.date(datetime.now())
     start = cur_day.replace(day = 1)
     end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
     from_date = start.strftime("%Y-%m-%d")
     to_date = end.strftime("%Y-%m-%d")
-    total_thisMonth = Get_User_Exp_Summary(group_name,from_date,to_date,userid)
+    total_thisMonth = Get_User_Exp_Summary(group_name,from_date,to_date)
     summary_list = [total_today, total_thisWeek, total_thisMonth]
     return summary_list
 

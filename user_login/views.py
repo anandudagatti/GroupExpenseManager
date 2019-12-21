@@ -177,7 +177,7 @@ def account(request):
         group_header = ['Total','Expense']
         group_user_exp = Get_Group_User_Exp_Summary(sel_group)
         print(group_user_exp)
-        group_rows = Get_Group_Exp_Summary(sel_group,userid)
+        group_rows = Get_Group_Exp_Summary(sel_group)
         print(group_rows)
         print(user_opt)
         if user_opt == "Today":
