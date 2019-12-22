@@ -276,6 +276,7 @@ def Get_User_Exp_Summary(trans_type,from_date,to_date):
     query = '''SELECT trans_type, sum(amount) as Total_Amount FROM transaction_master 
     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" 
     GROUP by trans_type;'''.format(trans_type,from_date,to_date)
+    print(query)
     cur.execute(query)
     result = cur.fetchall()
     if result:

@@ -148,7 +148,7 @@
                     <form id="form-sub" method="POST">           
                         <div class="input-group mb-2">
                             <div class="input-group-prepend form-control-md">
-                                <label class="input-group-text"  style="font-size: 14px;" for="select-group"> Period</label>
+                                <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
                                 <select style="width:120px" name="user_opt" id="user_opt">
                                     {% if sess_user_opt == "Today" %}
                                         <option selected value="Today">Today</option>
@@ -165,7 +165,7 @@
                                     {% endif %}                                                                    
                                 </select>
                             </div>
-                            <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>        
+                            <button class="btn btn-primary btn-sm" type="submit" name="update_useropt">Update</button>        
                         </div>
                     </form>
                     <table class="table table-sm group-summary">

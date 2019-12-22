@@ -145,18 +145,19 @@ def account(request):
     limit_to = request.POST.get('limit_to')
     get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
     grouplist = list(get_groups)
-    print(grouplist)
+    print("grouplist",grouplist)
     user_opt = request.POST.get('user_opt')
     request.session['user_opt'] = user_opt
     sess_user_opt = request.session.get('user_opt')
-    sel_group = request.POST.get('group_name')
+    sel_group = request.POST.getlist('group_name')
     request.session['group_name']= sel_group
     sess_group = request.session.get('group_name')
-    if(sel_group==None and len(grouplist)>0):
+    print("selgroup",sel_group)
+    if(sel_group==[] and len(grouplist)>0):
         sel_group = grouplist[0]
     else:
-        sel_group="Personal Expenses"
-
+        sel_group= sel_group[0]
+    
     if userid!=None:
         if request.POST.get('logout'):
             logmsg = "User logout by: "+str(userid)
@@ -175,6 +176,7 @@ def account(request):
         per_rows = Get_Personal_Exp_Summary(userid)
 
         group_header = ['Total','Expense']
+        print("selgroup",sel_group)
         group_user_exp = Get_Group_User_Exp_Summary(sel_group)
         print(group_user_exp)
         group_rows = Get_Group_Exp_Summary(sel_group)
