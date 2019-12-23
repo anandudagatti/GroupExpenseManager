@@ -204,6 +204,69 @@
         </div>
     </div>
 </div>
+
+<div class="container group-account">
+    <div class="card text-left text-black bg-light mb-3">
+        <h6 class="card-header">
+            <i class="fas fa-users"></i>
+            Group Exp: Categorywise Summary
+        </h6>
+        <div class="card-body">
+            <form id="form-sub" method="POST">
+                <div class="container">
+                    <form id="form-sub" method="POST">           
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend form-control-md">
+                                <label class="input-group-text" style="font-size: 14px;" for="select-group"> Group</label>
+                                <select style="width:130px" name="group_name" id="group_name">
+                                    {% for group in grouplist %}
+                                        {% if sess_group == group %}
+                                            <option selected value="{{group}}">{{group}}</option>
+                                        {% else %}
+                                            <option value="{{group}}">{{group}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
+                        </div>
+                    </form>
+                    <table class="table table-sm group-summary">
+                        <thead>
+                            <tr style="text-align: left">
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {% for rw in category_summary.date_list %}
+                                    <td>{{rw}}</td>
+                                {% endfor %}                                
+                                {% for rw in category_summary.category_list %}
+                                    <td>{{rw}}</td>
+                                {% endfor %}                                
+                                {% for rw in category_summary.amount_list %}
+                                    <td style="width: 15%; color: red" align="right">{{rw}}</td>
+                                {% endfor %}                                
+                            <tr>        
+                        </tbody>
+                    </table><br>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a href="{% url 'group_expenses' %}">
+                                <i style="color:red" class="fas fa-minus"></i>
+                                Add Expense
+                            </a>
+                        </div>  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="container trans-summary d-none d-lg-block">
     <form id="form-sub" method="POST">
         <div class="card text-left text-black bg-light sm-1">
