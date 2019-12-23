@@ -371,7 +371,7 @@ def Get_Categorywise_Summary(group_name):
         cur = conn.cursor() 
 
     query = '''SELECT trans_date, category, sum(amount) FROM transaction_master
-     WHERE group_name="{}";'''.format(group_name)
+     WHERE group_name="{}" Group By trans_date, category;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
     date_list = []

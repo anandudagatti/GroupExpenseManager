@@ -240,17 +240,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <td>
                                 {% for rw in category_summary.date_list %}
-                                    <td>{{rw}}</td>
-                                {% endfor %}                                
+                                    <p>{{rw}}</p>
+                                {% endfor %}
+                            </td>
+                            <td>
                                 {% for rw in category_summary.category_list %}
-                                    <td>{{rw}}</td>
+                                    <p>{{rw}}</p>
                                 {% endfor %}                                
+                            </td>
+                            <td>
                                 {% for rw in category_summary.amount_list %}
-                                    <td style="width: 15%; color: red" align="right">{{rw}}</td>
+                                    <p style="width: 50%; color: red" align="right">{{rw}}</p>
                                 {% endfor %}                                
-                            <tr>        
+                            </td>
                         </tbody>
                     </table><br>
                     <div class="row">
