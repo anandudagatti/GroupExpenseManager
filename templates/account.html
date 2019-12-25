@@ -65,13 +65,13 @@
                         <div class="col-6 text-center">
                             <a href="{% url 'incomes' %}">
                                 <i style="color:green" class="fas fa-plus"></i>
-                                Add Income
+                                Add Personal Income
                             </a>            
                         </div>
                         <div class="col-6 text-center">
                             <a href="{% url 'personal_expenses' %}">
                                 <i style="color:red" class="fas fa-minus"></i>
-                                Add Expense
+                                Add Personal Expense
                             </a>
                         </div>  
                     </div>
@@ -127,7 +127,7 @@
                         <div class="col-12 text-center">
                             <a href="{% url 'group_expenses' %}">
                                 <i style="color:red" class="fas fa-minus"></i>
-                                Add Expense
+                                Add Group Expense
                             </a>
                         </div>  
                     </div>
@@ -195,7 +195,7 @@
                         <div class="col-12 text-center">
                             <a href="{% url 'group_expenses' %}">
                                 <i style="color:red" class="fas fa-minus"></i>
-                                Add Expense
+                                Add Group Expense
                             </a>
                         </div>  
                     </div>
@@ -208,7 +208,7 @@
     <div class="card text-left text-black bg-light mb-3">
         <h6 class="card-header">
             <i class="fas fa-users"></i>
-            Group Exp: Categorywise Summary
+            Group Exp: Sub Categorywise
         </h6>
         <div class="card-body">
             <form id="form-sub" method="POST">
@@ -234,23 +234,23 @@
                         <thead>
                             <tr style="text-align: left">
                                 <th>Date</th>
-                                <th>Category</th>
+                                <th>Sub Category</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             <td>
-                                {% for rw in category_summary.date_list %}
+                                {% for rw in sub_category_summary.date_list %}
                                     <p>{{rw}}</p>
                                 {% endfor %}
                             </td>
                             <td>
-                                {% for rw in category_summary.category_list %}
+                                {% for rw in sub_category_summary.sub_category_list %}
                                     <p>{{rw}}</p>
                                 {% endfor %}                                
                             </td>
                             <td>
-                                {% for rw in category_summary.amount_list %}
+                                {% for rw in sub_category_summary.amount_list %}
                                     <p style="color: red" align="right">{{rw}}</p>
                                 {% endfor %}                                
                             </td>
@@ -260,7 +260,7 @@
                         <div class="col-12 text-center">
                             <a href="{% url 'group_expenses' %}">
                                 <i style="color:red" class="fas fa-minus"></i>
-                                Add Expense
+                                Add Group Expense
                             </a>
                         </div>  
                     </div>
@@ -301,7 +301,7 @@
                     <tbody>
                         {% for r in trans_rows %}
                             <tr>
-                                <td><i>{{r.date}}</i></td>
+                                <td style="width: 100px;"><i>{{r.date}}</i></td>
                                 <td><i>{{r.category}}</i></td>
                                 <td><i>{{r.sub_cat}}</i></td>
                                 <td><i>{{r.group}}</i></td>
