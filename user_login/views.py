@@ -287,7 +287,6 @@ def admin(request):
         return redirect('home')
 
 @csrf_exempt
-@login_required(login_url='home')
 def groups(request):
     if request.POST.get('create-group'):
         userid = request.POST.get('userid')
