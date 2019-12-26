@@ -4,6 +4,7 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import Permission, User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import Group
@@ -133,6 +134,7 @@ def authentication(request):
         return render(request, 'login.html')
 
 @csrf_exempt
+@login_required(login_url='home')
 def account(request):
     fullname = request.user.get_full_name()
     login_type = request.session.get('login_typ')
@@ -153,6 +155,7 @@ def account(request):
     request.session['group_name']= sel_group
     sess_group = request.session.get('group_name')
     print("selgroup",sel_group)
+
     if(sel_group==[] and len(grouplist)>0):
         sel_group = grouplist[0]
     else:
@@ -211,6 +214,7 @@ def account(request):
                 "sub_category_summary":sub_category_summary})
 
 @csrf_exempt
+@login_required(login_url='home')
 def admin(request):
     auth_type = request.session.get('login_typ')
     logmsg = "admin view: Rendering admin page"
@@ -283,6 +287,7 @@ def admin(request):
         return redirect('home')
 
 @csrf_exempt
+@login_required(login_url='home')
 def groups(request):
     if request.POST.get('create-group'):
         userid = request.POST.get('userid')
@@ -319,6 +324,7 @@ def groups(request):
     return render(request,'create_group.html')
 
 @csrf_exempt
+@login_required(login_url='home')
 def incomes(request):
     fullname = request.user.get_full_name()
     login_type = request.session.get('login_typ')
@@ -384,6 +390,7 @@ def incomes(request):
     return render(request,'incomes.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
 
 @csrf_exempt
+@login_required(login_url='home')
 def group_expenses(request):
     logmsg = "group expenses view: Rendering expenses page"
     logging.info(logmsg)
@@ -480,6 +487,7 @@ def group_expenses(request):
         return redirect('home')
 
 @csrf_exempt
+@login_required(login_url='home')
 def personal_expenses(request):
     logmsg = "personal expenses view: Rendering expenses page"
     logging.info(logmsg)
