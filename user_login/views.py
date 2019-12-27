@@ -248,12 +248,14 @@ def admin(request):
                 my_group.user_set.add(uid)
                 permissions_list = Permission.objects.all()
                 my_group.permissions.set(permissions_list)
-                logmsg="User added successfully!!"
-                errorvalue=""
+                info="User added successfully!!"
+                logging.info(logmsg)
+                messages.success(request,info)
             except:
-                logmsg=""
-                errorvalue="User already exist!!"
-            return render(request, 'admin.html',{"info":logmsg, "errorvalue":errorvalue, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+                info="User already exist!!"
+                logging.info(logmsg)
+                messages.error(request,info)
+            return render(request, 'admin.html',{"userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
         elif request.POST.get('remove-user'):
             sel_group = request.POST.get('group_name')
             sel_user = request.POST.get('newuserid')
@@ -263,19 +265,21 @@ def admin(request):
             try:
                 if User.objects.filter(pk=uid, groups__name=sel_group).exists():
                     my_group.user_set.remove(uid)
-                    logmsg="User removed successfully!!"
-                    errorvalue=""
+                    info="User removed successfully!!"
+                    logging.info(logmsg)
+                    messages.success(request,info)
                 else:
-                    logmsg=""
-                    errorvalue="User doesn't exist!!"
+                    info="User doesn't exist!!"
+                    logging.info(logmsg)
+                    messages.error(request,info)                    
             except:
-                logmsg=""
-                errorvalue="User doesn't exist!!"
-            return render(request, 'admin.html',{"info":logmsg, "errorvalue":errorvalue, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+                info="User doesn't exist!!"
+                logging.info(logmsg)
+                messages.error(request,info)                    
+            return render(request, 'admin.html',{"userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
         else:
-            logmsg=""
             fullname = request.user.get_full_name()
-            return render(request, 'admin.html',{"info":logmsg, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+            return render(request, 'admin.html',{"userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
     else:
         try:
             logout(request)
@@ -283,6 +287,7 @@ def admin(request):
         except KeyError:
             pass
         info = "User Logged Out Successfully!"
+        logging.info(logmsg)
         messages.success(request,info)
         return redirect('home')
 
@@ -385,8 +390,7 @@ def incomes(request):
 
     income_cat = Get_Income_Category()
     categories = income_cat
-    info=""
-    return render(request,'incomes.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
+    return render(request,'incomes.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -480,8 +484,7 @@ def group_expenses(request):
             exp_cat = Get_Exp_Category()
             categories = exp_cat
             sub_categories = '' #Get_SubCategoryTable("Food")
-            info=""
-            return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')
 
@@ -575,7 +578,6 @@ def personal_expenses(request):
             exp_cat = Get_Exp_Category()
             categories = exp_cat
             sub_categories = '' #Get_SubCategoryTable("Food")
-            info=""
-            return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')
