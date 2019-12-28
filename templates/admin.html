@@ -56,13 +56,8 @@
                             </div>
                         </div>
                         <input type="text" class="form-control" name="newuserid" id="newuserid" placeholder="Enter User ID" onclick="clearmsg()"><br>
-                        {% if messages %}
-                        {% for message in messages %}
-                        <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                            {{message}}
-                        </div>
-                        {% endfor %}
-                        {% endif %}
+                        <span id="errorvalue" style="color:red">{{errorvalue}}</span>
+                        <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span>
                         <div class="text-center">
                             <button type="submit" name='add-user' value="add-user" class="btn btn-primary" onclick="LoadSub()">
                                 <i style="color:rgb(52, 185, 52)" class="fas fa-plus"></i>
