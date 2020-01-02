@@ -317,8 +317,37 @@
         </div>
     </form>
 </div>
+<div class="container trans-summary-mini d-block d-sm-none">
+        <form id="form-sub" method="POST">
+            <div class="card text-left text-black bg-light sm-1">
+                <h6 class="card-header">
+                    <font size="5px">Transaction Summary</font> 
+                </h6>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr style="text-align: left">
+                                <th><font size="2px">Date</font></th>
+                                <th><font size="2px">Description</font></th>
+                                <th><font size="2px">Amount</font></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rw in mini_trans_summary %}
+                                <tr class="separated">
+                                    {% for r in rw %}
+                                    <td><p align="center"><font size="2px">{{r}}</font></p></td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-</bo    dy>
+</body>
 </html>

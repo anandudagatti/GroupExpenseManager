@@ -387,6 +387,21 @@ def Get_Sub_Categorywise_Summary(group_name):
     data_dict["amount_list"]=amount_list
     return data_dict
 
+def Get_Mini_Tran_Summary(group_name):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    query = '''SELECT trans_date, description, amount FROM transaction_master
+     WHERE group_name="{}";'''.format(group_name)
+    cur.execute(query)
+    result = cur.fetchall()
+    print(result)
+    data_dict = []
+    for row in result:
+        data_dict.append(row)
+    return data_dict
+
 def GetData_In_Dict(table_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
