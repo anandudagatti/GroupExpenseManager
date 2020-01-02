@@ -393,7 +393,7 @@ def Get_Mini_Tran_Summary(group_name):
         cur = conn.cursor() 
 
     query = '''SELECT trans_date, description, amount FROM transaction_master
-     WHERE group_name="{}";'''.format(group_name)
+     WHERE group_name="{}" ORDER By trans_date;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
     print(result)
