@@ -13,7 +13,7 @@ import logging
 from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category, Get_SubCategoryTable, \
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
-    Insert_Payee,Get_Sub_Categorywise_Summary,Get_Mini_Tran_Summary
+    Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary
 from datetime import datetime
 from django.views.generic import CreateView
 
@@ -205,15 +205,15 @@ def account(request):
         else:
             trans_rows = Get_Transaction_Summary(limit_to,userid)
 
-        sub_category_summary = Get_Sub_Categorywise_Summary(sel_group)
-        print(sub_category_summary)
+        category_summary = Get_Categorywise_Summary(sel_group)
+        print(category_summary)
 
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
-                "sub_category_summary":sub_category_summary, "mini_trans_summary":mini_trans_summary})
+                "category_summary":category_summary, "mini_trans_summary":mini_trans_summary})
 
 @csrf_exempt
 @login_required(login_url='home')

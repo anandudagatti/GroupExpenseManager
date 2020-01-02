@@ -208,7 +208,7 @@
     <div class="card text-left text-black bg-light mb-3">
         <h6 class="card-header">
             <i class="fas fa-users"></i>
-            Group Exp: Sub Categorywise
+            Group Expense: Categorywise
         </h6>
         <div class="card-body">
             <form id="form-sub" method="POST">
@@ -233,24 +233,24 @@
                     <table class="table table-sm group-summary">
                         <thead>
                             <tr style="text-align: left">
-                                <th>Date</th>
+                                <th>Category</th>
                                 <th>Sub Category</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
                             <td>
-                                {% for rw in sub_category_summary.date_list %}
+                                {% for rw in category_summary.category_list %}
                                     <p>{{rw}}</p>
                                 {% endfor %}
                             </td>
                             <td>
-                                {% for rw in sub_category_summary.sub_category_list %}
+                                {% for rw in category_summary.sub_category_list %}
                                     <p>{{rw}}</p>
                                 {% endfor %}                                
                             </td>
                             <td>
-                                {% for rw in sub_category_summary.amount_list %}
+                                {% for rw in category_summary.amount_list %}
                                     <p style="color: red" align="right">{{rw}}</p>
                                 {% endfor %}                                
                             </td>

@@ -365,24 +365,24 @@ def Get_Group_User_Exp_Summary(group_name):
     summary_list = [total_today, total_thisWeek, total_thisMonth]
     return summary_list
 
-def Get_Sub_Categorywise_Summary(group_name):
+def Get_Categorywise_Summary(group_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
-    query = '''SELECT trans_date, sub_category, sum(amount) FROM transaction_master
-     WHERE group_name="{}" Group By trans_date, sub_category;'''.format(group_name)
+    query = '''SELECT category, sub_category, sum(amount) FROM transaction_master
+     WHERE group_name="{}" Group By category, sub_category;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
-    date_list = []
+    category_list = []
     sub_category_list = []
     amount_list = []
-    data_dict = {"date_list":"", "sub_category_list":"", "amount_list":""} 
+    data_dict = {"category_list":"", "sub_category_list":"", "amount_list":""} 
     for row in result:
-        date_list.append(row[0])
+        category_list.append(row[0])
         sub_category_list.append(row[1])
         amount_list.append(row[2])
-    data_dict["date_list"]=date_list
+    data_dict["category_list"]=category_list
     data_dict["sub_category_list"]=sub_category_list
     data_dict["amount_list"]=amount_list
     return data_dict
