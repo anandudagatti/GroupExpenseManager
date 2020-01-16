@@ -9,12 +9,53 @@
 <link rel="stylesheet" href="/static/style.css">
 <script type="text/javascript">
     function LoadMain() {
-            document.getElementByname("form-navbar").action ="";
+        document.getElementByname("form-navbar").action ="";
     }
+
+    function OnloadUpdate(){
+        document.getElementById("user_sel_date").value = '{{from_to_date}}'
+    }
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [day, month, year].join('/');
+        }
+
+    function set_date(){
+        var fromdate = document.getElementById("from-date").value;
+        var todate = document.getElementById("to-date").value;
+        var option = document.createElement("option");
+        var x = document.getElementById("user_opt");
+
+        document.getElementById("success").innerHTML = ""
+        if(fromdate!="" & todate!=""){
+            document.getElementById("from_to_date").innerHTML = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+            document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+            document.getElementById("saveicon").className = "fas fa-check"
+            document.getElementById("msg").className = "alert alert-success"
+            document.getElementById("success").innerHTML = "From and To Date Updated!!"
+            option.text = "From "+formatDate(fromdate)+" To "+formatDate(todate);
+            option.selected = true;
+            x.add(option);
+        }else{
+            document.getElementById("success").innerHTML="Input cannot be blank!!"
+            document.getElementById("msg").className = "alert alert-danger"
+        }
+    }
+
 </script>
 <title>Group Expense Manager : Account</title>
 </head>
-<body>
+<body onload="OnloadUpdate()">
 <!-- Image and text -->
 <form id="form-navbar" method="POST">
     <nav class="navbar navbar-light bg-dark">
@@ -135,17 +176,30 @@
             </form>
         </div>
     </div>
-</div>
+</div> 
 <div class="container group-user-account">
     <div class="card text-left text-black bg-light mb-3">
         <h6 class="card-header">
             <i class="fas fa-users"></i>
-            Group User Expense Summary
+            Group Expense: User Wise Summary
         </h6>
         <div class="card-body">
             <form id="form-sub" method="POST">
                 <div class="container">
-                    <form id="form-sub" method="POST">           
+                    <form id="form-sub" method="POST">
+                        <div class="row mb-2">
+                            <div class="col-12">
+                                <div style="display: none;">
+                                    <input type="text" name="user_sel_date" id="user_sel_date">
+                                </div>
+                                <div class="input-group-prepend form-control-md mb-2">
+                                    <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
+                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
+                                         Change
+                                    </button>                
+                                </div>
+                            </div>
+                        </div>                
                         <div class="input-group mb-2">
                             <div class="input-group-prepend form-control-md">
                                 <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
@@ -158,10 +212,15 @@
                                         <option value="Today">Today</option>
                                         <option selected value="This Week">This Week</option>
                                         <option value="This Month">This Month</option>
-                                    {% else  %}
+                                    {% elif sess_user_opt == "This Month" %}
                                         <option value="Today">Today</option>
                                         <option value="This Week">This Week</option>
                                         <option selected value="This Month">This Month</option>
+                                    {% else %}
+                                        <option selected value="{{from_to_date}}">{{from_to_date}}</option>
+                                        <option value="Today">Today</option>
+                                        <option value="This Week">This Week</option>
+                                        <option value="This Month">This Month</option>
                                     {% endif %}                                                                    
                                 </select>
                             </div>
@@ -197,7 +256,7 @@
                                 <i style="color:red" class="fas fa-minus"></i>
                                 Add Group Expense
                             </a>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </form>
@@ -208,7 +267,7 @@
     <div class="card text-left text-black bg-light mb-3">
         <h6 class="card-header">
             <i class="fas fa-users"></i>
-            Group Expense: Categorywise
+            Group Expense: Category Wise
         </h6>
         <div class="card-body">
             <form id="form-sub" method="POST">
@@ -315,37 +374,74 @@
                 </table>
             </div>
         </div>
-    </form>
+    </form>    
 </div>
 <div class="container trans-summary-mini d-block d-sm-none">
-        <form id="form-sub" method="POST">
-            <div class="card text-left text-black bg-light sm-1">
-                <h6 class="card-header">
-                    <font size="5px">Transaction Summary</font> 
-                </h6>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr style="text-align: left">
-                                <th><font size="2px">Date</font></th>
-                                <th><font size="2px">Description</font></th>
-                                <th><font size="2px">Amount</font></th>
+    <form id="form-sub" method="POST">
+        <div class="card text-left text-black bg-light sm-1">
+            <h6 class="card-header">
+                <font size="5px">Transaction Summary</font> 
+            </h6>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr style="text-align: left">
+                            <th><font size="2px">Date</font></th>
+                            <th><font size="2px">Description</font></th>
+                            <th><font size="2px">Amount</font></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rw in mini_trans_summary %}
+                            <tr class="separated">
+                                {% for r in rw %}
+                                <td style="width: 50%;"><font size="2px">{{r}}</font></td>
+                                {% endfor %}
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for rw in mini_trans_summary %}
-                                <tr class="separated">
-                                    {% for r in rw %}
-                                    <td style="width: 50%;"><font size="2px">{{r}}</font></td>
-                                    {% endfor %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>           
+</div>
+<form id="form-navbar" method="POST">
+    <div class="modal fade" id="change-period" tabindex="1" role="dialog" aria-labelledby="change-periodlabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="change-periodlabel">Update Date</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <div class="row">
+                            <div class="input-group col-xs-12 col-sm-6 mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="from_date">From</span>
+                                </div>
+                                <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date">
+                            </div>
+                            <div class="input-group col-xs-12 col-sm-6 mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="to_date">To</span>
+                                </div>
+                                <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date">
+                            </div>
+                        </div>
+                        <div id="msg" role="alert">
+                        <span id="success"></span>  
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" name="save-date" onclick="set_date()"><i id="saveicon" class="fas fa-sign-in-alt"></i> Save</button>                    
                 </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </div>            
+</form>
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
