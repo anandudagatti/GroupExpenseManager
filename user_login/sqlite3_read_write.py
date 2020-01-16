@@ -3,7 +3,6 @@ import pandas as pd
 from collections import defaultdict
 from datetime import datetime, timedelta
 import calendar
-import re
 
 def Write_to_DB(dictionary,table_name):
     conn = sqlite3.connect("db.sqlite3")
@@ -157,7 +156,7 @@ def Update_Issue_Count_For_Key(key):
     conn.close()
 
 def Insert_Transaction(data_dict):
-    conn = sqlite3.connect("db.sqlite3")    
+    conn = sqlite3.connect("db.sqlite3")
     data_frame = pd.DataFrame.from_dict(data_dict)
     data_frame.to_sql('transaction_master', conn, if_exists="append", index=False)
     conn.commit()
@@ -344,7 +343,7 @@ def Get_Group_User_Exp(group_name,from_date,to_date):
     dictionary = {'user':userlist, 'expenses':exp_list}
     return dictionary
 
-def Get_Group_User_Exp_Summary(group_name, request):
+def Get_Group_User_Exp_Summary(group_name):
     cur_day = str(datetime.date(datetime.now()))
     from_date = cur_day
     to_date = cur_day
@@ -363,38 +362,16 @@ def Get_Group_User_Exp_Summary(group_name, request):
     from_date = start.strftime("%Y-%m-%d")
     to_date = end.strftime("%Y-%m-%d")
     total_thisMonth = Get_Group_User_Exp(group_name,from_date,to_date)
-
-    try:
-        req_date = re.split(" ",request.session.get('user-date'))
-        from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
-        to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
-        total_custom = Get_Group_User_Exp(group_name,from_date,to_date)
-        print(total_custom)
-    except:
-        total_custom ={}
-    summary_list = [total_today, total_thisWeek, total_thisMonth, total_custom]
+    summary_list = [total_today, total_thisWeek, total_thisMonth]
     return summary_list
 
-def Get_Categorywise_Summary(group_name, request):
+def Get_Categorywise_Summary(group_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
-    try:
-        req_date = re.split(" ",request.session.get('user-date'))
-        from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
-        to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
-    except:
-        cur_day = datetime.date(datetime.now())
-        start = cur_day.replace(day = 1)
-        end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
-        from_date = start.strftime("%Y-%m-%d")
-        to_date = end.strftime("%Y-%m-%d")
-
     query = '''SELECT category, sub_category, sum(amount) FROM transaction_master
-     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" Group By category,
-     sub_category;'''.format(group_name,from_date,to_date)
-
+     WHERE group_name="{}" Group By category, sub_category;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
     category_list = []

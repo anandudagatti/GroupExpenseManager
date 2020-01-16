@@ -15,7 +15,6 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary
 from datetime import datetime
-import calendar
 from django.views.generic import CreateView
 
 logging.basicConfig(level=logging.DEBUG)
@@ -156,21 +155,6 @@ def account(request):
     request.session['group_name']= sel_group
     sess_group = request.session.get('group_name')
     print("selgroup",sel_group)
-    
-    user_sel_date = request.POST.get('user_sel_date')    
-    print("user date",user_sel_date)
-    request.session['user-date'] = user_sel_date
-
-    if request.session.get('user-date'):
-        from_to_date = request.session.get('user-date')
-    else:
-        curdate = datetime.now()
-        fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
-        lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
-        from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
-        request.session['user-date'] = from_to_date
-
-    print("user date",request.session.get('user-date'))
 
     if(sel_group==[] and len(grouplist)>0):
         sel_group = grouplist[0]
@@ -196,7 +180,7 @@ def account(request):
 
         group_header = ['Total','Expense']
         print("selgroup",sel_group)
-        group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
+        group_user_exp = Get_Group_User_Exp_Summary(sel_group)
         print(group_user_exp)
         group_rows = Get_Group_Exp_Summary(sel_group)
         print(group_rows)
@@ -207,12 +191,10 @@ def account(request):
         elif user_opt == "This Week":
             print("this week")
             user_exp_summary=group_user_exp[1]
-        elif user_opt == "This Month":
+        else:
             print("this month")
             user_exp_summary=group_user_exp[2]
-        else:
-            user_exp_summary=group_user_exp[3]
-            
+
         #for usr in group_user_exp[2]['user']:
         #    group_header.append(usr)
 
@@ -223,18 +205,15 @@ def account(request):
         else:
             trans_rows = Get_Transaction_Summary(limit_to,userid)
 
-        category_summary = Get_Categorywise_Summary(sel_group,request)
+        category_summary = Get_Categorywise_Summary(sel_group)
         print(category_summary)
 
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
-
-
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
-                "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
-                "from_to_date": from_to_date})
+                "category_summary":category_summary, "mini_trans_summary":mini_trans_summary})
 
 @csrf_exempt
 @login_required(login_url='home')
