@@ -16,6 +16,13 @@
         document.getElementById("user_sel_date").value = '{{from_to_date}}'
     }
 
+    function Clearmsg(){
+        document.getElementById("saveicon").className = "fas fa-sign-in-alt"
+        document.getElementById("msg").className = "alert"
+        document.getElementById("success").innerHTML = ""
+
+    }
+
     function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -42,7 +49,7 @@
             document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
             document.getElementById("saveicon").className = "fas fa-check"
             document.getElementById("msg").className = "alert alert-success"
-            document.getElementById("success").innerHTML = "From and To Date Updated!!"
+            document.getElementById("success").innerHTML = "From and To Date Added to Period, Click on Update"
             option.text = "From "+formatDate(fromdate)+" To "+formatDate(todate);
             option.selected = true;
             x.add(option);
@@ -196,7 +203,7 @@
                                     <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
                                          Change
-                                    </button>                
+                                    </button>
                                 </div>
                             </div>
                         </div>                
@@ -263,7 +270,7 @@
         </div>
     </div>
 </div><br>
-<div class="container group-account">
+<div class="container group-account-category">
     <div class="card text-left text-black bg-light mb-3">
         <h6 class="card-header">
             <i class="fas fa-users"></i>
@@ -328,7 +335,6 @@
         </div>
     </div>
 </div>
-
 <div class="container trans-summary d-none d-lg-block">
     <form id="form-sub" method="POST">
         <div class="card text-left text-black bg-light sm-1">
@@ -416,27 +422,29 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <div class="row">
-                            <div class="input-group col-xs-12 col-sm-6 mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="from_date">From</span>
-                                </div>
-                                <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date">
+                    <div class="row">
+                        <div class="input-group col-xs-12 col-sm-6 mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="from_date">From</span>
                             </div>
-                            <div class="input-group col-xs-12 col-sm-6 mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="to_date">To</span>
-                                </div>
-                                <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date">
-                            </div>
+                            <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date" onfocus="Clearmsg()">
                         </div>
-                        <div id="msg" role="alert">
+                        <div class="input-group col-xs-12 col-sm-6 mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="to_date">To</span>
+                            </div>
+                            <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date" onfocus="Clearmsg()">
+                        </div>
+                    </div>
+                    <div id="msg" role="alert">
                         <span id="success"></span>  
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-secondary" name="save-date" onclick="set_date()"><i id="saveicon" class="fas fa-sign-in-alt"></i> Save</button>                    
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                    <button type="button" class="btn btn-secondary" name="save-date" onclick="set_date()">
+                        <i id="saveicon" class="fas fa-sign-in-alt"></i> Save
+                    </button>
                 </div>
             </div>
         </div>

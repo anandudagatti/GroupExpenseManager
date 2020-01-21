@@ -99,6 +99,14 @@ body, html {
     top: 5%;
     }
 
+.group-account-category{
+  width: 360px;
+  margin: 0;
+  margin-bottom: 50px;
+  position: relative;
+  top: 5%;
+  }
+
 .group-user-account{
   width: 360px;
   margin: 0;
@@ -120,7 +128,7 @@ body, html {
   opacity: .9;
   margin: 0;
   position: relative;
-  top: 8%;
+  top: 4%;
 }
 
 .form-control:focus {
