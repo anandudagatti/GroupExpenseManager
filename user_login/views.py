@@ -158,7 +158,6 @@ def account(request):
     print("selgroup",sel_group)
     
     user_sel_date = request.POST.get('user_sel_date')    
-    print("user date",user_sel_date)
     request.session['user-date'] = user_sel_date
 
     if request.session.get('user-date'):
@@ -201,21 +200,26 @@ def account(request):
         group_rows = Get_Group_Exp_Summary(sel_group)
         print(group_rows)
         print(user_opt)
-        if user_opt == "Today":
-            print("today")
-            user_exp_summary=group_user_exp[0]
-        elif user_opt == "This Week":
-            print("this week")
-            user_exp_summary=group_user_exp[1]
-        elif user_opt == "This Month":
-            print("this month")
-            user_exp_summary=group_user_exp[2]
-        else:
+        print(user_sel_date)
+        user_exp_summary=group_user_exp[2]
+        if request.POST.get('update_useropt'):
+            curdate = datetime.now()
+            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+            request.session['user-date'] = from_to_date
+            if user_opt == "Today":
+                print("today")
+                user_exp_summary=group_user_exp[0]
+            elif user_opt == "This Week":
+                print("this week")
+                user_exp_summary=group_user_exp[1]
+            else:
+                print("this month")
+                user_exp_summary=group_user_exp[2]
+        elif request.POST.get('apply_btn'):
             user_exp_summary=group_user_exp[3]
             
-        #for usr in group_user_exp[2]['user']:
-        #    group_header.append(usr)
-
         trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         if(limit_to==None):
             limit_to=10
@@ -227,7 +231,6 @@ def account(request):
         print(category_summary)
 
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
-
 
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,

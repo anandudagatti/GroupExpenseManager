@@ -40,8 +40,6 @@
     function set_date(){
         var fromdate = document.getElementById("from-date").value;
         var todate = document.getElementById("to-date").value;
-        var option = document.createElement("option");
-        var x = document.getElementById("user_opt");
 
         document.getElementById("success").innerHTML = ""
         if(fromdate!="" & todate!=""){
@@ -49,10 +47,9 @@
             document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
             document.getElementById("saveicon").className = "fas fa-check"
             document.getElementById("msg").className = "alert alert-success"
-            document.getElementById("success").innerHTML = "From and To Date Added to Period, Click on Update"
-            option.text = "From "+formatDate(fromdate)+" To "+formatDate(todate);
-            option.selected = true;
-            x.add(option);
+            document.getElementById("success").innerHTML = "From and to date added to period, Click on Apply to update values"
+            document.getElementById("change_btn").style.display="none"
+            document.getElementById("apply_btn").style.display=""
         }else{
             document.getElementById("success").innerHTML="Input cannot be blank!!"
             document.getElementById("msg").className = "alert alert-danger"
@@ -201,9 +198,14 @@
                                 </div>
                                 <div class="input-group-prepend form-control-md mb-2">
                                     <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
-                                         Change
-                                    </button>
+                                    <div id="change_btn">
+                                        <input type="button" value="Change" name="change_btn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
+                                       </input>   
+                                    </div>
+                                    <div style="display: none;" id="apply_btn">
+                                        <input value="Apply" class="btn btn-primary btn-sm" type="submit" name="apply_btn">
+                                        </input>        
+                                    </div>
                                 </div>
                             </div>
                         </div>                
@@ -224,14 +226,13 @@
                                         <option value="This Week">This Week</option>
                                         <option selected value="This Month">This Month</option>
                                     {% else %}
-                                        <option selected value="{{from_to_date}}">{{from_to_date}}</option>
                                         <option value="Today">Today</option>
                                         <option value="This Week">This Week</option>
-                                        <option value="This Month">This Month</option>
+                                        <option selected value="This Month">This Month</option>
                                     {% endif %}                                                                    
                                 </select>
                             </div>
-                            <button class="btn btn-primary btn-sm" type="submit" name="update_useropt">Update</button>        
+                            <input class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt"></input>        
                         </div>
                     </form>
                     <table class="table table-sm group-summary">
@@ -442,7 +443,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
-                    <button type="button" class="btn btn-secondary" name="save-date" onclick="set_date()">
+                    <button type="button" class="btn btn-secondary" name="save-date" data-dismiss="modal" onclick="set_date()">
                         <i id="saveicon" class="fas fa-sign-in-alt"></i> Save
                     </button>
                 </div>
