@@ -212,6 +212,7 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
     query = '''SELECT trans_type, sum(amount) as Total_Amount FROM transaction_master 
     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" and user="{}" 
     GROUP by trans_type;'''.format(trans_type,from_date,to_date,userid)
+    print(query)
     cur.execute(query)
     result = cur.fetchall()
     if result:
@@ -228,8 +229,23 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
         else:
             tran_dict[str(tran_type_1)]= result[0][1]
             tran_dict[str(tran_type_2)]= result[1][1]
-
+    print(tran_dict)
     return tran_dict
+
+def Personal_Cash_Exp_Summary(from_date,to_date,userid):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
+    WHERE trans_type="Expense" and trans_date BETWEEN 
+    "{}" AND "{}" and user="{}" and 
+    payment_method<>"Credit Card";'''.format(from_date,to_date,userid)
+    
+    cur.execute(query)
+    result = cur.fetchall()
+    cashexp = result[0][0]
+    return cashexp
 
 def Get_Personal_Exp_Summary(userid):
     cur_day = str(datetime.date(datetime.now()))
@@ -252,9 +268,10 @@ def Get_Personal_Exp_Summary(userid):
     to_date = end.strftime("%Y-%m-%d")
     total_thisMonth = Get_Exp_Summary("Personal Expenses",from_date,to_date,userid)
     grp_total_thisMonth = Get_Total_Group_Expense(from_date,to_date,userid)
-    cur_bal = total_thisMonth['income']-(total_thisMonth['expense']+grp_total_thisMonth[0])
-    current_balance ={'total_balance':'Current Balance', 'balance':cur_bal} 
-    total_group_exp ={'total':'Total Group Expense', 'expense':grp_total_thisMonth[0]} 
+    cashexp = Personal_Cash_Exp_Summary(from_date,to_date,userid)
+    cur_bal = total_thisMonth['income']-cashexp
+    current_balance ={'total_balance':'Cash Balance', 'balance':cur_bal} 
+    total_group_exp ={'total':'Total Group Expense', 'expense':grp_total_thisMonth[0]}
     summary_list = [total_today,total_thisWeek, total_thisMonth, total_group_exp, current_balance]
     return summary_list
 
