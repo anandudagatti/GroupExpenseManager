@@ -98,17 +98,17 @@
                                     <td style="color: red" align="right">{{r.expense}}</td>
                                 </tr>
                                 {% if r %}
-                                <tr bgcolor="#d3d3d3">
+                                <tr bgcolor="#f1d0cf">
                                     {% for j in r.firstrow %}
                                         <td align="left" colspan="2">{{j}}</td>
                                     {% endfor %}
                                 </tr>
-                                <tr bgcolor="#d3d3d3">
+                                <tr bgcolor="#f1d0cf">
                                     {% for k in r.secrow %}
                                         <td align="left" colspan="2">{{k}}</td>
                                     {% endfor %} 
                                 </tr>
-                                <tr bgcolor="#d3d3d3">
+                                <tr bgcolor="#cff1d1">
                                     {% for l in r.throw %}
                                         <td align="left" colspan="2"><b>{{l}}</b></td>
                                     {% endfor %} 
@@ -146,7 +146,7 @@
             <form id="form-sub" method="POST">
                 <div class="container">
                     <form id="form-sub" method="POST">           
-                        <div class="input-group mb-2">
+                        <div class="input-group mb-3">
                             <div class="input-group-prepend form-control-md">
                                 <label class="input-group-text" style="font-size: 14px;" for="select-group"> Group</label>
                                 <select style="width:130px" name="group_name" id="group_name">
@@ -166,7 +166,7 @@
                         <thead>
                             <tr style="text-align: left">
                                 {% for k in group_header %}
-                                <th>{{k}}</th>
+                                <th colspan="2">{{k}}</th>
                                 {% endfor %}
                             </tr>
                         </thead>
@@ -174,8 +174,20 @@
                             {% for r in group_rows %}
                                 <tr>
                                     <td><i>{{r.total}}</i></td>
-                                    <td style="width: 15%; color: red" align="right">{{r.expense}}</td>
-                                <tr>        
+                                    <td colspan="2" style=" color: red" align="right">{{r.expense}}</td>
+                                <tr>
+                                {% if r %}
+                                <tr bgcolor="#f1d0cf">
+                                    {% for j in r.firstrow %}
+                                        <td align="left" colspan="2">{{j}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr bgcolor="#f1d0cf">
+                                    {% for k in r.secrow %}
+                                        <td align="left" colspan="2">{{k}}</td>
+                                    {% endfor %} 
+                                </tr>
+                                {% endif %}        
                             {% endfor %}                                
                         </tbody>
                     </table><br>

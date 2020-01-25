@@ -232,14 +232,20 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
     print(tran_dict)
     return tran_dict
 
-def Personal_Cash_Exp_Summary(from_date,to_date,userid):
+def Get_Cash_Exp_Summary(from_date,to_date,userid,group):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
-    query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
-    WHERE group_name="Personal Expenses" and trans_type="Expense" and trans_date BETWEEN 
-    "{}" AND "{}" and user="{}" and payment_method<>"Credit Card";'''.format(from_date,to_date,userid)
+    if userid=="All":
+        query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
+        WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
+        "{}" AND "{}" and payment_method<>"Credit Card";'''.format(group,from_date,to_date)
+    else:
+        query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
+        WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
+        "{}" AND "{}" and user="{}" and payment_method<>"Credit Card";'''.format(group,from_date,to_date,userid)
+
     cur.execute(query)
     result = cur.fetchall()
     if result[0][0]==None:
@@ -248,14 +254,20 @@ def Personal_Cash_Exp_Summary(from_date,to_date,userid):
         cashexp = result[0][0]
     return cashexp
 
-def Personal_Credit_Exp_Summary(from_date,to_date,userid):
+def Get_Credit_Exp_Summary(from_date,to_date,userid,group):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
-    query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
-    WHERE group_name="Personal Expenses" and trans_type="Expense" and trans_date BETWEEN 
-    "{}" AND "{}" and user="{}" and payment_method="Credit Card";'''.format(from_date,to_date,userid)
+    if userid=="All":
+        query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
+        WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
+        "{}" AND "{}" and payment_method="Credit Card";'''.format(group,from_date,to_date)
+    else:
+        query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
+        WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
+        "{}" AND "{}" and user="{}" and payment_method="Credit Card";'''.format(group,from_date,to_date,userid)
+
     cur.execute(query)
     result = cur.fetchall()
     if result[0][0]==None:
@@ -283,12 +295,15 @@ def Get_Personal_Exp_Summary(userid):
     end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
     from_date = start.strftime("%Y-%m-%d")
     to_date = end.strftime("%Y-%m-%d")
-    credit_exp = Personal_Credit_Exp_Summary(from_date,to_date,userid) 
     total_thisMonth = Get_Exp_Summary("Personal Expenses",from_date,to_date,userid)
-    cashexp = Personal_Cash_Exp_Summary(from_date,to_date,userid)
+
+    credit_exp = Get_Credit_Exp_Summary(from_date,to_date,userid,"Personal Expenses") 
+    cashexp = Get_Cash_Exp_Summary(from_date,to_date,userid,"Personal Expenses")
     cur_bal = total_thisMonth['income']-cashexp
+
     current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 'throw':['Cash Balance',cur_bal]}
     summary_list = [total_today,total_thisWeek, total_thisMonth, current_balance]
+
     return summary_list
 
 def Get_User_Exp_Summary(trans_type,from_date,to_date):
@@ -354,7 +369,14 @@ def Get_Group_Exp_Summary(group_name):
     from_date = start.strftime("%Y-%m-%d")
     to_date = end.strftime("%Y-%m-%d")
     total_thisMonth = Get_User_Exp_Summary(group_name,from_date,to_date)
-    summary_list = [total_today, total_thisWeek, total_thisMonth]
+
+    userid = "All"
+    credit_exp = Get_Credit_Exp_Summary(from_date,to_date,userid,group_name) 
+    cashexp = Get_Cash_Exp_Summary(from_date,to_date,userid,group_name)
+
+    current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp]}
+    summary_list = [total_today,total_thisWeek, total_thisMonth, current_balance]
+
     return summary_list
 
 def Get_Group_User_Exp(group_name,from_date,to_date):

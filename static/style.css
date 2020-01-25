@@ -82,7 +82,7 @@ body, html {
   }
 
 .group-summary{
-  width: 270px;
+  margin:0;
 }
 
 .personal-account{
