@@ -90,6 +90,18 @@ def authentication(request):
         else:
             superuser = False    
 
+        group_exist = False
+
+        get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
+        grouplist = list(get_groups)
+ 
+        if len(grouplist)>0:
+            group_exist = True
+        else:
+            group_exist = False
+
+        print("groups exist", group_exist)
+
         if (admin=='on' and authentication=='Success' and superuser==True):
             request.session['login_typ'] = 'admin'
             session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['admin']}
@@ -107,7 +119,7 @@ def authentication(request):
             logging.error('Redirecting to login page')
             messages.error(request,logmsg)
             return redirect('home')
-        elif (admin==None and authentication=='Success'):
+        elif (group_exist==True and admin==None and authentication=='Success'):
             request.session['login_typ'] = 'user'
             session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user']}
             Write_to_DB(session_data,'session_master')
@@ -117,6 +129,16 @@ def authentication(request):
             logmsg = "User login by: "+str(userid)+": "+str(fullname)
             logging.info(logmsg)
             return redirect('account')
+        elif (group_exist==False and admin==None and authentication=='Success'):
+            request.session['login_typ'] = 'user'
+            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user']}
+            Write_to_DB(session_data,'session_master')
+            sessionid=Get_SessionID(session_data)
+            request.session['sessionid'] = sessionid 
+            fullname = request.user.get_full_name()
+            logmsg = "User login by: "+str(userid)+": "+str(fullname)
+            logging.info(logmsg)
+            return redirect('nogroup_account')
         else:
             logmsg = 'Error: Invalid UserID or Password'
             logging.error(logmsg)
@@ -139,24 +161,29 @@ def authentication(request):
 def account(request):
     fullname = request.user.get_full_name()
     login_type = request.session.get('login_typ')
+    userid = request.session.get('userid')
+
     logmsg = "account view: Rendering account page template"
     logging.info(logmsg)
-    userid = request.session.get('userid')
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
-    login_type = request.session.get('login_typ')
+
     limit_to = request.POST.get('limit_to')
     get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
     grouplist = list(get_groups)
-    print("grouplist",grouplist)
+    logmsg = 'Existing Group List: ' 
+    logging.info(logmsg)
+    print(grouplist)
+
     user_opt = request.POST.get('user_opt')
     request.session['user_opt'] = user_opt
     sess_user_opt = request.session.get('user_opt')
     sel_group = request.POST.getlist('group_name')
     request.session['group_name']= sel_group
     sess_group = request.session.get('group_name')
-    print("selgroup",sel_group)
-    
+    logmsg = 'selected group: '+str(sess_group)
+    logging.info(logmsg)
+
     user_sel_date = request.POST.get('user_sel_date')    
     request.session['user-date'] = user_sel_date
 
@@ -169,13 +196,17 @@ def account(request):
         from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
         request.session['user-date'] = from_to_date
 
-    print("user date",request.session.get('user-date'))
+    logmsg = 'user date: '+request.session.get('user-date')
+    logging.info(logmsg)
 
     if(sel_group==[] and len(grouplist)>0):
         sel_group = grouplist[0]
     else:
-        sel_group= sel_group[0]
-    
+        try:
+            sel_group= sel_group[0]
+        except:
+            return redirect('home')
+
     if userid!=None:
         if request.POST.get('logout'):
             logmsg = "User logout by: "+str(userid)
@@ -194,13 +225,9 @@ def account(request):
         per_rows = Get_Personal_Exp_Summary(userid)
 
         group_header = ['Total','Expense']
-        print("selgroup",sel_group)
         group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
-        print(group_user_exp)
         group_rows = Get_Group_Exp_Summary(sel_group)
-        print(group_rows)
-        print(user_opt)
-        print(user_sel_date)
+
         user_exp_summary=group_user_exp[2]
         if request.POST.get('update_useropt'):
             curdate = datetime.now()
@@ -208,16 +235,22 @@ def account(request):
             lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
             from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
             request.session['user-date'] = from_to_date
+
             if user_opt == "Today":
-                print("today")
+                logmsg = "Period Selected : Today"
+                logging.info(logmsg)
                 user_exp_summary=group_user_exp[0]
             elif user_opt == "This Week":
-                print("this week")
+                logmsg = "Period Selected : This Week"
+                logging.info(logmsg)
                 user_exp_summary=group_user_exp[1]
             else:
-                print("this month")
+                logmsg = "Period Selected : This Month"
+                logging.info(logmsg)
                 user_exp_summary=group_user_exp[2]
         elif request.POST.get('apply_btn'):
+            logmsg = "Custom Period Selected: "+from_to_date
+            logging.info(logmsg)
             user_exp_summary=group_user_exp[3]
             
         trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
@@ -228,7 +261,6 @@ def account(request):
             trans_rows = Get_Transaction_Summary(limit_to,userid)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
-        print(category_summary)
 
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
 
@@ -238,6 +270,47 @@ def account(request):
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date})
+
+@csrf_exempt
+@login_required(login_url='home')
+def nogroup_account(request):
+    fullname = request.user.get_full_name()
+    login_type = request.session.get('login_typ')
+    logmsg = "account view: Rendering account page template"
+    logging.info(logmsg)
+    userid = request.session.get('userid')
+    logmsg = 'session id'+str(request.session.get('sessionid'))
+    logging.info(logmsg)
+    login_type = request.session.get('login_typ')
+    limit_to = request.POST.get('limit_to')
+    
+    if userid!=None:
+        if request.POST.get('logout'):
+            logmsg = "User logout by: "+str(userid)
+            logging.info(logmsg)
+            
+            try:
+                logout(request)
+                del request.session['userid']
+            except KeyError:
+                pass
+            info = "User Logged Out Successfully!"
+            messages.success(request,info)
+            return redirect('home')
+
+        per_header = ['Total','Income','Expense']
+        per_rows = Get_Personal_Exp_Summary(userid)
+            
+        trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+        if(limit_to==None):
+            limit_to=10
+            trans_rows = Get_Transaction_Summary(limit_to,userid)
+        else:
+            trans_rows = Get_Transaction_Summary(limit_to,userid)
+
+    return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
+                "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
+                'limit_to':limit_to})
 
 @csrf_exempt
 @login_required(login_url='home')

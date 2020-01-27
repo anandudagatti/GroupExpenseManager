@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
+<link rel="stylesheet" href="/static/style.css">
+<script type="text/javascript">
+    function LoadMain() {
+        document.getElementByname("form-navbar").action ="";
+    }
+
+    function OnloadUpdate(){
+        document.getElementById("user_sel_date").value = '{{from_to_date}}'
+    }
+
+    function Clearmsg(){
+        document.getElementById("saveicon").className = "fas fa-sign-in-alt"
+        document.getElementById("msg").className = "alert"
+        document.getElementById("success").innerHTML = ""
+
+    }
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [day, month, year].join('/');
+        }
+
+    function set_date(){
+        var fromdate = document.getElementById("from-date").value;
+        var todate = document.getElementById("to-date").value;
+
+        document.getElementById("success").innerHTML = ""
+        if(fromdate!="" & todate!=""){
+            document.getElementById("from_to_date").innerHTML = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+            document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+            document.getElementById("saveicon").className = "fas fa-check"
+            document.getElementById("msg").className = "alert alert-success"
+            document.getElementById("success").innerHTML = "From and to date added to period, Click on Apply to update values"
+            document.getElementById("change_btn").style.display="none"
+            document.getElementById("apply_btn").style.display=""
+        }else{
+            document.getElementById("success").innerHTML="Input cannot be blank!!"
+            document.getElementById("msg").className = "alert alert-danger"
+        }
+    }
+
+</script>
+<title>Group Expense Manager : Account</title>
+</head>
+<body onload="OnloadUpdate()">
+<!-- Image and text -->
+<form id="form-navbar" method="POST">
+    <nav class="navbar navbar-light bg-dark">
+        <a class="navbar-brand text-white" href="#">
+            <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+            Group Expense Manager
+        </a>
+        <div class="align-right">
+            <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+            <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
+        </div>
+    </nav>            
+</form>
+<div class="container personal-account">
+    <div class="card text-left text-black bg-light mb-3">
+        <h6 class="card-header">
+            <i class="fas fa-user-minus"></i>
+            Personal Expense Summary
+        </h6>
+        <div class="card-body ">
+            <form id="form-sub" method="POST">
+                <div class="container">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                {% for k in per_header %}
+                                <th>{{k}}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in per_rows %}
+                                <tr>
+                                    <td><i>{{r.total}}</i></td>
+                                    <td style="color: green" align="right">{{r.income}}</td>
+                                    <td style="color: red" align="right">{{r.expense}}</td>
+                                </tr>
+                                {% if r %}
+                                <tr bgcolor="#f1d0cf">
+                                    {% for j in r.firstrow %}
+                                        <td align="left" colspan="2">{{j}}</td>
+                                    {% endfor %}
+                                </tr>
+                                <tr bgcolor="#f1d0cf">
+                                    {% for k in r.secrow %}
+                                        <td align="left" colspan="2">{{k}}</td>
+                                    {% endfor %} 
+                                </tr>
+                                <tr bgcolor="#cff1d1">
+                                    {% for l in r.throw %}
+                                        <td align="left" colspan="2"><b>{{l}}</b></td>
+                                    {% endfor %} 
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-6 text-center">
+                            <a href="{% url 'incomes' %}">
+                                <i style="color:green" class="fas fa-plus"></i>
+                                Add Personal Income
+                            </a>            
+                        </div>
+                        <div class="col-6 text-center">
+                            <a href="{% url 'personal_expenses' %}">
+                                <i style="color:red" class="fas fa-minus"></i>
+                                Add Personal Expense
+                            </a>
+                        </div>  
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container group-account">
+    <div class="card text-left text-black bg-light mb-3">
+        <h6 class="card-header">
+            <i class="fas fa-users"></i>
+            Group Expense Summary
+        </h6>
+        <div class="card-body">
+            <i>You do not have any group.<br>
+            <a style="color:blue" href="{% url 'groups' %}">Looking to create new group?  click here </a></i>
+        </div>
+    </div>
+</div>
+<div class="container trans-summary d-none d-lg-block">
+    <form id="form-sub" method="POST">
+        <div class="card text-left text-black bg-light sm-1">
+            <h6 class="card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <font size="5px">Transaction Summary</font> 
+                    </div>
+                    <div class="col-4 text-right">
+                        <div class="input-group mb-1">
+                            <div class="input-group-prepend form-control-md">
+                                <label class="input-group-text" for="payment-method">Show Last:</label> 
+                                <input type="text" style="width: 40px" name="limit_to" value={{limit_to}}></input>
+                            </div>
+                            <button class="btn btn-primary btn-sm" type="submit" name="update_list">Update</button>
+                        </div>
+                    </div>        
+                </div>
+            </h6>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            {% for k in trans_header %}
+                            <th class="text-left">{{k}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in trans_rows %}
+                            <tr>
+                                <td style="width: 100px;"><i>{{r.date}}</i></td>
+                                <td><i>{{r.category}}</i></td>
+                                <td><i>{{r.sub_cat}}</i></td>
+                                <td><i>{{r.group}}</i></td>
+                                <td><i>{{r.payee}}</i></td>
+                                <td><i>{{r.pay_meth}}</i></td>
+                                <td><i>{{r.tag}}</i></td>
+                                <td class="text-right"><i>{{r.expense}}</i></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>    
+</div>
+<div class="container trans-summary-mini d-block d-sm-none">
+    <form id="form-sub" method="POST">
+        <div class="card text-left text-black bg-light sm-1">
+            <h6 class="card-header">
+                <font size="5px">Transaction Summary</font> 
+            </h6>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr style="text-align: left">
+                            <th><font size="2px">Date</font></th>
+                            <th><font size="2px">Description</font></th>
+                            <th><font size="2px">Amount</font></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for rw in mini_trans_summary %}
+                            <tr class="separated">
+                                {% for r in rw %}
+                                <td style="width: 50%;"><font size="2px">{{r}}</font></td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>           
+</div>
+<script src="/static/js/jquery.slim.min.js"></script>
+<script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
+<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+</body>
+</html>

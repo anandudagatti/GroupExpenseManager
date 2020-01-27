@@ -212,7 +212,6 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
     query = '''SELECT trans_type, sum(amount) as Total_Amount FROM transaction_master 
     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" and user="{}" 
     GROUP by trans_type;'''.format(trans_type,from_date,to_date,userid)
-    print(query)
     cur.execute(query)
     result = cur.fetchall()
     if result:
@@ -229,7 +228,6 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
         else:
             tran_dict[str(tran_type_1)]= result[0][1]
             tran_dict[str(tran_type_2)]= result[1][1]
-    print(tran_dict)
     return tran_dict
 
 def Get_Cash_Exp_Summary(from_date,to_date,userid,group):
@@ -325,7 +323,7 @@ def Get_User_Exp_Summary(trans_type,from_date,to_date):
     query = '''SELECT trans_type, sum(amount) as Total_Amount FROM transaction_master 
     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" 
     GROUP by trans_type;'''.format(trans_type,from_date,to_date)
-    print(query)
+
     cur.execute(query)
     result = cur.fetchall()
     if result:
@@ -424,7 +422,6 @@ def Get_Group_User_Exp_Summary(group_name, request):
         from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
         to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
         total_custom = Get_Group_User_Exp(group_name,from_date,to_date)
-        print(total_custom)
     except:
         total_custom ={}
     summary_list = [total_today, total_thisWeek, total_thisMonth, total_custom]
@@ -474,7 +471,6 @@ def Get_Mini_Tran_Summary(group_name):
      WHERE group_name="{}" ORDER By trans_date;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
-    print(result)
     data_dict = []
     for row in result:
         data_dict.append(row)
