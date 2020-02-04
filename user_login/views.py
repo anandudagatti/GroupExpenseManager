@@ -13,7 +13,7 @@ import logging
 from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category, Get_SubCategoryTable, \
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
-    Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary
+    Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -253,7 +253,7 @@ def account(request):
             logging.info(logmsg)
             user_exp_summary=group_user_exp[3]
             
-        trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+        trans_header = ['Edit', 'Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         if(limit_to==None):
             limit_to=10
             trans_rows = Get_Transaction_Summary(limit_to,userid)
@@ -264,6 +264,11 @@ def account(request):
 
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
 
+        if request.POST.get('edit-btn'):
+            tran_id = request.POST.get('edit-btn')
+            request.session['edit_trans']=tran_id
+            return redirect('group_expenses')
+            
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
@@ -539,17 +544,27 @@ def group_expenses(request):
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payee], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
             print(expense_data)
-            try:
-                Insert_Transaction(expense_data)
-                messages.success(request,'Expense Added Succesfully!!')
-            except:
-                messages.error(request,"Unable to Insert!!")
+            tran_id = request.session.get('edit_trans')
+            if tran_id==None:
+                try:
+                    Insert_Transaction(expense_data)
+                    messages.success(request,'Expense Added Succesfully!!')
+                except:
+                    messages.error(request,"Unable to Insert!!")
 
-            fullname = request.user.get_full_name()
-            exp_cat = Get_Exp_Category()
-            categories = exp_cat
-            sub_categories = '' 
-            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = ''
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            else:
+                Edit_Transaction(tran_id,expense_data)
+                request.session['edit_trans']=None
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = ''
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
@@ -575,11 +590,45 @@ def group_expenses(request):
             group_data = {'name':group_name}
             Write_to_DB(group_data,'auth_group')
         else:
-            fullname = request.user.get_full_name()
-            exp_cat = Get_Exp_Category()
-            categories = exp_cat
-            sub_categories = '' #Get_SubCategoryTable("Food")
-            info=""
+            tran_id = request.session.get('edit_trans')
+            if tran_id!='':
+                trans = Get_Transaction_By_Id(tran_id)
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                print(trans)
+                request.session['cat_sel'] = trans[0][3]
+                request.session['sub_cat_sel'] = trans[0][4]
+                edit_group = trans[0][5]
+
+                if edit_group=="Personal Expenses":
+                    return redirect('personal_expenses')
+                else:
+                    pass
+
+                edit_date = trans[0][6]
+                edit_amount = trans[0][7]
+                edit_payee = trans[0][8]
+                edit_pay_type = trans[0][9]
+                edit_tag = trans[0][10]
+                edit_desc = trans[0][11]
+
+                info=""
+                get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
+                grouplist = list(get_groups) 
+                payee_list = Get_Payee_List()
+                payment_methods = Get_Payment_Method()
+                edit_mode = "True"
+
+                return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
+                "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods,
+                'edit_group':edit_group,'edit_date':edit_date,'edit_amount':edit_amount,'edit_payee':edit_payee,'edit_pay_type':edit_pay_type,
+                'edit_tag':edit_tag,'edit_desc':edit_desc, 'edit_mode':edit_mode})
+            else:
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = ''
+                info=""
             return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')
@@ -634,17 +683,28 @@ def personal_expenses(request):
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payee], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
             print(expense_data)
-            try:
-                Insert_Transaction(expense_data)
-                messages.success(request,'Expense Added Succesfully!!')
-            except:
-                messages.error(request,"Unable to Insert!!")
 
-            fullname = request.user.get_full_name()
-            exp_cat = Get_Exp_Category()
-            categories = exp_cat
-            sub_categories = '' 
-            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            tran_id = request.session.get('edit_trans')
+            if tran_id==None:
+                try:
+                    Insert_Transaction(expense_data)
+                    messages.success(request,'Expense Added Succesfully!!')
+                except:
+                    messages.error(request,"Unable to Insert!!")
+
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = '' 
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            else:
+                Edit_Transaction(tran_id,expense_data)
+                request.session['edit_trans']=None
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = ''
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
@@ -670,11 +730,35 @@ def personal_expenses(request):
             group_data = {'name':group_name}
             Write_to_DB(group_data,'auth_group')
         else:
-            fullname = request.user.get_full_name()
-            exp_cat = Get_Exp_Category()
-            categories = exp_cat
-            sub_categories = '' #Get_SubCategoryTable("Food")
-            info=""
-            return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            tran_id = request.session.get('edit_trans')
+            if tran_id!='':
+                trans = Get_Transaction_By_Id(tran_id)
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                print(trans)
+                request.session['cat_sel'] = trans[0][3]
+                request.session['sub_cat_sel'] = trans[0][4]                
+                edit_date = trans[0][6]
+                edit_amount = trans[0][7]
+                edit_payee = trans[0][8]
+                edit_pay_type = trans[0][9]
+                edit_tag = trans[0][10]
+                edit_desc = trans[0][11]
+
+                info=""
+                payee_list = Get_Payee_List()
+                payment_methods = Get_Payment_Method()
+                edit_mode = "True"
+                return render(request, 'expense_details_personal.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
+                "subcat_crumb":request.session.get('sub_cat_sel'), "payeelist": payee_list, "payment_meth":payment_methods,
+                'edit_date':edit_date,'edit_amount':edit_amount,'edit_payee':edit_payee,'edit_pay_type':edit_pay_type,
+                'edit_tag':edit_tag,'edit_desc':edit_desc, 'edit_mode':edit_mode})
+            else:
+                fullname = request.user.get_full_name()
+                exp_cat = Get_Exp_Category()
+                categories = exp_cat
+                sub_categories = '' #Get_SubCategoryTable("Food")
+                info=""
+                return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')

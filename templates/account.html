@@ -390,6 +390,11 @@
                     <tbody>
                         {% for r in trans_rows %}
                             <tr>
+                                <td>
+                                    <button class="btn btn-sm" type="submit" name="edit-btn" value="{{r.id}}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </td>
                                 <td style="width: 100px;"><i>{{r.date}}</i></td>
                                 <td><i>{{r.category}}</i></td>
                                 <td><i>{{r.sub_cat}}</i></td>

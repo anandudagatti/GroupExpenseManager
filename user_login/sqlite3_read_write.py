@@ -163,13 +163,36 @@ def Insert_Transaction(data_dict):
     conn.commit()
     conn.close()
 
+def Edit_Transaction(transaction_id,edited_data):
+    exist_data = Get_Transaction_By_Id(transaction_id)
+    for key,value in edited_data.items():
+        if str(value[0]) not in exist_data[0]:
+            conn = sqlite3.connect("db.sqlite3")
+            sql = ''' UPDATE transaction_master SET {} = '{}'
+                    WHERE transaction_id = {};'''.format(key,value[0],transaction_id)
+            print(sql)
+            cur = conn.cursor()
+            cur.execute(sql, edited_data)
+            conn.commit()
+            conn.close()            
+
+def Get_Transaction_By_Id(transaction_id):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    query = '''SELECT * from transaction_master WHERE transaction_id='{}';'''.format(transaction_id)
+    cur.execute(query)
+    result = cur.fetchall()
+    return result
+
 def Get_Transaction_Summary(limit_to,userid):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
     trans_dict = {}
-    query = '''SELECT trans_date, category, sub_category, group_name, payee, 
+    query = '''SELECT transaction_id, trans_date, category, sub_category, group_name, payee, 
     payment_method, tag, amount from transaction_master WHERE user="{}" 
     ORDER BY trans_date DESC LIMIT {};'''.format(userid,limit_to)
     
@@ -177,18 +200,20 @@ def Get_Transaction_Summary(limit_to,userid):
     result = cur.fetchall()
     row_count = len(result)
     trans_summary=[]
+
     for i in range(row_count):
-        trans_dict = {'date':'', 'category':'', 'sub_cat':'','group':'', 
+        trans_dict = {'id':'', 'date':'', 'category':'', 'sub_cat':'','group':'', 
                         'payee':'', 'pay_meth':'', 'tag':'', 'expense':''}
         row_tup = result[i]
-        trans_dict['date']=str(row_tup[0])
-        trans_dict['category']=str(row_tup[1])
-        trans_dict['sub_cat']=str(row_tup[2])
-        trans_dict['group']=str(row_tup[3])
-        trans_dict['payee']=str(row_tup[4])
-        trans_dict['pay_meth']=str(row_tup[5])
-        trans_dict['tag']=str(row_tup[6])
-        trans_dict['expense']=str(row_tup[7])
+        trans_dict['id']=str(row_tup[0])
+        trans_dict['date']=str(row_tup[1])
+        trans_dict['category']=str(row_tup[2])
+        trans_dict['sub_cat']=str(row_tup[3])
+        trans_dict['group']=str(row_tup[4])
+        trans_dict['payee']=str(row_tup[5])
+        trans_dict['pay_meth']=str(row_tup[6])
+        trans_dict['tag']=str(row_tup[7])
+        trans_dict['expense']=str(row_tup[8])
         trans_summary.append(trans_dict)
     conn.close()
     return trans_summary
