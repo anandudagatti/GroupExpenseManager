@@ -491,15 +491,25 @@ def Get_Mini_Tran_Summary(group_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
-
-    query = '''SELECT trans_date, description, amount FROM transaction_master
+    trans_dict ={}
+    query = '''SELECT transaction_id, trans_date, description, amount FROM transaction_master
      WHERE group_name="{}" ORDER By trans_date;'''.format(group_name)
     cur.execute(query)
     result = cur.fetchall()
-    data_dict = []
-    for row in result:
-        data_dict.append(row)
-    return data_dict
+    row_count = len(result)
+    trans_summary=[]
+
+    for i in range(row_count):
+        trans_dict = {'id':'', 'date':'', 'description':'', 'expense':''}
+        row_tup = result[i]
+        trans_dict['id']=str(row_tup[0])
+        trans_dict['date']=str(row_tup[1])
+        trans_dict['description']=str(row_tup[2])
+        trans_dict['expense']=str(row_tup[3])
+        trans_summary.append(trans_dict)
+    conn.close()
+    print(trans_summary)
+    return trans_summary
 
 def GetData_In_Dict(table_name):
     conn = sqlite3.connect("db.sqlite3")

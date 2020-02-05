@@ -265,10 +265,11 @@ def account(request):
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
 
         if request.POST.get('edit-btn'):
+            print('in if')
             tran_id = request.POST.get('edit-btn')
             request.session['edit_trans']=tran_id
             return redirect('group_expenses')
-            
+        print(request.POST.get('edit-btn'))
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
@@ -695,7 +696,7 @@ def personal_expenses(request):
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
-                sub_categories = '' 
+                sub_categories = ''
                 return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
             else:
                 Edit_Transaction(tran_id,expense_data)

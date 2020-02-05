@@ -80,7 +80,12 @@ body, html {
   th, td, select   {
     font-size: 14px;
   }
-
+  .btn-xs {
+    padding: 1px 1px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+  }
 .group-summary{
   margin:0;
 }
