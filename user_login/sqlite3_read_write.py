@@ -186,15 +186,15 @@ def Get_Transaction_By_Id(transaction_id):
     result = cur.fetchall()
     return result
 
-def Get_Transaction_Summary(limit_to,userid):
+def Get_Transaction_Summary(limit_to,group_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
     trans_dict = {}
     query = '''SELECT transaction_id, trans_date, category, sub_category, group_name, payee, 
-    payment_method, tag, amount from transaction_master WHERE user="{}" 
-    ORDER BY trans_date DESC LIMIT {};'''.format(userid,limit_to)
+    payment_method, tag, amount from transaction_master WHERE group_name="{}" 
+    ORDER BY trans_date DESC LIMIT {};'''.format(group_name,limit_to)
     
     cur.execute(query)
     result = cur.fetchall()

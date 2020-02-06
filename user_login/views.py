@@ -257,9 +257,9 @@ def account(request):
         trans_header = ['Edit', 'Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         if(limit_to==None):
             limit_to=10
-            trans_rows = Get_Transaction_Summary(limit_to,userid)
+            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
         else:
-            trans_rows = Get_Transaction_Summary(limit_to,userid)
+            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
@@ -319,9 +319,9 @@ def nogroup_account(request):
         trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         if(limit_to==None):
             limit_to=10
-            trans_rows = Get_Transaction_Summary(limit_to,userid)
+            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
         else:
-            trans_rows = Get_Transaction_Summary(limit_to,userid)
+            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
 
     return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
