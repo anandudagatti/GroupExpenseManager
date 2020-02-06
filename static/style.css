@@ -120,12 +120,11 @@ body, html {
 }
 
 .trans-summary{
-  width: 960px;
   opacity: .9;
   margin: 0;
   position: absolute;
-  left: 28%;
-  top: 15%;
+  left: 25%;
+  top: 13%;
 }
 
 .trans-summary-mini{

@@ -192,7 +192,7 @@ def Get_Transaction_Summary(limit_to,group_name):
         cur = conn.cursor() 
 
     trans_dict = {}
-    query = '''SELECT transaction_id, trans_date, category, sub_category, group_name, payee, 
+    query = '''SELECT transaction_id, trans_date, user, category, sub_category, group_name, payee, 
     payment_method, tag, amount from transaction_master WHERE group_name="{}" 
     ORDER BY trans_date DESC LIMIT {};'''.format(group_name,limit_to)
     
@@ -202,18 +202,19 @@ def Get_Transaction_Summary(limit_to,group_name):
     trans_summary=[]
 
     for i in range(row_count):
-        trans_dict = {'id':'', 'date':'', 'category':'', 'sub_cat':'','group':'', 
+        trans_dict = {'id':'', 'date':'', 'user':'', 'category':'', 'sub_cat':'','group':'', 
                         'payee':'', 'pay_meth':'', 'tag':'', 'expense':''}
         row_tup = result[i]
         trans_dict['id']=str(row_tup[0])
         trans_dict['date']=str(row_tup[1])
-        trans_dict['category']=str(row_tup[2])
-        trans_dict['sub_cat']=str(row_tup[3])
-        trans_dict['group']=str(row_tup[4])
-        trans_dict['payee']=str(row_tup[5])
-        trans_dict['pay_meth']=str(row_tup[6])
-        trans_dict['tag']=str(row_tup[7])
-        trans_dict['expense']=str(row_tup[8])
+        trans_dict['user']=str(row_tup[2])
+        trans_dict['category']=str(row_tup[3])
+        trans_dict['sub_cat']=str(row_tup[4])
+        trans_dict['group']=str(row_tup[5])
+        trans_dict['payee']=str(row_tup[6])
+        trans_dict['pay_meth']=str(row_tup[7])
+        trans_dict['tag']=str(row_tup[8])
+        trans_dict['expense']=str(row_tup[9])
         trans_summary.append(trans_dict)
     conn.close()
     return trans_summary

@@ -254,7 +254,7 @@ def account(request):
             logging.info(logmsg)
             user_exp_summary=group_user_exp[3]
             
-        trans_header = ['Edit', 'Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+        trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         if(limit_to==None):
             limit_to=10
             trans_rows = Get_Transaction_Summary(limit_to,sel_group)
