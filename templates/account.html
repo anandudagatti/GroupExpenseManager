@@ -379,13 +379,6 @@
                 </div>
             </h6>
             <div class="card-body">
-                {% if messages %}
-                {% for message in messages %}
-                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                    {{message}}
-                </div>
-                {% endfor %}
-                {% endif %}
                 <table class="table">
                     <thead>
                         <tr>
@@ -425,13 +418,6 @@
                 <font size="5px">Transaction Summary</font> 
             </h6>
             <div class="card-body">
-                {% if messages %}
-                {% for message in messages %}
-                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                    {{message}}
-                </div>
-                {% endfor %}
-                {% endif %}
                 <table class="table">
                     <thead>
                         <tr style="text-align: left">
