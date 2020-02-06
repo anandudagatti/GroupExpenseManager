@@ -162,7 +162,6 @@ def account(request):
     fullname = request.user.get_full_name()
     login_type = request.session.get('login_typ')
     userid = request.session.get('userid')
-    request.session['edit_trans']=None
 
     logmsg = "account view: Rendering account page template"
     logging.info(logmsg)
@@ -593,8 +592,8 @@ def group_expenses(request):
             Write_to_DB(group_data,'auth_group')
         else:
             tran_id = request.session.get('edit_trans')
-            trans = Get_Transaction_By_Id(tran_id)
-            if tran_id!=None and len(trans)>0:
+            if tran_id!='':
+                trans = Get_Transaction_By_Id(tran_id)
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 print(trans)
@@ -733,8 +732,8 @@ def personal_expenses(request):
             Write_to_DB(group_data,'auth_group')
         else:
             tran_id = request.session.get('edit_trans')
-            trans = Get_Transaction_By_Id(tran_id)
-            if tran_id!=None and len(trans)>0:
+            if tran_id!='':
+                trans = Get_Transaction_By_Id(tran_id)
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 print(trans)
