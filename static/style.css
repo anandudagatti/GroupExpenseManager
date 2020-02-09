@@ -122,9 +122,6 @@ body, html {
 .trans-summary{
   opacity: .9;
   margin: 0;
-  position: absolute;
-  left: 25%;
-  top: 13%;
 }
 
 .trans-summary-mini{
