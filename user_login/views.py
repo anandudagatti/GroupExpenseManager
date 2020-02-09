@@ -9,11 +9,13 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
+import json
 import logging
 from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category, Get_SubCategoryTable, \
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
-    Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction
+    Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
+    Get_Category_Sum_For_PieChart
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -262,6 +264,7 @@ def account(request):
             trans_rows = Get_Transaction_Summary(limit_to,sel_group)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
+        data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
 
         if request.POST.get('edit-btn'):
@@ -284,7 +287,7 @@ def account(request):
                 "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
-                "from_to_date": from_to_date})
+                "from_to_date": from_to_date, 'data_for_chart': json.dumps(data_for_chart)})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -298,6 +301,7 @@ def nogroup_account(request):
     logging.info(logmsg)
     login_type = request.session.get('login_typ')
     limit_to = request.POST.get('limit_to')
+    sel_group = request.POST.getlist('group_name')
     
     if userid!=None:
         if request.POST.get('logout'):
