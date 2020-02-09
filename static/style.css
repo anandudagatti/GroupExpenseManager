@@ -101,13 +101,21 @@ body, html {
     width: 360px;
     margin: 0;
     position: relative;
+    margin-bottom: 15px;
     top: 5%;
     }
 
+.group-chart{
+  width: 360px;
+  margin: 0;
+  position: relative;
+  margin-bottom: 15px;
+  top: 5%;
+  }
+  
 .group-account-category{
   width: 360px;
   margin: 0;
-  margin-bottom: 50px;
   position: relative;
   top: 5%;
   }
