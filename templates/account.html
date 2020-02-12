@@ -110,9 +110,14 @@
                                                 <td align="left" colspan="2">{{k}}</td>
                                             {% endfor %} 
                                         </tr>
-                                        <tr bgcolor="#cff1d1">
+                                        <tr bgcolor="#f1d0cf">
                                             {% for l in r.throw %}
-                                                <td align="left" colspan="2"><b>{{l}}</b></td>
+                                                <td align="left" colspan="2">{{l}}</td>
+                                            {% endfor %} 
+                                        </tr>
+                                        <tr bgcolor="#cff1d1">
+                                            {% for m in r.fourthrow %}
+                                                <td align="left" colspan="2"><b>{{m}}</b></td>
                                             {% endfor %} 
                                         </tr>
                                         {% endif %}
@@ -228,8 +233,73 @@
                         </div>
                         <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
                     </div>
-                    <div id="piechart" style="width: 360px; height: 260px;"></div>
+                    <div id="piechart" style="width: 360px; height: 290px;"></div>
                 </div>   
+            </div>
+        </div>
+        <div class="container group-account-category">
+            <div class="card text-left text-black bg-light mb-3">
+                <h6 class="card-header">
+                    <i class="fas fa-users"></i>
+                    Group Expense: Category Wise
+                </h6>
+                <div class="card-body">
+                    <form id="form-sub" method="POST">
+                        <div class="container">
+                            <form id="form-sub" method="POST">           
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend form-control-md">
+                                        <label class="input-group-text" style="font-size: 14px;" for="select-group"> Group</label>
+                                        <select style="width:130px" name="group_name" id="group_name">
+                                            {% for group in grouplist %}
+                                                {% if sess_group == group %}
+                                                    <option selected value="{{group}}">{{group}}</option>
+                                                {% else %}
+                                                    <option value="{{group}}">{{group}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
+                                </div>
+                            </form>
+                            <table class="table table-sm group-summary-category">
+                                <thead>
+                                    <tr style="text-align: left">
+                                        <th>Category</th>
+                                        <th>Sub Category</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <td>
+                                        {% for rw in category_summary.category_list %}
+                                            <p>{{rw}}</p>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for rw in category_summary.sub_category_list %}
+                                            <p>{{rw}}</p>
+                                        {% endfor %}                                
+                                    </td>
+                                    <td>
+                                        {% for rw in category_summary.amount_list %}
+                                            <p style="color: red" align="right">{{rw}}</p>
+                                        {% endfor %}                                
+                                    </td>
+                                </tbody>
+                            </table><br>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a href="{% url 'group_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Group Expense
+                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="container group-user-account">
@@ -286,7 +356,7 @@
                                     <input class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt"></input>        
                                 </div>
                             </form>
-                            <table class="table table-sm group-summary">
+                            <table class="table table-sm group-summary-user">
                                 <thead>
                                     <tr style="text-align: left">
                                         {% for k in group_header %}
@@ -316,71 +386,6 @@
                                         Add Group Expense
                                     </a>
                                 </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="container group-account-category">
-            <div class="card text-left text-black bg-light mb-3">
-                <h6 class="card-header">
-                    <i class="fas fa-users"></i>
-                    Group Expense: Category Wise
-                </h6>
-                <div class="card-body">
-                    <form id="form-sub" method="POST">
-                        <div class="container">
-                            <form id="form-sub" method="POST">           
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend form-control-md">
-                                        <label class="input-group-text" style="font-size: 14px;" for="select-group"> Group</label>
-                                        <select style="width:130px" name="group_name" id="group_name">
-                                            {% for group in grouplist %}
-                                                {% if sess_group == group %}
-                                                    <option selected value="{{group}}">{{group}}</option>
-                                                {% else %}
-                                                    <option value="{{group}}">{{group}}</option>
-                                                {% endif %}
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
-                                </div>
-                            </form>
-                            <table class="table table-sm group-summary">
-                                <thead>
-                                    <tr style="text-align: left">
-                                        <th>Category</th>
-                                        <th>Sub Category</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <td>
-                                        {% for rw in category_summary.category_list %}
-                                            <p>{{rw}}</p>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for rw in category_summary.sub_category_list %}
-                                            <p>{{rw}}</p>
-                                        {% endfor %}                                
-                                    </td>
-                                    <td>
-                                        {% for rw in category_summary.amount_list %}
-                                            <p style="color: red" align="right">{{rw}}</p>
-                                        {% endfor %}                                
-                                    </td>
-                                </tbody>
-                            </table><br>
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a href="{% url 'group_expenses' %}">
-                                        <i style="color:red" class="fas fa-minus"></i>
-                                        Add Group Expense
-                                    </a>
-                                </div>  
                             </div>
                         </div>
                     </form>
@@ -426,7 +431,7 @@
                     </div>
                 </div>
             </form>           
-        </div>
+        </div><br>
         <div class="container trans-summary d-none d-lg-block">
             <form id="form-sub" method="POST">
                 <div class="card text-left text-black bg-light sm-1">
@@ -488,7 +493,7 @@
             </form>    
         </div>
     </div>
-</div>    
+</div><br>
 <form id="form-navbar" method="POST">
     <div class="modal fade" id="change-period" tabindex="1" role="dialog" aria-labelledby="change-periodlabel" aria-hidden="true">
         <div class="modal-dialog" role="document">

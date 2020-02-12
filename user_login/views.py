@@ -257,6 +257,7 @@ def account(request):
             user_exp_summary=group_user_exp[3]
             
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+
         if(limit_to==None):
             limit_to=10
             trans_rows = Get_Transaction_Summary(limit_to,sel_group)
@@ -265,7 +266,7 @@ def account(request):
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
         data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
-        mini_trans_summary = Get_Mini_Tran_Summary(sel_group)
+        mini_trans_summary = Get_Mini_Tran_Summary(sel_group,request)
 
         if request.POST.get('edit-btn'):
             tran_id = request.POST.get('edit-btn')

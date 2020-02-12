@@ -322,11 +322,14 @@ def Get_Personal_Exp_Summary(userid):
 
     credit_exp = Get_Credit_Exp_Summary(from_date,to_date,userid,"Personal Expenses") 
     cashexp = Get_Cash_Exp_Summary(from_date,to_date,userid,"Personal Expenses")
-    cur_bal = total_thisMonth['income']-cashexp
 
-    current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 'throw':['Cash Balance',cur_bal]}
+    user_group_exp = Get_Total_Group_Expense(from_date, to_date, userid)
+    cur_bal = total_thisMonth['income']-(cashexp+float(user_group_exp[0]))
+
+    current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 
+    'throw':['Group Expense',user_group_exp[0]], 'fourthrow':['Cash Balance',cur_bal]}
     summary_list = [total_today,total_thisWeek, total_thisMonth, current_balance]
-
+    print(summary_list)
     return summary_list
 
 def Get_User_Exp_Summary(trans_type,from_date,to_date):
@@ -515,13 +518,24 @@ def Get_Category_Sum_For_PieChart(group_name, request):
     print(category_list)
     return category_list
 
-def Get_Mini_Tran_Summary(group_name):
+def Get_Mini_Tran_Summary(group_name,request):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
     trans_dict ={}
+    try:
+        req_date = re.split(" ",request.session.get('user-date'))
+        from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
+        to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
+    except:
+        cur_day = datetime.date(datetime.now())
+        start = cur_day.replace(day = 1)
+        end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
+        from_date = start.strftime("%Y-%m-%d")
+        to_date = end.strftime("%Y-%m-%d")
+
     query = '''SELECT transaction_id, trans_date, description, amount FROM transaction_master
-     WHERE group_name="{}" ORDER By trans_date;'''.format(group_name)
+     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" ORDER By trans_date Desc;'''.format(group_name,from_date,to_date)
     cur.execute(query)
     result = cur.fetchall()
     row_count = len(result)

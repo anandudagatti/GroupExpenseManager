@@ -87,6 +87,13 @@ body, html {
     border-radius: 3px;
   }
 .group-summary{
+  height: 230px;
+  margin:0;
+}
+.group-summary-category{
+  margin:0;
+}
+.group-summary-user{
   margin:0;
 }
 
@@ -101,7 +108,7 @@ body, html {
     width: 360px;
     margin: 0;
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     top: 5%;
     }
 
