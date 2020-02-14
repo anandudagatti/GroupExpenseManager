@@ -204,8 +204,8 @@ def Get_Transaction_Summary(request,group_name,userid):
     result = cur.fetchall()
 
     query = '''SELECT transaction_id, trans_date, user, category, sub_category, group_name, payee, 
-    payment_method, tag, description, amount from transaction_master WHERE group_name="Personal Expenses" and user="{}" 
-    and trans_date BETWEEN "{}" AND "{}" ORDER BY trans_date DESC;'''.format(userid,from_date,to_date)
+    payment_method, tag, description, amount from transaction_master WHERE trans_type="Expense" and group_name="Personal Expenses" 
+    and user="{}" and trans_date BETWEEN "{}" AND "{}" ORDER BY trans_date DESC;'''.format(userid,from_date,to_date)
     
     cur.execute(query)
     result_per = cur.fetchall()
