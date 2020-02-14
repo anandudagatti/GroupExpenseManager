@@ -260,13 +260,13 @@ def account(request):
 
         if(limit_to==None):
             limit_to=10
-            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
+            trans_rows = Get_Transaction_Summary(request,sel_group,userid)
         else:
-            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
+            trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
         data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
-        mini_trans_summary = Get_Mini_Tran_Summary(sel_group,request)
+        mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
 
         if request.POST.get('edit-btn'):
             tran_id = request.POST.get('edit-btn')

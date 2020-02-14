@@ -2,6 +2,7 @@ import sqlite3
 import pandas as pd
 from collections import defaultdict
 from datetime import datetime, timedelta
+from operator import itemgetter
 import calendar
 import re
 
@@ -185,24 +186,42 @@ def Get_Transaction_By_Id(transaction_id):
     result = cur.fetchall()
     return result
 
-def Get_Transaction_Summary(limit_to,group_name):
+def Get_Transaction_Summary(request,group_name,userid):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor() 
 
+    req_date = re.split(" ",request.session.get('user-date'))
+    from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
+    to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
+
     trans_dict = {}
     query = '''SELECT transaction_id, trans_date, user, category, sub_category, group_name, payee, 
-    payment_method, tag, amount from transaction_master WHERE group_name="{}" 
-    ORDER BY trans_date DESC LIMIT {};'''.format(group_name,limit_to)
+    payment_method, tag, description, amount from transaction_master WHERE group_name="{}" and trans_date BETWEEN 
+    "{}" AND "{}" ORDER BY trans_date DESC;'''.format(group_name,from_date,to_date)
     
     cur.execute(query)
     result = cur.fetchall()
+
+    query = '''SELECT transaction_id, trans_date, user, category, sub_category, group_name, payee, 
+    payment_method, tag, description, amount from transaction_master WHERE group_name="Personal Expenses" and user="{}" 
+    and trans_date BETWEEN "{}" AND "{}" ORDER BY trans_date DESC;'''.format(userid,from_date,to_date)
+    
+    cur.execute(query)
+    result_per = cur.fetchall()
+    row_count_per = len(result_per)
+    
+    for a in range(row_count_per):
+        result.append(result_per[a])
+
+    result.sort(key=itemgetter(1))
+    result.sort(key=lambda L: datetime.strptime(L[1], '%Y-%m-%d'))
     row_count = len(result)
     trans_summary=[]
 
     for i in range(row_count):
         trans_dict = {'id':'', 'date':'', 'user':'', 'category':'', 'sub_cat':'','group':'', 
-                        'payee':'', 'pay_meth':'', 'tag':'', 'expense':''}
+                        'payee':'', 'pay_meth':'', 'tag':'', 'description':'', 'expense':''}
         row_tup = result[i]
         trans_dict['id']=str(row_tup[0])
         trans_dict['date']=str(row_tup[1])
@@ -213,8 +232,10 @@ def Get_Transaction_Summary(limit_to,group_name):
         trans_dict['payee']=str(row_tup[6])
         trans_dict['pay_meth']=str(row_tup[7])
         trans_dict['tag']=str(row_tup[8])
-        trans_dict['expense']=str(row_tup[9])
+        trans_dict['description']=str(row_tup[9])
+        trans_dict['expense']=str(row_tup[10])
         trans_summary.append(trans_dict)
+
     conn.close()
     return trans_summary
 
@@ -515,42 +536,21 @@ def Get_Category_Sum_For_PieChart(group_name, request):
     category_list = [['Category', 'Expense']]
     for row in result:
         category_list.append([str(row[0]),int(row[1])])
-    print(category_list)
     return category_list
 
-def Get_Mini_Tran_Summary(group_name,request):
-    conn = sqlite3.connect("db.sqlite3")
-    with conn:
-        cur = conn.cursor() 
-    trans_dict ={}
-    try:
-        req_date = re.split(" ",request.session.get('user-date'))
-        from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
-        to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
-    except:
-        cur_day = datetime.date(datetime.now())
-        start = cur_day.replace(day = 1)
-        end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
-        from_date = start.strftime("%Y-%m-%d")
-        to_date = end.strftime("%Y-%m-%d")
-
-    query = '''SELECT transaction_id, trans_date, description, amount FROM transaction_master
-     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" ORDER By trans_date Desc;'''.format(group_name,from_date,to_date)
-    cur.execute(query)
-    result = cur.fetchall()
-    row_count = len(result)
-    trans_summary=[]
-
-    for i in range(row_count):
-        trans_dict = {'id':'', 'date':'', 'description':'', 'expense':''}
-        row_tup = result[i]
-        trans_dict['id']=str(row_tup[0])
-        trans_dict['date']=str(row_tup[1])
-        trans_dict['description']=str(row_tup[2])
-        trans_dict['expense']=str(row_tup[3])
-        trans_summary.append(trans_dict)
-    conn.close()
-    return trans_summary
+def Get_Mini_Tran_Summary(trans_summary_dic):
+    trans_summary_mini=[]
+    for dic in trans_summary_dic:
+        shallow_copy = dict(dic)
+        del shallow_copy['user']
+        del shallow_copy['category']
+        del shallow_copy['sub_cat']
+        del shallow_copy['group']
+        del shallow_copy['payee']
+        del shallow_copy['pay_meth']
+        del shallow_copy['tag']
+        trans_summary_mini.append(shallow_copy)
+    return trans_summary_mini
 
 def GetData_In_Dict(table_name):
     conn = sqlite3.connect("db.sqlite3")
