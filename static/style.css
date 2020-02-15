@@ -45,7 +45,10 @@ body, html {
   opacity: .9;
   position: relative;
 }
-
+.add-income{
+  opacity: .9;
+  position: relative;
+}
 .create-group{
   opacity: .9;
   width: 350px;
@@ -71,12 +74,6 @@ body, html {
   top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  }
-
-.add-income{
-  opacity: .9;
-  position: relative;
-  top: 5%;
   }
 
   th, td, select   {

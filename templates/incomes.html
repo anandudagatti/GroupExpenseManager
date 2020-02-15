@@ -36,46 +36,44 @@
             </div>
         </nav>            
     </form>    
-        <div class="row">
-            <div class="container col-sm-12 col-lg-7">
-
-    <div class="container add-income">
-        <div class="card text-left text-black bg-light mb-3">
-            <h5 class="card-header">
-                <div class="row">
-                    <div class="col-8">
-                        <i class="fas fa-user-plus"></i>
-                        <font size="4px">Add Income</font>
-                    </div>
-                    <div class="col-4 text-right">
-                        <h6><a href="{% url 'account' %}">Back to Account</a></h6>
-                    </div>
-                </div>   
-            </h5>
-            <div class="card-body ">
-                <form id="form-sub" method="POST">
-                    {% if messages %}
-                    {% for message in messages %}
-                    <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                        {{message}}
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                    <div id="select-category" class="select-category">
-                        <div class="category-card">
-                            {% for category in categories %}
-                                <button name="category-btn" value={{category}} type="submit" class="btn btn-light">
-                                    <img width="100px" height="80px" src="/static/{{category}}.svg"/><br>
-                                    <font size="2px">{{ category }}</font>
-                                </button>
-                            {% endfor %}                
-                        </div><br>
-                    </div>
-                </form>
+    <div class="row">
+        <div class="container card-body add-income col-sm-12 col-lg-7">
+            <div class="card text-left text-black bg-light mb-3">
+                <h5 class="card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <i class="fas fa-user-plus"></i>
+                            <font size="4px">Add Income</font>
+                        </div>
+                        <div class="col-4 text-right">
+                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                        </div>
+                    </div>   
+                </h5>
+                <div class="card-body">
+                    <form id="form-sub" method="POST">
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                            {{message}}
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        <div id="select-category" class="select-category">
+                            <div class="category-card">
+                                {% for category in categories %}
+                                    <button name="category-btn" value={{category}} type="submit" class="btn btn-light">
+                                        <img width="100px" height="80px" src="/static/{{category}}.svg"/><br>
+                                        <font size="2px">{{ category }}</font>
+                                    </button>
+                                {% endfor %}                
+                            </div><br>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
