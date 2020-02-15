@@ -34,18 +34,16 @@ body, html {
   }
 .expense-card{
   opacity: .9;
-  position: relative;
+  position: absolute;
   top: 15%;
 }
 .expdetail-card{
   opacity: .9;
   position: relative;
-  top: 15%;
 }
 .incdetail-card{
   opacity: .9;
   position: relative;
-  top: 15%;
 }
 
 .create-group{

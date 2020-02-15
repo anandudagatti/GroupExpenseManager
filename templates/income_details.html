@@ -30,67 +30,70 @@
                 <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
             </div>
         </nav>        
-        <div class="container align-center incdetail-card card-body">
-            <div class="card text-left mb-3">
-                <h5 class="card-header">
-                    <div class="row">
-                        <div class="col-8">    
-                                <i class="fas fa-rupee-sign"></i>
-                                <i style="color:red" class="fas fa-money-check-alt"></i>
-                                Add Income
-                        </div>
-                        <div class="col-4 text-right">
-                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+        <div class="row">
+            <div class="container col-sm-12 col-lg-7">
+                <div class="align-center incdetail-card card-body">
+                    <div class="card text-left mb-3">
+                        <h5 class="card-header">
+                            <div class="row">
+                                <div class="col-8">    
+                                        <i class="fas fa-rupee-sign"></i>
+                                        <i style="color:red" class="fas fa-money-check-alt"></i>
+                                        Add Income
+                                </div>
+                                <div class="col-4 text-right">
+                                    <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                                </div>
+                            </div>
+                        </h5>
+                        <div class="card-body">
+                            <form id="income-form" method="POST">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="">{{cat_crumb}}</a></li>
+                                </ol>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="date">Date</span>
+                                    </div>
+                                    <input type="Date" name="date" value="{{date}}" class="form-control" aria-label="date" aria-describedby="date">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">₹</span>
+                                    </div>
+                                    <input type="number" name="amount" placeholder="0.00" class="form-control" aria-label="Amount">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="payer">Payer</label>
+                                    </div>
+                                    <input type="text" id="payer-name" name="payer-name" autocomplete="off" class="form-control" aria-label="payer Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default">   
+                                    <div style="display: none;"> 
+                                        <input type="text" id="newpayer-list" name="newpayer-list">
+                                    </div>
+                                </div>    
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="tag">#Tag</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="tag" aria-label="tag" aria-describedby="tag incomes">
+                                </div>    
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Description</span>
+                                    </div>
+                                    <textarea class="form-control" aria-label="Enter Description of Expenses"></textarea>
+                                </div>
+                                <span id="errorvalue" style="color:red">{{errorvalue}}</span>
+                                <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span><br>
+                                <div class="form-group text-center form-check">
+                                    <input type="checkbox" class="form-check-input" name="recurring" id="recurring" onclick="clearmsg()">
+                                    <label class="form-check-label" for="recurring">Save as Recurring</label><br><br>
+                                    <button type="submit" name='save' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Save</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </h5>
-
-                <div class="card-body">
-                    <form id="income-form" method="POST">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="">{{cat_crumb}}</a></li>
-                        </ol>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="date">Date</span>
-                            </div>
-                            <input type="Date" name="date" value="{{date}}" class="form-control" aria-label="date" aria-describedby="date">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">₹</span>
-                            </div>
-                            <input type="number" name="amount" placeholder="0.00" class="form-control" aria-label="Amount">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="payer">Payer</label>
-                            </div>
-                            <input type="text" id="payer-name" name="payer-name" autocomplete="off" class="form-control" aria-label="payer Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default">   
-                            <div style="display: none;"> 
-                                <input type="text" id="newpayer-list" name="newpayer-list">
-                            </div>
-                        </div>    
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="tag">#Tag</span>
-                            </div>
-                            <input type="text" class="form-control" name="tag" aria-label="tag" aria-describedby="tag incomes">
-                        </div>    
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Description</span>
-                            </div>
-                            <textarea class="form-control" aria-label="Enter Description of Expenses"></textarea>
-                        </div>
-                        <span id="errorvalue" style="color:red">{{errorvalue}}</span>
-                        <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span><br>
-                        <div class="form-group text-center form-check">
-                            <input type="checkbox" class="form-check-input" name="recurring" id="recurring" onclick="clearmsg()">
-                            <label class="form-check-label" for="recurring">Save as Recurring</label><br><br>
-                            <button type="submit" name='save' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Save</button>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>

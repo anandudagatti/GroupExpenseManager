@@ -34,54 +34,58 @@
                 <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
             </div>
         </nav>    
-        <div class="container expense-card card-body">
-            <div class="card text-left mb-3">
-                <h5 class="card-header">
-                    <div class="row">
-                        <div class="col-8">
-                            <i class="fas fa-user-minus"></i>
-                            <font size="4px">Add Expense</font>
-                        </div>
-                        <div class="col-4 text-right">
-                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
-                        </div>
-                    </div>       
-                </h5>
-                <div class="card-body">
-                    <form id="expense-form" method="POST">
-                        {% if messages %}
-                        {% for message in messages %}
-                        <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                            {{message}}
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        <div id="select-category" class="select-category">
-                            <div id="category" class="category-card">
-                                {% if not sub_categories %}
-                                <div>Category</div>
-                                {% for category in categories %}
-                                <button name="category-btn" value={{category}} type="submit" onclick="take_to_subcat()" class="btn btn-light">
-                                    <img width="100px" height="80px" src="/static/{{category}}.svg" alt="No Image" /><br>
-                                    {{ category }}
-                                </button>
+        <div class="row">
+            <div class="container col-sm-12 col-lg-7">
+                <div class="expense-card card-body">
+                    <div class="card text-left mb-3">
+                        <h5 class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <i class="fas fa-user-minus"></i>
+                                    <font size="4px">Add Expense</font>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                                </div>
+                            </div>       
+                        </h5>
+                        <div class="card-body">
+                            <form id="expense-form" method="POST">
+                                {% if messages %}
+                                {% for message in messages %}
+                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                    {{message}}
+                                </div>
                                 {% endfor %}
-                                {% endif %}                
-                            </div>
-                            <div id="subcategory" class="subcategory-card">
-                                {% if sub_categories %}
-                                <h6><a href=""><<< Back to Category</a></h6>
-                                <div>Sub Category</div>
-                                {% for subcategory in sub_categories %}
-                                <button name="sub-category-btn" value={{subcategory}} type="submit" onclick="show_exp_details()" class="btn btn-light">
-                                    <img width="100px" height="80px" src="/static/{{subcategory}}.svg" alt="No Image" onerror="this.src='/static/NoImage.jpg';"/><br>
-                                    {{ subcategory }}
-                                </button>
-                                {% endfor %}
-                                {% endif %}                
-                            </div>            
+                                {% endif %}
+                                <div id="select-category" class="select-category">
+                                    <div id="category" class="category-card">
+                                        {% if not sub_categories %}
+                                        <div>Category</div>
+                                        {% for category in categories %}
+                                        <button name="category-btn" value={{category}} type="submit" onclick="take_to_subcat()" class="btn btn-light">
+                                            <img width="100px" height="80px" src="/static/{{category}}.svg" alt="No Image" onerror="this.src='/static/NoImage.jpg';"/><br>
+                                            {{ category }}
+                                        </button>
+                                        {% endfor %}
+                                        {% endif %}                
+                                    </div>
+                                    <div id="subcategory" class="subcategory-card">
+                                        {% if sub_categories %}
+                                        <h6><a href=""><<< Back to Category</a></h6>
+                                        <div>Sub Category</div>
+                                        {% for subcategory in sub_categories %}
+                                        <button name="sub-category-btn" value={{subcategory}} type="submit" onclick="show_exp_details()" class="btn btn-light">
+                                            <img width="100px" height="80px" src="/static/{{subcategory}}.svg" alt="No Image" onerror="this.src='/static/NoImage.jpg';"/><br>
+                                            {{ subcategory }}
+                                        </button>
+                                        {% endfor %}
+                                        {% endif %}                
+                                    </div>            
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>        

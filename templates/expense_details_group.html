@@ -63,101 +63,105 @@
                 <span class="text-white" id="userid"><i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
                 <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
             </div>
-        </nav>        
-        <div class="container expdetail-card card-body">
-            <div class="card text-left mb-3">
-                <h5 class="card-header">
-                    <div class="row">
-                        <div class="col-8">
-                            <i class="fas fa-rupee-sign"></i>
-                            <i style="color:red" class="fas fa-money-check-alt"></i>
-                            <font size="4px">Add Expense</font>
-                        </div>
-                        <div class="col-4 text-right">
-                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+        </nav>
+        <div class="row">
+            <div class="container col-sm-12 col-lg-7">
+                <div class="expdetail-card card-body">
+                    <div class="card text-left mb-3">
+                        <h5 class="card-header">
+                            <div class="row">
+                                <div class="col-8">
+                                    <i class="fas fa-rupee-sign"></i>
+                                    <i style="color:red" class="fas fa-money-check-alt"></i>
+                                    <font size="4px">Add Expense</font>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                                </div>
+                            </div>
+                        </h5>
+                        <div class="card-body">
+                            <form id="expense-form" method="POST">
+                                <ol class="breadcrumb">
+                                    {% if edit_mode %}
+                                    <li class="breadcrumb-item">{{cat_crumb}}</li>
+                                    {% else %}
+                                    <li class="breadcrumb-item"><a href="">{{cat_crumb}}</a></li>
+                                    {% endif %}
+                                    <li class="breadcrumb-item active" aria-current="">{{subcat_crumb}}</li>
+                                </ol>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="group">Select Group</label>
+                                    </div>
+                                    <select class="custom-select" name="group" id="group">
+                                        {% for group in grouplist %}
+                                        {% if group == edit_group %}
+                                        <option selected value="{{group}}">{{group}}</option>
+                                        {% else %}
+                                        <option value="{{group}}">{{group}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>            
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="date">Date</span>
+                                    </div>
+                                    <input type="Date" name="date" value="{{edit_date}}" class="form-control" aria-label="date" aria-describedby="date">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">₹</span>
+                                    </div>
+                                    <input type="number" name="amount" value="{{edit_amount}}" placeholder="0.00" class="form-control" aria-label="Amount">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="payee">Payee</label>
+                                    </div>
+                                    <input type="text" id="payee-name" value="{{edit_payee}}" name="payee-name" autocomplete="off" class="form-control" aria-label="Payee Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default">   
+                                    <div style="display: none;"> 
+                                        <input type="text" id="newpayee-list" name="newpayee-list">
+                                    </div>
+                                </div>    
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="payment-method">Payment Method</label>
+                                    </div>
+                                    <select class="custom-select" name="payment-method" id="payment-method">
+                                        {% for pay_type in payment_meth %}
+                                        {% if pay_type == edit_pay_type %}
+                                        <option selected value="{{pay_type}}">{{pay_type}}</option>
+                                        {% else %}
+                                        <option value="{{pay_type}}">{{pay_type}}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="tag">#Tag</span>
+                                    </div>
+                                    <input type="text" class="form-control" value="{{edit_tag}}" name="tag" aria-label="tag" aria-describedby="tag expenses">
+                                </div>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Description</span>
+                                    </div>
+                                    <textarea class="form-control" name="description" aria-label="Enter Description of Expenses">{{edit_desc}}</textarea>
+                                </div>
+                                <span id="errorvalue" style="color:red">{{errorvalue}}</span>
+                                <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span><br>
+                                <div class="form-group text-center form-check">
+                                    <input type="checkbox" class="form-check-input" name="recurring" id="recurring" onclick="clearmsg()">
+                                    <label class="form-check-label" for="recurring">Save as Recurring</label><br><br>
+                                    <button type="submit" name='save' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Save</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </h5>
-                <div class="card-body">
-                    <form id="expense-form" method="POST">
-                        <ol class="breadcrumb">
-                            {% if edit_mode %}
-                            <li class="breadcrumb-item">{{cat_crumb}}</li>
-                            {% else %}
-                            <li class="breadcrumb-item"><a href="">{{cat_crumb}}</a></li>
-                            {% endif %}
-                            <li class="breadcrumb-item active" aria-current="">{{subcat_crumb}}</li>
-                        </ol>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="group">Select Group</label>
-                            </div>
-                            <select class="custom-select" name="group" id="group">
-                                {% for group in grouplist %}
-                                {% if group == edit_group %}
-                                <option selected value="{{group}}">{{group}}</option>
-                                {% else %}
-                                <option value="{{group}}">{{group}}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>            
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="date">Date</span>
-                            </div>
-                            <input type="Date" name="date" value="{{edit_date}}" class="form-control" aria-label="date" aria-describedby="date">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">₹</span>
-                            </div>
-                            <input type="number" name="amount" value="{{edit_amount}}" placeholder="0.00" class="form-control" aria-label="Amount">
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="payee">Payee</label>
-                            </div>
-                            <input type="text" id="payee-name" name="payee-name" autocomplete="off" class="form-control" aria-label="Payee Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default">   
-                            <div style="display: none;"> 
-                                <input type="text" id="newpayee-list" name="newpayee-list">
-                            </div>
-                        </div>    
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="payment-method">Payment Method</label>
-                            </div>
-                            <select class="custom-select" name="payment-method" id="payment-method">
-                                {% for pay_type in payment_meth %}
-                                {% if pay_type == edit_pay_type %}
-                                <option selected value="{{pay_type}}">{{pay_type}}</option>
-                                {% else %}
-                                <option value="{{pay_type}}">{{pay_type}}</option>
-                                {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="tag">#Tag</span>
-                            </div>
-                            <input type="text" class="form-control" value="{{edit_tag}}" name="tag" aria-label="tag" aria-describedby="tag expenses">
-                        </div>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Description</span>
-                            </div>
-                            <textarea class="form-control" name="description" aria-label="Enter Description of Expenses">{{edit_desc}}</textarea>
-                        </div>
-                        <span id="errorvalue" style="color:red">{{errorvalue}}</span>
-                        <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span><br>
-                        <div class="form-group text-center form-check">
-                            <input type="checkbox" class="form-check-input" name="recurring" id="recurring" onclick="clearmsg()">
-                            <label class="form-check-label" for="recurring">Save as Recurring</label><br><br>
-                            <button type="submit" name='save' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Save</button>
-                        </div>
-                    </form>
-                </div>
+                </div>        
             </div>
         </div>
     </form>
