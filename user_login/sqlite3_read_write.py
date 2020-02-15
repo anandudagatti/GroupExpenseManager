@@ -122,19 +122,32 @@ def Get_Payer_List():
     conn.close()
     return payer_list
 
-def Insert_Payee(payee_list):
+def Insert_Payee(payee_name):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
         cur = conn.cursor()
     ex_payee_list = Get_Payee_List()
     payee_id = len(ex_payee_list)+1
-    for payee_name in payee_list:
-        if payee_name not in ex_payee_list:
-            insert_query = """INSERT INTO payee_list(payee_id,payee_name) VALUES("{}","{}");""".format(payee_id,payee_name) 
-            cur.execute(insert_query)
-            payee_id = payee_id +1
+    if payee_name not in ex_payee_list:
+        payee_id = payee_id +1
+        insert_query = """INSERT INTO payee_list(payee_id,payee_name) VALUES("{}","{}");""".format(payee_id,payee_name) 
+        cur.execute(insert_query)
+        conn.commit()
     
-    conn.commit()
+    conn.close()
+
+def Insert_Payer(payer_name):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor()
+    ex_payer_list = Get_Payer_List()
+    payer_id = len(ex_payer_list)+1
+    if payer_name not in ex_payer_list:
+        payer_id = payer_id +1
+        insert_query = """INSERT INTO payer_list(payer_id,payer_name) VALUES("{}","{}");""".format(payer_id,payer_name) 
+        cur.execute(insert_query)
+        conn.commit()
+    
     conn.close()
 
 def Update_Issue_Count_For_Key(key):

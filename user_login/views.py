@@ -15,7 +15,7 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
-    Get_Category_Sum_For_PieChart
+    Get_Category_Sum_For_PieChart,Insert_Payer
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -171,7 +171,6 @@ def account(request):
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
 
-    limit_to = request.POST.get('limit_to')
     get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
     grouplist = list(get_groups)
     logmsg = 'Existing Group List: ' 
@@ -258,11 +257,7 @@ def account(request):
             
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
 
-        if(limit_to==None):
-            limit_to=10
-            trans_rows = Get_Transaction_Summary(request,sel_group,userid)
-        else:
-            trans_rows = Get_Transaction_Summary(request,sel_group,userid)
+        trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
         data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
@@ -285,7 +280,7 @@ def account(request):
 
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
-                "trans_header":trans_header,"trans_rows":trans_rows, 'limit_to':limit_to, "grouplist":grouplist, 
+                "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date, 'data_for_chart': json.dumps(data_for_chart)})
@@ -301,7 +296,6 @@ def nogroup_account(request):
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
     login_type = request.session.get('login_typ')
-    limit_to = request.POST.get('limit_to')
     sel_group = request.POST.getlist('group_name')
     
     if userid!=None:
@@ -322,15 +316,10 @@ def nogroup_account(request):
         per_rows = Get_Personal_Exp_Summary(userid)
             
         trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
-        if(limit_to==None):
-            limit_to=10
-            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
-        else:
-            trans_rows = Get_Transaction_Summary(limit_to,sel_group)
+        trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
     return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
-                "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
-                'limit_to':limit_to})
+                "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -481,7 +470,8 @@ def incomes(request):
             group = "Personal Expenses"
             date = request.POST.get('date')
             amount = request.POST.get('amount')
-            payer = request.POST.get('payer')
+            payer = request.POST.get('payer-name')
+            Insert_Payer(payer)
             category = request.session.get('cat_sel')
             subcategory = 'NA'
             payment = 'NA'
@@ -530,26 +520,15 @@ def group_expenses(request):
             info = "User Logged Out Successfully!"
             messages.success(request,info)
             return redirect('home')
-        elif request.POST.get('add-payee'):
-            fullname = request.user.get_full_name()
-            get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
-            grouplist = list(get_groups) 
-            payee_list = Get_Payee_List()
-            payment_methods = Get_Payment_Method()
-            return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
-             "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('save'):
             info = 'Expense Saved!!'
             logmsg = "Save Button Clicked"
             logging.info(logmsg)
-            tempvalue = request.POST.getlist('newpayee-list')
-            newpayee_list = tempvalue[0].split(",")
-            Insert_Payee(newpayee_list) 
-            logging.info(newpayee_list)
             group = request.POST.get('group')
             date = request.POST.get('date')
             amount = request.POST.get('amount')
-            payee = request.POST.get('payee')
+            payee = request.POST.get('payee-name')
+            Insert_Payee(payee)
             category = request.session.get('cat_sel')
             subcategory = request.session.get('sub_cat_sel')
             payment = request.POST.get('payment-method')
@@ -662,24 +641,15 @@ def personal_expenses(request):
             info = "User Logged Out Successfully!"
             messages.success(request,info)
             return redirect('home')
-        elif request.POST.get('add-payee'):
-            print(request.POST.get('payee-name'))    
-            fullname = request.user.get_full_name()
-            payee_list = Get_Payee_List()
-            payment_methods = Get_Payment_Method()
-            return render(request, 'expense_details_personal.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
-             "subcat_crumb":request.session.get('sub_cat_sel'), "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('save'):
             info = 'Expense Saved!!'
             logmsg = "Save Button Clicked"
             logging.info(logmsg)
-            tempvalue = request.POST.getlist('newpayee-list')
-            newpayee_list = tempvalue[0].split(",")
-            Insert_Payee(newpayee_list) 
             group = 'Personal Expenses'
             date = request.POST.get('date')
             amount = request.POST.get('amount')
-            payee = request.POST.get('payee')
+            payee = request.POST.get('payee-name')
+            Insert_Payee(payee)
             category = request.session.get('cat_sel')
             subcategory = request.session.get('sub_cat_sel')
             payment = request.POST.get('payment-method')
