@@ -504,10 +504,15 @@ def Get_Categorywise_Summary(group_name, request):
         end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
         from_date = start.strftime("%Y-%m-%d")
         to_date = end.strftime("%Y-%m-%d")
-
-    query = '''SELECT category, sub_category, sum(amount) FROM transaction_master
-     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" Group By category,
-     sub_category;'''.format(group_name,from_date,to_date)
+    if group_name == "Personal Expenses":
+        userid = request.session.get('userid')
+        query = '''SELECT category, sub_category, sum(amount) FROM transaction_master
+        WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" and user="{}" Group By category,
+        sub_category;'''.format(group_name,from_date,to_date,userid)
+    else:
+        query = '''SELECT category, sub_category, sum(amount) FROM transaction_master
+        WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" Group By category,
+        sub_category;'''.format(group_name,from_date,to_date)
 
     cur.execute(query)
     result = cur.fetchall()
@@ -540,9 +545,15 @@ def Get_Category_Sum_For_PieChart(group_name, request):
         from_date = start.strftime("%Y-%m-%d")
         to_date = end.strftime("%Y-%m-%d")
 
-    query = '''SELECT category, sum(amount) FROM transaction_master
-     WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" 
-     Group By category;'''.format(group_name,from_date,to_date)
+    if group_name == "Personal Expenses":
+        userid = request.session.get('userid')
+        query = '''SELECT category, sum(amount) FROM transaction_master
+        WHERE trans_type="Expense" and group_name="{}" and trans_date BETWEEN "{}" AND "{}" and user="{}"
+        Group By category;'''.format(group_name,from_date,to_date,userid)
+    else:
+        query = '''SELECT category, sum(amount) FROM transaction_master
+        WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}" 
+        Group By category;'''.format(group_name,from_date,to_date)
 
     cur.execute(query)
     result = cur.fetchall()
@@ -550,6 +561,32 @@ def Get_Category_Sum_For_PieChart(group_name, request):
     for row in result:
         category_list.append([str(row[0]),int(row[1])])
     return category_list
+
+def Get_User_Exp_For_PieChart(group_name,request):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    try:
+        req_date = re.split(" ",request.session.get('user-date'))
+        from_date = datetime.strptime(req_date[1], '%d/%m/%Y').strftime('%Y-%m-%d')
+        to_date = datetime.strptime(req_date[3], '%d/%m/%Y').strftime('%Y-%m-%d')
+    except:
+        cur_day = datetime.date(datetime.now())
+        start = cur_day.replace(day = 1)
+        end = cur_day.replace(day = calendar.monthrange(cur_day.year, cur_day.month)[1])
+        from_date = start.strftime("%Y-%m-%d")
+        to_date = end.strftime("%Y-%m-%d")
+
+    query = """SELECT user, sum(amount) as Total_Amount FROM transaction_master 
+            WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}"
+            GROUP by user""".format(group_name,from_date,to_date)
+    cur.execute(query)
+    result = cur.fetchall()
+    user_exp_list = [['User', 'Expense']]
+    for row in result:
+        user_exp_list.append([str(row[0]),int(row[1])])
+    return user_exp_list
 
 def Get_Mini_Tran_Summary(trans_summary_dic):
     trans_summary_mini=[]

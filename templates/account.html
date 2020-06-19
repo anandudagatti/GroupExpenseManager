@@ -143,6 +143,19 @@
                 </div>
             </div>
         </div>
+        <div class="container personal-chart">
+            <div class="card text-left text-black bg-light">
+                <h6 class="card-header">
+                    <i class="fas fa-user-minus"></i>
+                    Personal Expense Pie Chart
+                </h6>
+                <div class="card-body">
+                    <div id="pers_piechart" style="width: 360px; height: 330px;"></div>
+                </div>   
+            </div>
+        </div>
+    </div>  
+    <div class="row">
         <div class="container group-account">
             <div class="card text-left text-black bg-light mb-3">
                 <h6 class="card-header">
@@ -233,7 +246,7 @@
                         </div>
                         <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
                     </div>
-                    <div id="piechart" style="width: 360px; height: 290px;"></div>
+                    <div id="group_piechart" style="width: 360px; height: 290px;"></div>
                 </div>   
             </div>
         </div>
@@ -392,6 +405,21 @@
                 </div>
             </div>
         </div>
+        <div class="container group-user-account">
+            <div class="card text-left text-black bg-light mb-3">
+                <h6 class="card-header">
+                    <i class="fas fa-users"></i>
+                    Group Expense: User Wise Pie Chart
+                </h6>
+                <div class="card-body">
+                    <div class="container">
+                        <div id="usersplit_piechart" style="width: 360px; height: 290px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="container trans-summary-mini d-block d-sm-none">
             <form id="form-sub" method="POST">
                 <div class="card text-left text-black bg-light sm-1">
@@ -432,6 +460,8 @@
                 </div>
             </form>           
         </div><br>
+    </div>
+    <div class="row">
         <div class="container trans-summary d-none d-lg-block">
             <form id="form-sub" method="POST">
                 <div class="card text-left text-black bg-light sm-1">
@@ -541,10 +571,51 @@
           is3D: true,
           backgroundColor: { fill:'transparent' }};
     
-      // Display the chart inside the <div> element with id="piechart"
-      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+      // Display the chart inside the <div> element with id="group_piechart"
+      var chart = new google.visualization.PieChart(document.getElementById('group_piechart'));
       chart.draw(data, options);
     }
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawPersonalChart);
+
+    // Draw the chart and set the chart values
+    function drawPersonalChart() {
+      var datalist = {{per_ex_data_for_chart|safe}};
+      var data = google.visualization.arrayToDataTable(datalist);
+    
+      // Optional; add a title and set the width and height of the chart
+      var options = {
+          legend:'right',
+          pieSliceText: 'percentage',
+          is3D: true,
+          backgroundColor: { fill:'transparent' }};
+    
+      // Display the chart inside the <div> element with id="pers_piechart"
+      var chart = new google.visualization.PieChart(document.getElementById('pers_piechart'));
+      chart.draw(data, options);
+    }
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawUserSplitChart);
+
+    // Draw the chart and set the chart values
+    function drawUserSplitChart() {
+      var datalist = {{group_user_exp_chart|safe}};
+      var data = google.visualization.arrayToDataTable(datalist);
+
+      // Optional; add a title and set the width and height of the chart
+      var options = {
+          legend:'right',
+          pieSliceText: 'percentage',
+          is3D: true,
+          backgroundColor: { fill:'transparent' }};
+    
+      // Display the chart inside the <div> element with id="pers_piechart"
+      var chart = new google.visualization.PieChart(document.getElementById('usersplit_piechart'));
+      chart.draw(data, options);
+    }
+
 </script>
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>

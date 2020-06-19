@@ -15,7 +15,7 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
-    Get_Category_Sum_For_PieChart,Insert_Payer
+    Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -262,6 +262,8 @@ def account(request):
         category_summary = Get_Categorywise_Summary(sel_group,request)
         data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
+        per_ex_data_for_chart = Get_Category_Sum_For_PieChart("Personal Expenses",request)
+        user_exp_summary_chart = Get_User_Exp_For_PieChart(sel_group,request)
 
         if request.POST.get('edit-btn'):
             tran_id = request.POST.get('edit-btn')
@@ -277,13 +279,13 @@ def account(request):
                 else:
                     info = 'Invalid User to Edit Transaction!'
                     messages.error(request,info)
-
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
-                "from_to_date": from_to_date, 'data_for_chart': json.dumps(data_for_chart)})
+                "from_to_date": from_to_date, 'data_for_chart': json.dumps(data_for_chart), 
+                'per_ex_data_for_chart': json.dumps(per_ex_data_for_chart),"group_user_exp_chart":json.dumps(user_exp_summary_chart)})
 
 @csrf_exempt
 @login_required(login_url='home')

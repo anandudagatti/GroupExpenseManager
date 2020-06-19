@@ -118,19 +118,24 @@ body, html {
   margin-bottom: 15px;
   top: 5%;
   }
-  
+.personal-chart{
+  width: 360px;
+  margin: 0;
+  position: relative;
+  margin-bottom: 15px;
+  top: 5%;
+  }
+      
 .group-account-category{
   width: 360px;
   margin: 0;
   position: relative;
-  top: 5%;
   }
 
 .group-user-account{
   width: 360px;
   margin: 0;
   position: relative;
-  top: 6%;
 }
 
 .trans-summary{
