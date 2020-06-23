@@ -276,32 +276,34 @@
                                     <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
                                 </div>
                             </form>
-                            <table class="table table-sm group-summary-category">
-                                <thead>
-                                    <tr style="text-align: left">
-                                        <th>Category</th>
-                                        <th>Sub Category</th>
-                                        <th>Amount</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <td>
-                                        {% for rw in category_summary.category_list %}
-                                            <p>{{rw}}</p>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for rw in category_summary.sub_category_list %}
-                                            <p>{{rw}}</p>
-                                        {% endfor %}                                
-                                    </td>
-                                    <td>
-                                        {% for rw in category_summary.amount_list %}
-                                            <p style="color: red" align="right">{{rw}}</p>
-                                        {% endfor %}                                
-                                    </td>
-                                </tbody>
-                            </table><br>
+                            <div class="scroll-catwise">
+                                <table class="table table-sm group-summary-category">
+                                    <thead>
+                                        <tr style="text-align: left">
+                                            <th>Category</th>
+                                            <th>Sub Category</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <td>
+                                            {% for rw in category_summary.category_list %}
+                                                <p>{{rw}}</p>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% for rw in category_summary.sub_category_list %}
+                                                <p>{{rw}}</p>
+                                            {% endfor %}                                
+                                        </td>
+                                        <td>
+                                            {% for rw in category_summary.amount_list %}
+                                                <p style="color: red" align="right">{{rw}}</p>
+                                            {% endfor %}                                
+                                        </td>
+                                    </tbody>
+                                </table><br>
+                            </div>
                             <div class="row">
                                 <div class="col-12 text-center">
                                     <a href="{% url 'group_expenses' %}">
@@ -426,7 +428,7 @@
                     <h6 class="card-header">
                         <font size="5px">Transaction Summary</font> 
                     </h6>
-                    <div class="card-body">
+                    <div class="card-body scroll-trans">
                         {% if messages %}
                         {% for message in messages %}
                         <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
@@ -472,7 +474,7 @@
                             </div>
                         </div>
                     </h6>
-                    <div class="card-body">
+                    <div class="card-body scroll-trans">
                         {% if messages %}
                         {% for message in messages %}
                         <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
