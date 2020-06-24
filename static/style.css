@@ -96,14 +96,14 @@ body, html {
 }
 
 .personal-account{
-  width: 360px;
+  width: 380px;
   margin: 0;
   position: relative;
   top: 3%;
   }
   
 .group-account{
-    width: 360px;
+    width: 380px;
     margin: 0;
     position: relative;
     margin-bottom: 10px;
@@ -111,14 +111,14 @@ body, html {
     }
 
 .group-chart{
-  width: 360px;
+  width: 380px;
   margin: 0;
   position: relative;
   margin-bottom: 15px;
   top: 5%;
   }
 .personal-chart{
-  width: 360px;
+  width: 380px;
   margin: 0;
   position: relative;
   margin-bottom: 15px;
@@ -132,7 +132,7 @@ body, html {
   }
 
 .group-user-account{
-  width: 360px;
+  width: 380px;
   margin: 0;
   position: relative;
 }
@@ -153,7 +153,7 @@ body, html {
 }
 
 .trans-summary-mini{
-  width: 360px;
+  width: 380px;
   opacity: .9;
   margin: 0;
   position: relative;

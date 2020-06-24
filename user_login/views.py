@@ -186,7 +186,7 @@ def account(request):
     logmsg = 'selected group: '+str(sess_group)
     logging.info(logmsg)
 
-    user_sel_date = request.POST.get('user_sel_date')    
+    user_sel_date = request.POST.get('user_sel_date')
     request.session['user-date'] = user_sel_date
 
     if request.session.get('user-date'):
@@ -397,7 +397,6 @@ def admin(request):
         return redirect('home')
 
 @csrf_exempt
-@login_required(login_url='home')
 def groups(request):
     if request.POST.get('create-group'):
         userid = request.POST.get('userid')
