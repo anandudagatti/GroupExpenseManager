@@ -25,16 +25,12 @@
 <body>
     <form id="form-navbar" method="POST">
         <nav class="navbar navbar-light bg-dark">
-            <div class="row">
-                <a class="navbar-brand text-white" href="#">
-                    <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+            <a class="navbar-brand text-white" href="#">
+                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
                     Group Expense Manager
-                </a>
-            </div>
+            </a>
             <div class="align-right">
-                <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>            
-            </div>
-            <div class="align-left">
+                <span class="text-white" id="userid"><i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
                 <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
             </div>
         </nav>

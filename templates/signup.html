@@ -35,15 +35,14 @@
     <form id="form-navbar" method="POST">
         {% csrf_token %}
         <nav class="navbar navbar-light bg-dark">
-            <div class="row">
-                <a class="navbar-brand text-white" href="#">
-                    <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
-                    Group Expense Manager
-                </a>
-            </div>
+            <a class="navbar-brand text-white" href="#">
+                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                 Group Expense Manager
+            </a>
             <div class="text-center">
-                <a style="color:white" href="{% url 'home' %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+                <a style="color:white" href="{% url 'home' %}"><b>Return to Home</b></a>
             </div>
+    
         </nav>            
     </form>
     
