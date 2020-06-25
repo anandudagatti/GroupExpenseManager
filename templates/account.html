@@ -62,19 +62,26 @@
 <body onload="OnloadUpdate()">
 <!-- Image and text -->
 <form id="form-navbar" method="POST">
-    <nav class="navbar navbar-light bg-dark">
-        <a class="navbar-brand text-white" href="#">
-            <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
-            Group Expense Manager
-        </a>
-        <div class="align-right">
-            <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
-            <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
+    <div class="pos-f-t">
+        <nav class="navbar navbar-dark bg-dark">
+            <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
+                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                Group Expense Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-user-alt"></i>
+            </button>
+        </nav>
+        <div class="collapse align-center text-right" id="navbarToggleExternalContent">
+            <div class="bg-dark p-3">
+                <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button>   
+            </div>
         </div>
-    </nav>            
+    </div>
 </form><br>
-<div class="container">
-    <form id="form-sub" method="POST">
+<form id="form-sub" method="POST">
+    <div class="container">
         <div class="row mb-2">
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div style="display: none;">
@@ -93,7 +100,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 col-md-6 col-sm-12">
+            <div class="col-lg-5 col-md-6 col-sm-12">
                 <div class="input-group mb-2">
                     <div class="input-group-prepend form-control-md">
                         <label class="input-group-text" style="font-size: 12px;" for="select-group"><i class="fas fa-users"> Group </i></label>
@@ -110,9 +117,9 @@
                     <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </div>    
+    </div>
+</form>
 <div class="container">
     <div class="row">
         <div class="container personal-account">

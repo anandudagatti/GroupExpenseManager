@@ -24,16 +24,23 @@
 </head>
 <body>
     <form id="form-navbar" method="POST">
-        <nav class="navbar navbar-light bg-dark">
-            <a class="navbar-brand text-white" href="#">
-                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+        <div class="pos-f-t">
+            <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
+                    <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
                     Group Expense Manager
-            </a>
-            <div class="align-right">
-                <span class="text-white" id="userid"><i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
-                <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button><br>    
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-user-alt"></i>
+                </button>
+            </nav>
+            <div class="collapse align-center text-right" id="navbarToggleExternalContent">
+                <div class="bg-dark p-3">
+                    <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                    <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button>   
+                </div>
             </div>
-        </nav>
+        </div>
         <div class="row">
             <div class="container card-body col-sm-12 col-lg-7">
                 <div class="card text-left mb-3">
