@@ -238,7 +238,7 @@ def Get_Transaction_Summary(request,group_name,userid):
         row_tup = result[i]
         trans_dict['id']=str(row_tup[0])
         trans_dict['date']=str(row_tup[1])
-        trans_dict['user']=str(row_tup[2])
+        trans_dict['user']=str(Get_FirstName_of_User(row_tup[2]))
         trans_dict['category']=str(row_tup[3])
         trans_dict['sub_cat']=str(row_tup[4])
         trans_dict['group']=str(row_tup[5])
@@ -439,6 +439,21 @@ def Get_Group_Exp_Summary(group_name):
 
     return summary_list
 
+def Get_FirstName_of_User(username):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    dictionary = {}
+    query = """SELECT first_name FROM auth_user 
+            WHERE username="{}" """.format(username)
+    cur.execute(query)
+    result = cur.fetchall()
+
+    FirstName = result[0][0]
+
+    return FirstName
+
 def Get_Group_User_Exp(group_name,from_date,to_date):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
@@ -454,7 +469,7 @@ def Get_Group_User_Exp(group_name,from_date,to_date):
     userlist = []
     exp_list =[]
     for r in result:
-        userlist.append(r[0])
+        userlist.append(Get_FirstName_of_User(r[0]))
         exp_list.append(r[1])
     dictionary = {'user':userlist, 'expenses':exp_list}
     return dictionary
@@ -585,7 +600,7 @@ def Get_User_Exp_For_PieChart(group_name,request):
     result = cur.fetchall()
     user_exp_list = [['User', 'Expense']]
     for row in result:
-        user_exp_list.append([str(row[0]),int(row[1])])
+        user_exp_list.append([str(Get_FirstName_of_User(row[0])),int(row[1])])
     return user_exp_list
 
 def Get_Mini_Tran_Summary(trans_summary_dic):
