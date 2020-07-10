@@ -57,12 +57,16 @@
                 </form>
             </div>
         </div>    
-        <div class="card text-center text-white bg-dark mb-3">
+        <div class="card text-left text-white bg-dark mb-3">
             <div class="card-body">
-                <a style="color:white" href="{% url 'signup' %}">New User? Sign Up</a><br>
-                <a style="color:white" href="{% url 'groups' %}">Looking to create new group?  click here </a>
+                <a style="color:white" href="{% url 'signup' %}"><i class="fas fa-user-plus"></i> New User? Sign Up</a><br><br>
+                <a style="color:white" href="{% url 'groups' %}"><i class="fas fa-users"></i> Create New Group From Here </a><br><br>
+                <a style="color:white" href="http://app.appsgeyser.com/11516863/Group%20Expenses%20Manager" target="_blank">
+                    <i class="fas fa-download"></i>
+                     Download Android App
+                </a>
             </div>
-        </div>        
+        </div>
     </div>    
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
