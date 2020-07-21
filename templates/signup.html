@@ -28,6 +28,8 @@
             document.getElementById('signupinfo').style.display ='none';
         }
     }
+
+}
 </script>
 <title>Group Expenses Manager: Sign Up</title>
 </head>
@@ -45,7 +47,6 @@
     
         </nav>            
     </form>
-    
     <div class="container sign-up">
         <div class="card text-center text-white bg-dark mb-3">
             <h5 class="card-header">
@@ -76,12 +77,19 @@
                     </div>
                     {% endfor %}
                     {% endif %}
-                    <button type="submit" name='sign-up' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Signup</button>
+                    <div class="form-group">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="agree" required>
+                        <label class="form-check-label" for="agree">
+                            Agree to <a href="{% url 'terms' %}" target="_blank"><b>terms of use</b></a>
+                        </label>
+                    </div><br>
+                    <button type="submit" name='sign-up' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Sign Up</button>
+                    </form>
                 </form>
             </div>
         </div>
     </div>
-    
 <script src="/static/js/jquery.slim.min.js"></script>
 <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
 <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>

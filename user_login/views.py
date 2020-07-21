@@ -15,7 +15,8 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Write_to_DB, Get_SessionID, Get_Payee_List, Get_Payment_Method, Get_Payer_List,Insert_Transaction, \
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
-    Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart
+    Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart, Update_UserDate_to_SessionMaster, \
+    Get_FromToDate_From_SessionID
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -29,7 +30,11 @@ def home(request):
     return render(request, 'login.html')
 
 @csrf_exempt
-def signup(request):
+def terms(request):
+    return render(request, 'terms_of_use.html')
+
+@csrf_exempt
+def signup(request):       
     if request.POST.get('sign-up'):
         logmsg = "singup view: Rendering singup page"
         logging.info(logmsg)
@@ -187,6 +192,7 @@ def account(request):
     logging.info(logmsg)
 
     user_sel_date = request.POST.get('user_sel_date')
+    print("userdate", user_sel_date)
     request.session['user-date'] = user_sel_date
 
     if request.session.get('user-date'):
@@ -197,6 +203,8 @@ def account(request):
         lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
         from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
         request.session['user-date'] = from_to_date
+
+    Update_UserDate_to_SessionMaster(request.session.get('sessionid'),from_to_date)
 
     logmsg = 'user date: '+request.session.get('user-date')
     logging.info(logmsg)

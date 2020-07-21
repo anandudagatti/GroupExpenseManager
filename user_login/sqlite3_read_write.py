@@ -67,6 +67,31 @@ def Get_SessionID(session_data):
         session_id.append(r[0])
     return session_id
 
+def Update_UserDate_to_SessionMaster(session_id,from_to_date):
+    conn = sqlite3.connect("db.sqlite3")
+    sql = ''' UPDATE session_master SET from_to_date = '{}'
+            WHERE session_id = {};'''.format(from_to_date,session_id[0])
+    print(sql)
+    cur = conn.cursor()
+    cur.execute(sql)
+    conn.commit()
+    conn.close()            
+
+def Get_FromToDate_From_SessionID(session_id):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    dictionary = {}
+    query = """SELECT from_to_date FROM session_master 
+            WHERE session_id="{}" """.format(session_id)
+    cur.execute(query)
+    result = cur.fetchall()
+
+    from_to_date = result[0][0]
+
+    return from_to_date
+
 def Delete_Issue_Count():
     conn = sqlite3.connect("db.sqlite3")
     with conn:

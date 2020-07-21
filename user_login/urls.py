@@ -11,5 +11,6 @@ urlpatterns = [
     path('groups/', views.groups, name='groups'),
     path('incomes/', views.incomes, name='incomes'),
     path('group_expenses/', views.group_expenses, name='group_expenses'),
-    path('personal_expenses/', views.personal_expenses, name='personal_expenses')
+    path('personal_expenses/', views.personal_expenses, name='personal_expenses'),
+    path('terms_of_use/', views.terms, name='terms')
 ]
