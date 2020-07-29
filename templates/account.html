@@ -212,7 +212,32 @@
                 <div class="card-body">
                     <div class="container">
                         <form id="form-sub" method="POST">
-                            <a href="{% url 'groups' %}"><i class="fas fa-users"></i>   Create New Group</a>
+                            <div class="col">
+                                <div class="row mb-3">
+                                    <a href="{% url 'groups' %}">
+                                        <i class="fas fa-users"></i>
+                                        Create New Group
+                                    </a>
+                                </div>
+                                <div class="row mb-3">
+                                    <a href="{% url 'incomes' %}">
+                                        <i style="color:green" class="fas fa-plus"></i>
+                                        Add Personal Income
+                                    </a>    
+                                </div>
+                                <div class="row mb-3">
+                                    <a href="{% url 'personal_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Personal Expense
+                                    </a>    
+                                </div>
+                                <div class="row mb-3">
+                                    <a href="{% url 'group_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Group Expense
+                                    </a>        
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
