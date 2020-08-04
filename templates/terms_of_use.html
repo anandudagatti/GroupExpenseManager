@@ -34,7 +34,18 @@
     <div class="container">
         <div class="card text-left text-black bg-light mb-3">
             <div id="terms-and-conditions">
-            <h2 class="card-header" style="text-align: center;"><b>Terms of Use</b></h2>
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-9">
+                        <h2 style="text-align: left; font-size:22px"><b>Terms of Use</b></h2>
+                    </div>
+                    <div class="col-3" style="text-align: right;">
+                        <button onclick="closeBtnClicked()" class="btn" id="closebtn" onclick="closeBtnClicked"> 
+                            <i style="font-size:22px" class="fas fa-times"></i>
+                        </button>                    
+                    </div>    
+                </div>
+            </div>
             <div class="card-body ">
                 <p>Last Revised: <span class="date">2020-07-01</span></p>
                 <hr class="wp-block-separator">
@@ -123,9 +134,11 @@
                 <p><span class="num">19</span>. <b>Acknowledgement</b></p>
                 <p>BY USING SERVICE OR OTHER SERVICES PROVIDED BY US, YOU ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS OF SERVICE AND AGREE TO BE BOUND BY THEM.</p>
                 <p><span class="num">20</span>. <b>Contact Us</b></p>
-                <p>Please send your feedback, comments, requests for technical support by email: <b><span class="email"></span></b>.</p>
+                <p>Please send your feedback, comments, requests for technical support by email: <a href = "mailto: groupexpensemanager@gmail.com">groupexpensemanager@gmail.com</a></p>
                 <div class="modal-footer">
-                    <button onclick="closeBtnClicked()" class="btn btn-light" id="closebtn" onclick="closeBtnClicked"> Close </button>
+                    <button onclick="closeBtnClicked()" class="btn btn-light" id="closebtn" onclick="closeBtnClicked"> 
+                        <i class="far fa-hand-point-right" style="font-size: 20px;"> Close</i>
+                    </button>
                 </div>
             </div>
         </div>
