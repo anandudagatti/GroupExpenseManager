@@ -160,6 +160,30 @@
                                             Add Group Expense
                                         </a>        
                                     </div>
+                                    <div class="row mb-3 d-block d-sm-none">
+                                        <a href="#group_expenses_summary">
+                                            <i style="color:black" class="fas fa-users"></i>
+                                            Group Expense Summary
+                                        </a>        
+                                    </div>
+                                    <div class="row mb-3 d-block d-sm-none">
+                                        <a href="#GroupExpByCat">
+                                            <i style="color:black" class="fas fa-users"></i>
+                                            Group Expense By Category
+                                        </a>        
+                                    </div>
+                                    <div class="row mb-3 d-block d-sm-none">
+                                        <a href="#GroupExpByUser">
+                                            <i style="color:black" class="fas fa-users"></i>
+                                            Group Expense By User
+                                        </a>        
+                                    </div>
+                                    <div class="row mb-3 d-block d-sm-none">
+                                        <a href="#TransSummary">
+                                            <i class="fas fa-list-alt"></i>
+                                            Transaction Summary
+                                        </a>        
+                                    </div>                                    
                                 </div>
                             </form>
                         </div>
@@ -249,11 +273,11 @@
             </div>
         </div>  
         <div class="row">
-            <div class="container group-account-category">
+            <div id="GroupExpByCat" class="container group-account-category">
                 <div class="card text-left text-black bg-light mb-3" style="height: 415px">
                     <h6 class="card-header">
                         <i class="fas fa-users"></i>
-                        Group Expense: Category Wise
+                        Group Expense: By Category
                     </h6>
                     <div class="card-body">
                         <form id="form-sub" method="POST">
@@ -301,7 +325,7 @@
                     </div>
                 </div>
             </div>            
-            <div class="container group-account">                
+            <div id="group_expenses_summary" class="container group-account">                
                 <div class="card text-left text-black bg-light mb-3" style="height: 415px">
                     <h6 class="card-header">
                         <i class="fas fa-users"></i>
@@ -365,7 +389,7 @@
                     </div>   
                 </div>
             </div>
-            <div class="container group-user-account">
+            <div id="GroupExpByUser" class="container group-user-account">
                 <div class="card text-left text-black bg-light mb-3" style="height: 405px;">
                     <h6 class="card-header">
                         <i class="fas fa-users"></i>
@@ -452,7 +476,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="container trans-summary-mini d-block d-sm-none">
+            <div id="TransSummary" class="container trans-summary-mini d-block d-sm-none">
                 <form id="form-sub" method="POST">
                     <div class="card text-left text-black bg-light sm-1">
                         <h6 class="card-header">
@@ -497,7 +521,7 @@
             </div><br>
         </div>
         <div class="row">
-            <div class="container trans-summary d-none d-lg-block">
+            <div id="TransSummary" class="container trans-summary d-none d-lg-block">
                 <form id="form-sub" method="POST">
                     <div class="card text-left text-black bg-light sm-1">
                         <h6 class="card-header">
