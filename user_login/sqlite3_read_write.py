@@ -568,7 +568,8 @@ def Get_Categorywise_Summary(group_name, request):
     data_dict["sub_category_list"]=sub_category_list
     data_dict["amount_list"]=amount_list
     return data_dict
-
+import pygal
+from pygal.style import Style
 def Get_Category_Sum_For_PieChart(group_name, request):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
@@ -598,8 +599,36 @@ def Get_Category_Sum_For_PieChart(group_name, request):
     cur.execute(query)
     result = cur.fetchall()
     category_list = [['Category', 'Expense']]
+    total_exp = 0
     for row in result:
         category_list.append([str(row[0]),int(row[1])])
+        total_exp = total_exp + int(row[1])
+
+    custom_style = Style(
+        title_font_size = 25.0,
+        legend_font_size = 25.0,
+        value_font_size = 25.0,
+        tooltip_font_size = 25.0,
+        major_label_font_size = 25.0,
+        label_font_sioze = 25.0,
+        value_label_font_size = 25.0,
+        font_family='googlefont:Raleway')
+
+    pie_chart = pygal.Pie(width=620, legend_at_bottom=True, style=custom_style)
+    pie_chart.title = 'Personal Expenses By Category'
+    percent_formatter = lambda x: '{:.10g}%'.format(x)
+    for r in result:
+        exp_per = round((int(r[1])/total_exp)*100,2)
+        pie_chart.add(str(r[0]),exp_per,formatter = percent_formatter)
+    tag =""
+    if group_name == "Personal Expenses":
+        tag = "Personal"
+    else:
+        tag = "Group"
+
+    chartname = 'static//'+ tag + 'ExpensesByCategory.svg'
+    pie_chart.render_to_file(chartname)
+
     return category_list
 
 def Get_User_Exp_For_PieChart(group_name,request):
@@ -621,11 +650,42 @@ def Get_User_Exp_For_PieChart(group_name,request):
     query = """SELECT user, sum(amount) as Total_Amount FROM transaction_master 
             WHERE group_name="{}" and trans_date BETWEEN "{}" AND "{}"
             GROUP by user""".format(group_name,from_date,to_date)
+
     cur.execute(query)
     result = cur.fetchall()
     user_exp_list = [['User', 'Expense']]
+    total_exp = 0
+
     for row in result:
         user_exp_list.append([str(Get_FirstName_of_User(row[0])),int(row[1])])
+        total_exp = total_exp + int(row[1])
+
+    custom_style = Style(
+        title_font_size = 25.0,
+        legend_font_size = 25.0,
+        value_font_size = 25.0,
+        tooltip_font_size = 25.0,
+        major_label_font_size = 25.0,
+        label_font_sioze = 25.0,
+        value_label_font_size = 25.0,
+        font_family='googlefont:Raleway')
+
+    pie_chart = pygal.Pie(width=620, legend_at_bottom=True, style=custom_style)
+    pie_chart.title = 'Group Expenses By Users'
+    percent_formatter = lambda x: '{:.10g}%'.format(x)
+    for r in result:
+        exp_per = round((int(r[1])/total_exp)*100,2)
+        pie_chart.add(str(Get_FirstName_of_User(r[0])),exp_per,formatter = percent_formatter)
+    
+    tag =""
+    if group_name == "Personal Expenses":
+        tag = "Personal"
+    else:
+        tag = "Group"
+
+    chartname = 'static//'+ tag + 'ExpensesByUsers.svg'
+    pie_chart.render_to_file(chartname)
+
     return user_exp_list
 
 def Get_Mini_Tran_Summary(trans_summary_dic):
@@ -692,3 +752,4 @@ def GetData_In_Tuple(table_name):
     conn.close()
     data_tuple = (dic_year,dic_model_name)
     return data_tuple
+
