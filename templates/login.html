@@ -52,7 +52,10 @@
                     {% endif %}
                     <div class="form-group form-check">
                         <input type="checkbox" class="form-check-input" name="admin" id="admin" onclick="clearmsg()">
-                        <label class="form-check-label" for="admin">Login as admin</label>
+                        <label class="form-check-label" for="admin">Login as admin</label><br>
+                        <div class="text-center">
+                            <a style="color:white" href="{% url 'password_reset' %}"><b>Forgot your password ? </b></a>
+                        </div>    
                     </div>
                     <button type="submit" name='login' value="Submit" class="btn btn-primary" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i> Login</button>
                 </form>

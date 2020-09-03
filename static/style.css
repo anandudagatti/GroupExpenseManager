@@ -12,7 +12,14 @@ body, html {
     /*background-repeat: no-repeat;*/
     background-size: cover;
   }
-
+  .forgot-card{
+    opacity: .9;
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .login-card{
     opacity: .9;
     width: 370px;

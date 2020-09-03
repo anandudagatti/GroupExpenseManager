@@ -20,6 +20,9 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
+from django.core.mail import send_mail
+import os
+from django.conf import settings
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -47,7 +50,9 @@ def signup(request):
         email = request.POST.get('email')
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
-        
+        data_file = open(os.path.join(settings.BASE_DIR+'\\templates', 'welcome-email-template.txt'))
+        temp_msg = '''Hi {},\n\nYour User ID: {},\n\n'''.format(firstname,newuserid) + data_file.read()
+
         try:
             user = User.objects.create_user(username=newuserid, 
                                         password=newpassword,
@@ -59,12 +64,21 @@ def signup(request):
             logmsg = "Successfully Signed Up!, Login to Start Adding Expenses."
             logging.info(logmsg)
             messages.success(request,logmsg)
+            send_mail(
+                subject = "Welcome to Group Expense Manger",
+                message = temp_msg,
+                from_email = "groupexpensemanager@gmail.com",
+                recipient_list = [email,],
+                fail_silently = False,
+            )
             return render(request,'signup.html')
         except IntegrityError: 
             logmsg = "Error: User Already Exists!"
             logging.error(logmsg)
             messages.error(request,logmsg)
             return render(request, 'signup.html')
+
+
     return render(request, 'signup.html')
 
 
