@@ -322,13 +322,31 @@ def nogroup_account(request):
             messages.success(request,info)
             return redirect('home')
 
+        user_sel_date = request.POST.get('user_sel_date')
+        print("userdate", user_sel_date)
+        request.session['user-date'] = user_sel_date
+
+        if request.session.get('user-date'):
+            from_to_date = request.session.get('user-date')
+        else:
+            curdate = datetime.now()
+            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+            request.session['user-date'] = from_to_date
+
+        Update_UserDate_to_SessionMaster(request.session.get('sessionid'),from_to_date)
+
+        logmsg = 'user date: '+request.session.get('user-date')
+        logging.info(logmsg)
+
         per_header = ['Total','Income','Expense']
         per_rows = Get_Personal_Exp_Summary(userid)
             
         trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
-    return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
+    return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(),"from_to_date": from_to_date, 
                 "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows})
 
 @csrf_exempt

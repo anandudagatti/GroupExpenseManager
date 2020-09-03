@@ -1,699 +1,698 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
-<link rel="stylesheet" href="/static/style.css">
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-<script type="text/javascript">
-    function LoadMain() {
-        document.getElementByname("form-navbar").action ="";
-    }
-
-    function OnloadUpdate(){
-        document.getElementById("user_sel_date").value = '{{from_to_date}}'
-    }
-
-    function Clearmsg(){
-        document.getElementById("saveicon").className = "fas fa-sign-in-alt"
-        document.getElementById("msg").className = "alert"
-        document.getElementById("success").innerHTML = ""
-
-    }
-
-    function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-
-        return [day, month, year].join('/');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome-free-5.10.2-web/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script type="text/javascript">
+        function LoadMain() {
+            document.getElementByname("form-navbar").action ="";
         }
 
-    function set_date(){
-        var fromdate = document.getElementById("from-date").value;
-        var todate = document.getElementById("to-date").value;
-
-        document.getElementById("success").innerHTML = ""
-        if(fromdate!="" & todate!=""){
-            document.getElementById("from_to_date").innerHTML = "From "+formatDate(fromdate)+" To "+formatDate(todate)
-            document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
-            document.getElementById("saveicon").className = "fas fa-check"
-            document.getElementById("msg").className = "alert alert-success"
-            document.getElementById("success").innerHTML = "From and to date added to period, Click on Apply to update values"
-            document.getElementById("change_btn").style.display="none"
-            document.getElementById("apply_btn").style.display=""
-        }else{
-            document.getElementById("success").innerHTML="Input cannot be blank!!"
-            document.getElementById("msg").className = "alert alert-danger"
+        function OnloadUpdate(){
+            document.getElementById("user_sel_date").value = '{{from_to_date}}'
         }
-    }
 
-</script>
-<title>Group Expense Manager : Account</title>
+        function Clearmsg(){
+            document.getElementById("saveicon").className = "fas fa-sign-in-alt"
+            document.getElementById("msg").className = "alert"
+            document.getElementById("success").innerHTML = ""
+
+        }
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2) 
+                month = '0' + month;
+            if (day.length < 2) 
+                day = '0' + day;
+
+            return [day, month, year].join('/');
+            }
+
+        function set_date(){
+            var fromdate = document.getElementById("from-date").value;
+            var todate = document.getElementById("to-date").value;
+
+            document.getElementById("success").innerHTML = ""
+            if(fromdate!="" & todate!=""){
+                document.getElementById("from_to_date").innerHTML = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+                document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
+                document.getElementById("saveicon").className = "fas fa-check"
+                document.getElementById("msg").className = "alert alert-success"
+                document.getElementById("success").innerHTML = "From and to date added to period, Click on Apply to update values"
+                document.getElementById("change_btn").style.display="none"
+                document.getElementById("apply_btn").style.display=""
+            }else{
+                document.getElementById("success").innerHTML="Input cannot be blank!!"
+                document.getElementById("msg").className = "alert alert-danger"
+            }
+        }
+
+    </script>
+    <title>Group Expense Manager : Account</title>
 </head>
 <body onload="OnloadUpdate()">
-<!-- Image and text -->
-<form id="form-navbar" method="POST">
-    <div class="pos-f-t">
-        <nav class="navbar navbar-dark bg-dark">
-            <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
-                <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
-                Group Expense Manager
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-user-alt"></i>
-            </button>
-        </nav>
-        <div class="collapse align-center text-right" id="navbarToggleExternalContent">
-            <div class="bg-dark p-3">
-                <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
-                <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button>   
+    <form id="form-navbar" method="POST">
+        <div class="pos-f-t">
+            <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
+                    <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                    Group Expense Manager
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-user-alt"></i>
+                </button>
+            </nav>
+            <div class="collapse align-center text-right" id="navbarToggleExternalContent">
+                <div class="bg-dark p-3">
+                    <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                    <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button>   
+                </div>
             </div>
         </div>
-    </div>
-</form><br>
-<form id="form-sub" method="POST">
+    </form><br>
+    <form id="form-sub" method="POST">
+        <div class="container">
+            <div data-aos="fade-right" data-aos-easing="linear" data-aos-duration="500">
+                <div class="row mb-2">
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div style="display: none;">
+                            <input type="text" name="user_sel_date" id="user_sel_date">
+                        </div>
+                        <div class="input-group-prepend form-control-md mb-2">
+                            <label for="from_to_date" class="input-group-text" style="font-size: 12px;"><b><i class="fas fa-calendar-alt"></i> Date</b></label>
+                            <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
+                            <div id="change_btn">
+                                <input type="button" value="Change" name="change_btn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
+                            </input>   
+                            </div>
+                            <div style="display: none;" id="apply_btn">
+                                <input value="Apply" class="btn btn-primary btn-sm" type="submit" name="apply_btn">
+                                </input>        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-6 col-sm-12">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend form-control-md">
+                                <label class="input-group-text" style="font-size: 12px;" for="select-group"><i class="fas fa-users"> Group </i></label>
+                                <select style="width:130px" name="group_name" id="group_name">
+                                    {% for group in grouplist %}
+                                        {% if sess_group == group %}
+                                            <option selected value="{{group}}">{{group}}</option>
+                                        {% else %}
+                                            <option value="{{group}}">{{group}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </form>
     <div class="container">
-        <div data-aos="fade-right" data-aos-easing="linear" data-aos-duration="500">
-            <div class="row mb-2">
-                <div class="col-lg-4 col-md-6 col-sm-12">
-                    <div style="display: none;">
-                        <input type="text" name="user_sel_date" id="user_sel_date">
-                    </div>
-                    <div class="input-group-prepend form-control-md mb-2">
-                        <label for="from_to_date" class="input-group-text" style="font-size: 12px;"><b><i class="fas fa-calendar-alt"></i> Date</b></label>
-                        <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
-                        <div id="change_btn">
-                            <input type="button" value="Change" name="change_btn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
-                        </input>   
+        <div data-aos="zoom-in" data-aos-easing="linear" data-aos-duration="300">
+            <div class="row">
+                <div class="container group-account-category">
+                    <div class="card text-left text-black bg-light mb-3" style="height: 420px;">
+                        <h6 class="card-header">
+                            <i class="fas fa-toolbox"></i>
+                            Quick Action Toolbax
+                        </h6>
+                        <div class="card-body">
+                            <div class="container">
+                                <form id="form-sub" method="POST">
+                                    <div class="col">
+                                        <div class="row mb-3">
+                                            <a href="{% url 'groups' %}">
+                                                <i class="fas fa-users"></i>
+                                                Create New Group
+                                            </a>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <a href="{% url 'incomes' %}">
+                                                <i style="color:green" class="fas fa-plus"></i>
+                                                Add Personal Income
+                                            </a>    
+                                        </div>
+                                        <div class="row mb-3">
+                                            <a href="{% url 'personal_expenses' %}">
+                                                <i style="color:red" class="fas fa-minus"></i>
+                                                Add Personal Expense
+                                            </a>    
+                                        </div>
+                                        <div class="row mb-3">
+                                            <a href="{% url 'group_expenses' %}">
+                                                <i style="color:red" class="fas fa-minus"></i>
+                                                Add Group Expense
+                                            </a>        
+                                        </div>
+                                        <div class="row mb-3 d-block d-sm-none">
+                                            <a href="#group_expenses_summary">
+                                                <i style="color:black" class="fas fa-users"></i>
+                                                Group Expense Summary
+                                            </a>        
+                                        </div>
+                                        <div class="row mb-3 d-block d-sm-none">
+                                            <a href="#GroupExpByCat">
+                                                <i style="color:black" class="fas fa-users"></i>
+                                                Group Expense By Category
+                                            </a>        
+                                        </div>
+                                        <div class="row mb-3 d-block d-sm-none">
+                                            <a href="#GroupExpByUser">
+                                                <i style="color:black" class="fas fa-users"></i>
+                                                Group Expense By User
+                                            </a>        
+                                        </div>
+                                        <div class="row mb-3 d-block d-sm-none">
+                                            <a href="#TransSummary">
+                                                <i class="fas fa-list-alt"></i>
+                                                Transaction Summary
+                                            </a>        
+                                        </div>                                    
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div style="display: none;" id="apply_btn">
-                            <input value="Apply" class="btn btn-primary btn-sm" type="submit" name="apply_btn">
-                            </input>        
-                        </div>
                     </div>
-                </div>
-                <div class="col-lg-5 col-md-6 col-sm-12">
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend form-control-md">
-                            <label class="input-group-text" style="font-size: 12px;" for="select-group"><i class="fas fa-users"> Group </i></label>
-                            <select style="width:130px" name="group_name" id="group_name">
-                                {% for group in grouplist %}
-                                    {% if sess_group == group %}
-                                        <option selected value="{{group}}">{{group}}</option>
-                                    {% else %}
-                                        <option value="{{group}}">{{group}}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <button class="btn btn-primary btn-sm" type="submit" name="update_group">Update</button>
-                    </div>
-                </div>
-            </div>    
-        </div>
-    </div>
-</form>
-<div class="container">
-    <div data-aos="zoom-in" data-aos-easing="linear" data-aos-duration="300">
-        <div class="row">
-            <div class="container group-account-category">
-                <div class="card text-left text-black bg-light mb-3" style="height: 420px;">
-                    <h6 class="card-header">
-                        <i class="fas fa-toolbox"></i>
-                        Quick Action Toolbax
-                    </h6>
-                    <div class="card-body">
-                        <div class="container">
+                </div>    
+                <div class="container personal-account">
+                    <div class="card text-left text-black bg-light mb-3" style="height: 420px;">
+                        <h6 class="card-header">
+                            <i class="fas fa-user-minus"></i>
+                            Personal Expense Summary
+                        </h6>
+                        <div class="card-body ">
                             <form id="form-sub" method="POST">
-                                <div class="col">
-                                    <div class="row mb-3">
-                                        <a href="{% url 'groups' %}">
-                                            <i class="fas fa-users"></i>
-                                            Create New Group
-                                        </a>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <a href="{% url 'incomes' %}">
-                                            <i style="color:green" class="fas fa-plus"></i>
-                                            Add Personal Income
-                                        </a>    
-                                    </div>
-                                    <div class="row mb-3">
-                                        <a href="{% url 'personal_expenses' %}">
-                                            <i style="color:red" class="fas fa-minus"></i>
-                                            Add Personal Expense
-                                        </a>    
-                                    </div>
-                                    <div class="row mb-3">
-                                        <a href="{% url 'group_expenses' %}">
-                                            <i style="color:red" class="fas fa-minus"></i>
-                                            Add Group Expense
-                                        </a>        
-                                    </div>
-                                    <div class="row mb-3 d-block d-sm-none">
-                                        <a href="#group_expenses_summary">
-                                            <i style="color:black" class="fas fa-users"></i>
-                                            Group Expense Summary
-                                        </a>        
-                                    </div>
-                                    <div class="row mb-3 d-block d-sm-none">
-                                        <a href="#GroupExpByCat">
-                                            <i style="color:black" class="fas fa-users"></i>
-                                            Group Expense By Category
-                                        </a>        
-                                    </div>
-                                    <div class="row mb-3 d-block d-sm-none">
-                                        <a href="#GroupExpByUser">
-                                            <i style="color:black" class="fas fa-users"></i>
-                                            Group Expense By User
-                                        </a>        
-                                    </div>
-                                    <div class="row mb-3 d-block d-sm-none">
-                                        <a href="#TransSummary">
-                                            <i class="fas fa-list-alt"></i>
-                                            Transaction Summary
-                                        </a>        
-                                    </div>                                    
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>    
-            <div class="container personal-account">
-                <div class="card text-left text-black bg-light mb-3" style="height: 420px;">
-                    <h6 class="card-header">
-                        <i class="fas fa-user-minus"></i>
-                        Personal Expense Summary
-                    </h6>
-                    <div class="card-body ">
-                        <form id="form-sub" method="POST">
-                            <div class="container">
-                                <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            {% for k in per_header %}
-                                            <th>{{k}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for r in per_rows %}
-                                            <tr>
-                                                <td><i>{{r.total}}</i></td>
-                                                <td style="color: green" align="right">{{r.income}}</td>
-                                                <td style="color: red" align="right">{{r.expense}}</td>
-                                            </tr>
-                                            {% if r %}
-                                            <tr bgcolor="#f1d0cf">
-                                                {% for j in r.firstrow %}
-                                                    <td align="left" colspan="2">{{j}}</td>
-                                                {% endfor %}
-                                            </tr>
-                                            <tr bgcolor="#f1d0cf">
-                                                {% for k in r.secrow %}
-                                                    <td align="left" colspan="2">{{k}}</td>
-                                                {% endfor %} 
-                                            </tr>
-                                            <tr bgcolor="#f1d0cf">
-                                                {% for l in r.throw %}
-                                                    <td align="left" colspan="2">{{l}}</td>
-                                                {% endfor %} 
-                                            </tr>
-                                            <tr bgcolor="#cff1d1">
-                                                {% for m in r.fourthrow %}
-                                                    <td align="left" colspan="2"><b>{{m}}</b></td>
-                                                {% endfor %} 
-                                            </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="row">
-                            <div class="col-6 text-center">
-                                <a href="{% url 'incomes' %}">
-                                    <i style="color:green" class="fas fa-plus"></i>
-                                    Add Income
-                                </a>            
-                            </div>
-                            <div class="col-6 text-center">
-                                <a href="{% url 'personal_expenses' %}">
-                                    <i style="color:red" class="fas fa-minus"></i>
-                                    Add Expense
-                                </a>
-                            </div>  
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container personal-chart">
-                <div class="card text-left text-black bg-light" style="height: 415px;">
-                    <h6 class="card-header">
-                        <i class="fas fa-user-minus"></i>
-                        Personal Expense Pie Chart
-                    </h6>
-                    <div class="card-body">
-                        <figure>
-                            <embed type="image/svg+xml" src="/static/PersonalExpensesByCategory.svg"></embed>
-                        </figure>
-                    </div>   
-                </div>
-            </div>
-        </div>  
-        <div class="row">
-            <div id="GroupExpByCat" class="container group-account-category">
-                <div class="card text-left text-black bg-light mb-3" style="height: 415px">
-                    <h6 class="card-header">
-                        <i class="fas fa-users"></i>
-                        Group Expense: By Category
-                    </h6>
-                    <div class="card-body">
-                        <form id="form-sub" method="POST">
-                            <div class="container">
-                                <div class="scroll-catwise">
-                                    <table class="table table-sm group-summary-category">
+                                <div class="container">
+                                    <table class="table table-sm">
                                         <thead>
-                                            <tr style="text-align: left">
-                                                <th>Category</th>
-                                                <th>Sub Category</th>
-                                                <th>Amount</th>
+                                            <tr>
+                                                {% for k in per_header %}
+                                                <th>{{k}}</th>
+                                                {% endfor %}
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td>
-                                                {% for rw in category_summary.category_list %}
-                                                    <p>{{rw}}</p>
+                                            {% for r in per_rows %}
+                                                <tr>
+                                                    <td><i>{{r.total}}</i></td>
+                                                    <td style="color: green" align="right">{{r.income}}</td>
+                                                    <td style="color: red" align="right">{{r.expense}}</td>
+                                                </tr>
+                                                {% if r %}
+                                                <tr bgcolor="#f1d0cf">
+                                                    {% for j in r.firstrow %}
+                                                        <td align="left" colspan="2">{{j}}</td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr bgcolor="#f1d0cf">
+                                                    {% for k in r.secrow %}
+                                                        <td align="left" colspan="2">{{k}}</td>
+                                                    {% endfor %} 
+                                                </tr>
+                                                <tr bgcolor="#f1d0cf">
+                                                    {% for l in r.throw %}
+                                                        <td align="left" colspan="2">{{l}}</td>
+                                                    {% endfor %} 
+                                                </tr>
+                                                <tr bgcolor="#cff1d1">
+                                                    {% for m in r.fourthrow %}
+                                                        <td align="left" colspan="2"><b>{{m}}</b></td>
+                                                    {% endfor %} 
+                                                </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="row">
+                                <div class="col-6 text-center">
+                                    <a href="{% url 'incomes' %}">
+                                        <i style="color:green" class="fas fa-plus"></i>
+                                        Add Income
+                                    </a>            
+                                </div>
+                                <div class="col-6 text-center">
+                                    <a href="{% url 'personal_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Expense
+                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container personal-chart">
+                    <div class="card text-left text-black bg-light" style="height: 415px;">
+                        <h6 class="card-header">
+                            <i class="fas fa-user-minus"></i>
+                            Personal Expense Pie Chart
+                        </h6>
+                        <div class="card-body">
+                            <figure>
+                                <embed type="image/svg+xml" src="/static/PersonalExpensesByCategory.svg"></embed>
+                            </figure>
+                        </div>   
+                    </div>
+                </div>
+            </div>  
+            <div class="row">
+                <div id="GroupExpByCat" class="container group-account-category">
+                    <div class="card text-left text-black bg-light mb-3" style="height: 415px">
+                        <h6 class="card-header">
+                            <i class="fas fa-users"></i>
+                            Group Expense: By Category
+                        </h6>
+                        <div class="card-body">
+                            <form id="form-sub" method="POST">
+                                <div class="container">
+                                    <div class="scroll-catwise">
+                                        <table class="table table-sm group-summary-category">
+                                            <thead>
+                                                <tr style="text-align: left">
+                                                    <th>Category</th>
+                                                    <th>Sub Category</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <td>
+                                                    {% for rw in category_summary.category_list %}
+                                                        <p>{{rw}}</p>
+                                                    {% endfor %}
+                                                </td>
+                                                <td>
+                                                    {% for rw in category_summary.sub_category_list %}
+                                                        <p>{{rw}}</p>
+                                                    {% endfor %}                                
+                                                </td>
+                                                <td>
+                                                    {% for rw in category_summary.amount_list %}
+                                                        <p style="color: red" align="right">{{rw}}</p>
+                                                    {% endfor %}                                
+                                                </td>
+                                            </tbody>
+                                        </table><br>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a href="{% url 'group_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Group Expense
+                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+                <div id="group_expenses_summary" class="container group-account">                
+                    <div class="card text-left text-black bg-light mb-3" style="height: 415px">
+                        <h6 class="card-header">
+                            <i class="fas fa-users"></i>
+                            Group Expense Summary
+                        </h6>
+                        <div class="card-body">
+                            <form id="form-sub" method="POST">
+                                <div class="container">
+                                    <table class="table table-sm group-summary">
+                                        <thead>
+                                            <tr style="text-align: left">
+                                                {% for k in group_header %}
+                                                <th colspan="2">{{k}}</th>
                                                 {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for rw in category_summary.sub_category_list %}
-                                                    <p>{{rw}}</p>
-                                                {% endfor %}                                
-                                            </td>
-                                            <td>
-                                                {% for rw in category_summary.amount_list %}
-                                                    <p style="color: red" align="right">{{rw}}</p>
-                                                {% endfor %}                                
-                                            </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for r in group_rows %}
+                                                <tr>
+                                                    <td><i>{{r.total}}</i></td>
+                                                    <td colspan="2" style=" color: red" align="right">{{r.expense}}</td>
+                                                <tr>
+                                                {% if r %}
+                                                <tr bgcolor="#f1d0cf">
+                                                    {% for j in r.firstrow %}
+                                                        <td align="left" colspan="2">{{j}}</td>
+                                                    {% endfor %}
+                                                </tr>
+                                                <tr bgcolor="#f1d0cf">
+                                                    {% for k in r.secrow %}
+                                                        <td align="left" colspan="2">{{k}}</td>
+                                                    {% endfor %} 
+                                                </tr>
+                                                {% endif %}        
+                                            {% endfor %}                                
+                                        </tbody>
+                                    </table><br>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a href="{% url 'group_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Group Expense
+                                    </a>
+                                </div>  
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="container group-chart">
+                    <div class="card text-left text-black bg-light" style="height: 415px">
+                        <h6 class="card-header">
+                            <i class="fas fa-users"></i>
+                            Group Expense Pie Chart
+                        </h6>
+                        <div class="card-body">
+                            <figure>
+                                <embed type="image/svg+xml" src="/static/GroupExpensesByCategory.svg"></embed>
+                            </figure>
+                        </div>   
+                    </div>
+                </div>
+                <div id="GroupExpByUser" class="container group-user-account">
+                    <div class="card text-left text-black bg-light mb-3" style="height: 405px;">
+                        <h6 class="card-header">
+                            <i class="fas fa-users"></i>
+                            Group Expense: User Wise Summary
+                        </h6>
+                        <div class="card-body">
+                            <div class="container">
+                                <form id="form-sub" method="POST">
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-prepend form-control-md">
+                                            <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
+                                            <select style="width:120px" name="user_opt" id="user_opt">
+                                                {% if sess_user_opt == "Today" %}
+                                                    <option selected value="Today">Today</option>
+                                                    <option value="This Week">This Week</option>
+                                                    <option value="This Month">This Month</option>
+                                                {% elif sess_user_opt == "This Week"%}
+                                                    <option value="Today">Today</option>
+                                                    <option selected value="This Week">This Week</option>
+                                                    <option value="This Month">This Month</option>
+                                                {% elif sess_user_opt == "This Month" %}
+                                                    <option value="Today">Today</option>
+                                                    <option value="This Week">This Week</option>
+                                                    <option selected value="This Month">This Month</option>
+                                                {% else %}
+                                                    <option value="Today">Today</option>
+                                                    <option value="This Week">This Week</option>
+                                                    <option selected value="This Month">This Month</option>
+                                                {% endif %}                                                                    
+                                            </select>
+                                        </div>
+                                        <input class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt"></input>        
+                                    </div>
+                                </form>
+                                <div class="scroll-catwise">
+                                    <table class="table table-sm group-summary-user">
+                                        <thead>
+                                            <tr style="text-align: left">
+                                                {% for k in group_header %}
+                                                <th>{{k}}</th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr style="border-bottom: 1px solid rgb(197, 194, 194);">
+                                                <td style="width: 11%;">
+                                                    {% for rw in group_user_exp.user %}
+                                                        <i><p>&nbsp;&nbsp;&nbsp;{{rw}}</p></i>
+                                                    {% endfor %}
+                                                </td>
+                                                <td style="width: 11%;">
+                                                    {% for exp in group_user_exp.expenses %}
+                                                        <p style="width: 50%; color: red" align="right">{{exp}}</p>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>   
                                         </tbody>
                                     </table><br>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <a href="{% url 'group_expenses' %}">
-                                    <i style="color:red" class="fas fa-minus"></i>
-                                    Add Group Expense
-                                </a>
-                            </div>  
                         </div>
-                    </div>
-                </div>
-            </div>            
-            <div id="group_expenses_summary" class="container group-account">                
-                <div class="card text-left text-black bg-light mb-3" style="height: 415px">
-                    <h6 class="card-header">
-                        <i class="fas fa-users"></i>
-                        Group Expense Summary
-                    </h6>
-                    <div class="card-body">
-                        <form id="form-sub" method="POST">
-                            <div class="container">
-                                <table class="table table-sm group-summary">
-                                    <thead>
-                                        <tr style="text-align: left">
-                                            {% for k in group_header %}
-                                            <th colspan="2">{{k}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for r in group_rows %}
-                                            <tr>
-                                                <td><i>{{r.total}}</i></td>
-                                                <td colspan="2" style=" color: red" align="right">{{r.expense}}</td>
-                                            <tr>
-                                            {% if r %}
-                                            <tr bgcolor="#f1d0cf">
-                                                {% for j in r.firstrow %}
-                                                    <td align="left" colspan="2">{{j}}</td>
-                                                {% endfor %}
-                                            </tr>
-                                            <tr bgcolor="#f1d0cf">
-                                                {% for k in r.secrow %}
-                                                    <td align="left" colspan="2">{{k}}</td>
-                                                {% endfor %} 
-                                            </tr>
-                                            {% endif %}        
-                                        {% endfor %}                                
-                                    </tbody>
-                                </table><br>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <a href="{% url 'group_expenses' %}">
-                                    <i style="color:red" class="fas fa-minus"></i>
-                                    Add Group Expense
-                                </a>
-                            </div>  
-                        </div>
-                    </div>
-                </div>
-            </div> 
-            <div class="container group-chart">
-                <div class="card text-left text-black bg-light" style="height: 415px">
-                    <h6 class="card-header">
-                        <i class="fas fa-users"></i>
-                        Group Expense Pie Chart
-                    </h6>
-                    <div class="card-body">
-                        <figure>
-                            <embed type="image/svg+xml" src="/static/GroupExpensesByCategory.svg"></embed>
-                        </figure>
-                    </div>   
-                </div>
-            </div>
-            <div id="GroupExpByUser" class="container group-user-account">
-                <div class="card text-left text-black bg-light mb-3" style="height: 405px;">
-                    <h6 class="card-header">
-                        <i class="fas fa-users"></i>
-                        Group Expense: User Wise Summary
-                    </h6>
-                    <div class="card-body">
-                        <div class="container">
-                            <form id="form-sub" method="POST">
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend form-control-md">
-                                        <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
-                                        <select style="width:120px" name="user_opt" id="user_opt">
-                                            {% if sess_user_opt == "Today" %}
-                                                <option selected value="Today">Today</option>
-                                                <option value="This Week">This Week</option>
-                                                <option value="This Month">This Month</option>
-                                            {% elif sess_user_opt == "This Week"%}
-                                                <option value="Today">Today</option>
-                                                <option selected value="This Week">This Week</option>
-                                                <option value="This Month">This Month</option>
-                                            {% elif sess_user_opt == "This Month" %}
-                                                <option value="Today">Today</option>
-                                                <option value="This Week">This Week</option>
-                                                <option selected value="This Month">This Month</option>
-                                            {% else %}
-                                                <option value="Today">Today</option>
-                                                <option value="This Week">This Week</option>
-                                                <option selected value="This Month">This Month</option>
-                                            {% endif %}                                                                    
-                                        </select>
-                                    </div>
-                                    <input class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt"></input>        
-                                </div>
-                            </form>
-                            <div class="scroll-catwise">
-                                <table class="table table-sm group-summary-user">
-                                    <thead>
-                                        <tr style="text-align: left">
-                                            {% for k in group_header %}
-                                            <th>{{k}}</th>
-                                            {% endfor %}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="border-bottom: 1px solid rgb(197, 194, 194);">
-                                            <td style="width: 11%;">
-                                                {% for rw in group_user_exp.user %}
-                                                    <i><p>&nbsp;&nbsp;&nbsp;{{rw}}</p></i>
-                                                {% endfor %}
-                                            </td>
-                                            <td style="width: 11%;">
-                                                {% for exp in group_user_exp.expenses %}
-                                                    <p style="width: 50%; color: red" align="right">{{exp}}</p>
-                                                {% endfor %}
-                                            </td>
-                                        </tr>   
-                                    </tbody>
-                                </table><br>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-transparent">
-                        <div class="row">
-                            <div class="col-12 text-center">
-                                <a href="{% url 'group_expenses' %}">
-                                    <i style="color:red" class="fas fa-minus"></i>
-                                    Add Group Expense
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container group-user-account">
-                <div class="card text-left text-black bg-light mb-3" style="height: 405px;">
-                    <h6 class="card-header">
-                        <i class="fas fa-users"></i>
-                        Group Expense: User Wise Pie Chart
-                    </h6>
-                    <div class="card-body">
-                        <figure>
-                            <embed type="image/svg+xml" src="/static/GroupExpensesByUsers.svg"></embed>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div id="TransSummary" class="container trans-summary-mini d-block d-sm-none">
-                <form id="form-sub" method="POST">
-                    <div class="card text-left text-black bg-light sm-1">
-                        <h6 class="card-header">
-                            <font size="4px">
-                                <i class="fas fa-list-alt"></i>
-                                Transaction Summary
-                            </font> 
-                        </h6>
-                        <div class="card-body scroll-trans">
-                            {% if messages %}
-                            {% for message in messages %}
-                            <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                                {{message}}
-                            </div>
-                            {% endfor %}
-                            {% endif %}
-                            <table class="table">
-                                <thead>
-                                    <tr style="text-align: left">
-                                        <th><font size="2px">Date</font></th>
-                                        <th><font size="2px">Description</font></th>
-                                        <th><font size="2px">Amount</font></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for rw in mini_trans_summary %}
-                                        <tr class="separated">
-                                            <td style="width: 40%;">
-                                                <button class="btn btn-xs" type="submit" name="edit-btn" value="{{rw.id}}">
-                                                    <i class="fas fa-edit"></i> {{rw.date}}
-                                                </button>
-                                            </td>
-                                            <td style="width: 40%;"><font size="2px">{{rw.description}}</font></td>
-                                            <td style="width: 20%;"><font size="2px">{{rw.expense}}</font></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </form>           
-            </div><br>
-        </div>
-        <div class="row">
-            <div id="TransSummary" class="container trans-summary d-none d-lg-block">
-                <form id="form-sub" method="POST">
-                    <div class="card text-left text-black bg-light sm-1">
-                        <h6 class="card-header">
+                        <div class="card-footer bg-transparent">
                             <div class="row">
-                                <div class="col-8">
-                                    <font size="5px">
-                                        <i class="fas fa-list-alt"></i>
-                                        Transaction Summary
-                                    </font> 
+                                <div class="col-12 text-center">
+                                    <a href="{% url 'group_expenses' %}">
+                                        <i style="color:red" class="fas fa-minus"></i>
+                                        Add Group Expense
+                                    </a>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container group-user-account">
+                    <div class="card text-left text-black bg-light mb-3" style="height: 405px;">
+                        <h6 class="card-header">
+                            <i class="fas fa-users"></i>
+                            Group Expense: User Wise Pie Chart
                         </h6>
-                        <div class="card-body scroll-trans">
-                            {% if messages %}
-                            {% for message in messages %}
-                            <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                                {{message}}
-                            </div>
-                            {% endfor %}
-                            {% endif %}
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        {% for k in trans_header %}
-                                        <th class="text-left">{{k}}</th>
-                                        {% endfor %}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for r in trans_rows %}
-                                        <tr>
-                                            <td>
-                                                <button class="btn btn-sm" type="submit" name="edit-btn" value="{{r.id}}">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </td>
-                                            <td style="width: 100px;"><i>{{r.date}}</i></td>
-                                            <td><i>{{r.user}}</i></td>
-                                            <td><i>{{r.category}}</i></td>
-                                            <td><i>{{r.sub_cat}}</i></td>
-                                            <td><i>{{r.group}}</i></td>
-                                            <td><i>{{r.payee}}</i></td>
-                                            <td><i>{{r.pay_meth}}</i></td>
-                                            <td><i>{{r.tag}}</i></td>
-                                            <td class="text-right"><i>{{r.expense}}</i></td>
+                        <div class="card-body">
+                            <figure>
+                                <embed type="image/svg+xml" src="/static/GroupExpensesByUsers.svg"></embed>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="TransSummary" class="container trans-summary-mini d-block d-sm-none">
+                    <form id="form-sub" method="POST">
+                        <div class="card text-left text-black bg-light sm-1">
+                            <h6 class="card-header">
+                                <font size="4px">
+                                    <i class="fas fa-list-alt"></i>
+                                    Transaction Summary
+                                </font> 
+                            </h6>
+                            <div class="card-body scroll-trans">
+                                {% if messages %}
+                                {% for message in messages %}
+                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                <table class="table">
+                                    <thead>
+                                        <tr style="text-align: left">
+                                            <th><font size="2px">Date</font></th>
+                                            <th><font size="2px">Description</font></th>
+                                            <th><font size="2px">Amount</font></th>
                                         </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for rw in mini_trans_summary %}
+                                            <tr class="separated">
+                                                <td style="width: 40%;">
+                                                    <button class="btn btn-xs" type="submit" name="edit-btn" value="{{rw.id}}">
+                                                        <i class="fas fa-edit"></i> {{rw.date}}
+                                                    </button>
+                                                </td>
+                                                <td style="width: 40%;"><font size="2px">{{rw.description}}</font></td>
+                                                <td style="width: 20%;"><font size="2px">{{rw.expense}}</font></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </form>    
+                    </form>           
+                </div><br>
+            </div>
+            <div class="row">
+                <div id="TransSummary" class="container trans-summary d-none d-lg-block">
+                    <form id="form-sub" method="POST">
+                        <div class="card text-left text-black bg-light sm-1">
+                            <h6 class="card-header">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <font size="5px">
+                                            <i class="fas fa-list-alt"></i>
+                                            Transaction Summary
+                                        </font> 
+                                    </div>
+                                </div>
+                            </h6>
+                            <div class="card-body scroll-trans">
+                                {% if messages %}
+                                {% for message in messages %}
+                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            {% for k in trans_header %}
+                                            <th class="text-left">{{k}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for r in trans_rows %}
+                                            <tr>
+                                                <td>
+                                                    <button class="btn btn-sm" type="submit" name="edit-btn" value="{{r.id}}">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </td>
+                                                <td style="width: 100px;"><i>{{r.date}}</i></td>
+                                                <td><i>{{r.user}}</i></td>
+                                                <td><i>{{r.category}}</i></td>
+                                                <td><i>{{r.sub_cat}}</i></td>
+                                                <td><i>{{r.group}}</i></td>
+                                                <td><i>{{r.payee}}</i></td>
+                                                <td><i>{{r.pay_meth}}</i></td>
+                                                <td><i>{{r.tag}}</i></td>
+                                                <td class="text-right"><i>{{r.expense}}</i></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>    
+                </div>
             </div>
         </div>
-    </div>
-</div><br>
-<form id="form-navbar" method="POST">
-    <div class="modal fade" id="change-period" tabindex="1" role="dialog" aria-labelledby="change-periodlabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="change-periodlabel">Update Date</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="input-group col-xs-12 col-sm-6 mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="from_date">From</span>
+    </div><br>
+    <form id="form-navbar" method="POST">
+        <div class="modal fade" id="change-period" tabindex="1" role="dialog" aria-labelledby="change-periodlabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="change-periodlabel">Update Date</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="input-group col-xs-12 col-sm-6 mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="from_date">From</span>
+                                </div>
+                                <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date" onfocus="Clearmsg()">
                             </div>
-                            <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date" onfocus="Clearmsg()">
+                            <div class="input-group col-xs-12 col-sm-6 mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="to_date">To</span>
+                                </div>
+                                <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date" onfocus="Clearmsg()">
+                            </div>
                         </div>
-                        <div class="input-group col-xs-12 col-sm-6 mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="to_date">To</span>
-                            </div>
-                            <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date" onfocus="Clearmsg()">
+                        <div id="msg" role="alert">
+                            <span id="success"></span>  
                         </div>
                     </div>
-                    <div id="msg" role="alert">
-                        <span id="success"></span>  
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
+                        <button type="button" class="btn btn-secondary" name="save-date" data-dismiss="modal" onclick="set_date()">
+                            <i id="saveicon" class="fas fa-sign-in-alt"></i> Save
+                        </button>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
-                    <button type="button" class="btn btn-secondary" name="save-date" data-dismiss="modal" onclick="set_date()">
-                        <i id="saveicon" class="fas fa-sign-in-alt"></i> Save
-                    </button>
                 </div>
             </div>
-        </div>
-    </div>            
-</form>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    // Load google charts
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-    
-    // Draw the chart and set the chart values
-    function drawChart() {
-      var datalist = {{data_for_chart|safe}};
-      var data = google.visualization.arrayToDataTable(datalist);
-    
-      // Optional; add a title and set the width and height of the chart
-      var options = {
-          legend:'left',
-          pieSliceText: 'percentage',
-          is3D: true,
-          backgroundColor: { fill:'transparent' }};
-    
-      // Display the chart inside the <div> element with id="group_piechart"
-      var chart = new google.visualization.PieChart(document.getElementById('group_piechart'));
-      chart.draw(data, options);
-    }
+        </div>            
+    </form>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        // Load google charts
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        
+        // Draw the chart and set the chart values
+        function drawChart() {
+        var datalist = {{data_for_chart|safe}};
+        var data = google.visualization.arrayToDataTable(datalist);
+        
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            legend:'left',
+            pieSliceText: 'percentage',
+            is3D: true,
+            backgroundColor: { fill:'transparent' }};
+        
+        // Display the chart inside the <div> element with id="group_piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('group_piechart'));
+        chart.draw(data, options);
+        }
 
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawPersonalChart);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawPersonalChart);
 
-    // Draw the chart and set the chart values
-    function drawPersonalChart() {
-      var datalist = {{per_ex_data_for_chart|safe}};
-      var data = google.visualization.arrayToDataTable(datalist);
-    
-      // Optional; add a title and set the width and height of the chart
-      var options = {
-          legend:'left',
-          pieSliceText: 'percentage',
-          is3D: true,
-          backgroundColor: { fill:'transparent' }};
-    
-      // Display the chart inside the <div> element with id="pers_piechart"
-      var chart = new google.visualization.PieChart(document.getElementById('pers_piechart'));
-      chart.draw(data, options);
-    }
+        // Draw the chart and set the chart values
+        function drawPersonalChart() {
+        var datalist = {{per_ex_data_for_chart|safe}};
+        var data = google.visualization.arrayToDataTable(datalist);
+        
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            legend:'left',
+            pieSliceText: 'percentage',
+            is3D: true,
+            backgroundColor: { fill:'transparent' }};
+        
+        // Display the chart inside the <div> element with id="pers_piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('pers_piechart'));
+        chart.draw(data, options);
+        }
 
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawUserSplitChart);
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawUserSplitChart);
 
-    // Draw the chart and set the chart values
-    function drawUserSplitChart() {
-      var datalist = {{group_user_exp_chart|safe}};
-      var data = google.visualization.arrayToDataTable(datalist);
+        // Draw the chart and set the chart values
+        function drawUserSplitChart() {
+        var datalist = {{group_user_exp_chart|safe}};
+        var data = google.visualization.arrayToDataTable(datalist);
 
-      // Optional; add a title and set the width and height of the chart
-      var options = {
-          legend:'left',
-          pieSliceText: 'percentage',
-          is3D: true,
-          backgroundColor: { fill:'transparent' }};
-    
-      // Display the chart inside the <div> element with id="pers_piechart"
-      var chart = new google.visualization.PieChart(document.getElementById('usersplit_piechart'));
-      chart.draw(data, options);
-    }
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            legend:'left',
+            pieSliceText: 'percentage',
+            is3D: true,
+            backgroundColor: { fill:'transparent' }};
+        
+        // Display the chart inside the <div> element with id="pers_piechart"
+        var chart = new google.visualization.PieChart(document.getElementById('usersplit_piechart'));
+        chart.draw(data, options);
+        }
 
-</script>
-<script src="/static/js/jquery.slim.min.js"></script>
-<script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
-<script>
-  AOS.init();
-</script>
+    </script>
+    <script src="/static/js/jquery.slim.min.js"></script>
+    <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
+    <script>
+    AOS.init();
+    </script>
 </body>
 </html>
