@@ -53,31 +53,37 @@ def signup(request):
         data_file = open(os.path.join(settings.BASE_DIR+'/templates', 'welcome-email-template.txt'))
         temp_msg = '''Hi {},\n\nYour User ID: {},\n\n'''.format(firstname,newuserid) + data_file.read()
 
-        try:
-            user = User.objects.create_user(username=newuserid, 
-                                        password=newpassword,
-                                        email=email,
-                                        first_name=firstname,
-                                        last_name=lastname)
+        
+        for user in User.objects.all():
+            if email == user.email:
+                logmsg = "Error: Email Already Exist! Try With New Email."
+                logging.info(logmsg)
+                messages.error(request,logmsg)
+                return render(request, 'signup.html')
+            elif newuserid == user.username:
+                logmsg = "Error:Userid Already Exists! Try With New Userid."
+                logging.info(logmsg)
+                messages.error(request,logmsg)
+                return render(request, 'signup.html')
+            else:
+                pass
+        user = User.objects.create_user(username=newuserid, 
+                                    password=newpassword,
+                                    email=email,
+                                    first_name=firstname,
+                                    last_name=lastname)
 
-            user.save()
-            logmsg = "Successfully Signed Up!, Login to Start Adding Expenses."
-            logging.info(logmsg)
-            messages.success(request,logmsg)
-            send_mail(
-                subject = "Welcome to Group Expense Manger",
-                message = temp_msg,
-                from_email = "groupexpensemanager@gmail.com",
-                recipient_list = [email,],
-                fail_silently = False,
-            )
-            return render(request,'signup.html')
-        except IntegrityError: 
-            logmsg = "Error: User Already Exists!"
-            logging.error(logmsg)
-            messages.error(request,logmsg)
-            return render(request, 'signup.html')
-
+        user.save()
+        logmsg = "Successfully Signed Up!, Login to Start Adding Expenses."
+        logging.info(logmsg)
+        messages.success(request,logmsg)
+        send_mail(
+            subject = "Welcome to Group Expense Manger",
+            message = temp_msg,
+            from_email = "groupexpensemanager@gmail.com",
+            recipient_list = [email,],
+            fail_silently = False,
+        )
 
     return render(request, 'signup.html')
 
