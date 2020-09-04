@@ -28,6 +28,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["groupexpensemanager.pythonanywhere.com"]
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'groupexpensemanager'
+EMAIL_HOST_PASSWORD = 'Anand@6017'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Group Expense Manager <groupexpensemanager@gmail.com>'
 
 # Application definition
 
