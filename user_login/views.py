@@ -235,10 +235,21 @@ def account(request):
         if request.POST.get('logout'):
             logmsg = "User logout by: "+str(userid)
             logging.info(logmsg)
-            
+            img_name_list = ["GroupExpensesByCategory.svg", "GroupExpensesByUsers.svg", "PersonalExpensesByCategory.svg"]
+            sess_id = request.session.get('sessionid')
+            for each_img in img_name_list:
+                del_img_name = str(sess_id[0]) + each_img
+                if os.path.exists('static/charts/'+ del_img_name):
+                    os.remove('static/charts/'+ del_img_name)
+                    logmsg = "Static Chart Deleted: " + del_img_name
+                    logging.info(logmsg)
+                else:
+                    logmsg = "Error In Static Chart Delete: " + del_img_name
+                    logging.info(logmsg)
+           
             try:
                 logout(request)
-                del request.session['userid']
+                del request.session[userid]
             except KeyError:
                 pass
             info = "User Logged Out Successfully!"
@@ -282,10 +293,10 @@ def account(request):
         trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
         category_summary = Get_Categorywise_Summary(sel_group,request)
-        data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
+        group_exp_by_category = Get_Category_Sum_For_PieChart(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
-        per_ex_data_for_chart = Get_Category_Sum_For_PieChart("Personal Expenses",request)
-        user_exp_summary_chart = Get_User_Exp_For_PieChart(sel_group,request)
+        personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
+        group_exp_by_users = Get_User_Exp_For_PieChart(sel_group,request)
 
         if request.POST.get('edit-btn'):
             tran_id = request.POST.get('edit-btn')
@@ -306,8 +317,8 @@ def account(request):
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
                 "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
-                "from_to_date": from_to_date, 'data_for_chart': json.dumps(data_for_chart), 
-                'per_ex_data_for_chart': json.dumps(per_ex_data_for_chart),"group_user_exp_chart":json.dumps(user_exp_summary_chart)})
+                "from_to_date": from_to_date, 'group_exp_by_category': group_exp_by_category, 
+                'personal_exp_by_category': personal_exp_by_category,"group_exp_by_users":group_exp_by_users})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -326,7 +337,17 @@ def nogroup_account(request):
         if request.POST.get('logout'):
             logmsg = "User logout by: "+str(userid)
             logging.info(logmsg)
-            
+            img_name_list = ["GroupExpensesByCategory.svg", "GroupExpensesByUsers.svg", "PersonalExpensesByCategory.svg"]
+            sess_id = request.session.get('sessionid')
+            for each_img in img_name_list:
+                del_img_name = str(sess_id[0]) + each_img
+                if os.path.exists('static/charts/'+ del_img_name):
+                    os.remove('static/charts/'+ del_img_name)
+                    logmsg = "Static Chart Deleted: " + del_img_name
+                    logging.info(logmsg)
+                else:
+                    logmsg = "Error In Static Chart Delete: " + del_img_name
+                    logging.info(logmsg)
             try:
                 logout(request)
                 del request.session['userid']
@@ -358,15 +379,14 @@ def nogroup_account(request):
         per_rows = Get_Personal_Exp_Summary(userid)
             
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
-        trans_rows = Get_Transaction_Summary(request,sel_group,userid)
+        trans_rows = Get_Transaction_Summary(request,"Personal Expenses",userid)
 
-        data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
-        per_ex_data_for_chart = Get_Category_Sum_For_PieChart("Personal Expenses",request)
+        personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
 
     return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(),"from_to_date": from_to_date, 
                 "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
-                "mini_trans_summary":mini_trans_summary,})
+                "mini_trans_summary":mini_trans_summary, 'personal_exp_by_category': personal_exp_by_category})
 
 @csrf_exempt
 @login_required(login_url='home')

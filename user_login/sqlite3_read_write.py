@@ -615,22 +615,25 @@ def Get_Category_Sum_For_PieChart(group_name, request):
         value_label_font_size = 25.0,
         font_family='googlefont:Raleway')
 
-    pie_chart = pygal.Pie(width=620, legend_at_bottom=True, style=custom_style)
-    pie_chart.title = 'Personal Expenses By Category'
-    percent_formatter = lambda x: '{:.10g}%'.format(x)
-    for r in result:
-        exp_per = round((int(r[1])/total_exp)*100,2)
-        pie_chart.add(str(r[0]),exp_per,formatter = percent_formatter)
     tag =""
     if group_name == "Personal Expenses":
         tag = "Personal"
     else:
         tag = "Group"
 
-    chartname = 'static//'+ tag + 'ExpensesByCategory.svg'
+    pie_chart = pygal.Pie(width=620, legend_at_bottom=True, style=custom_style)
+    pie_chart.title = tag +' Expenses By Category'
+    percent_formatter = lambda x: '{:.10g}%'.format(x)
+    for r in result:
+        exp_per = round((int(r[1])/total_exp)*100,2)
+        pie_chart.add(str(r[0]),exp_per,formatter = percent_formatter)
+
+
+    sess_id = request.session.get('sessionid')
+    chartname = 'static/charts/'+ str(sess_id[0]) + tag + 'ExpensesByCategory.svg'
     pie_chart.render_to_file(chartname)
 
-    return category_list
+    return chartname
 
 def Get_User_Exp_For_PieChart(group_name,request):
     conn = sqlite3.connect("db.sqlite3")
@@ -678,16 +681,11 @@ def Get_User_Exp_For_PieChart(group_name,request):
         exp_per = round((int(r[1])/total_exp)*100,2)
         pie_chart.add(str(Get_FirstName_of_User(r[0])),exp_per,formatter = percent_formatter)
     
-    tag =""
-    if group_name == "Personal Expenses":
-        tag = "Personal"
-    else:
-        tag = "Group"
-
-    chartname = 'static//'+ tag + 'ExpensesByUsers.svg'
+    sess_id = request.session.get('sessionid')
+    chartname = 'static/charts/'+ str(sess_id[0]) + 'GroupExpensesByUsers.svg'
     pie_chart.render_to_file(chartname)
 
-    return user_exp_list
+    return chartname
 
 def Get_Mini_Tran_Summary(trans_summary_dic):
     trans_summary_mini=[]

@@ -243,7 +243,7 @@
                         </h6>
                         <div class="card-body">
                             <figure>
-                                <embed type="image/svg+xml" src="/static/PersonalExpensesByCategory.svg"></embed>
+                                <embed type="image/svg+xml" src="/{{personal_exp_by_category}}"></embed>
                             </figure>
                         </div>   
                     </div>
@@ -407,69 +407,6 @@
         </div>            
     </form>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        // Load google charts
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-        
-        // Draw the chart and set the chart values
-        function drawChart() {
-        var datalist = {{data_for_chart|safe}};
-        var data = google.visualization.arrayToDataTable(datalist);
-        
-        // Optional; add a title and set the width and height of the chart
-        var options = {
-            legend:'left',
-            pieSliceText: 'percentage',
-            is3D: true,
-            backgroundColor: { fill:'transparent' }};
-        
-        // Display the chart inside the <div> element with id="group_piechart"
-        var chart = new google.visualization.PieChart(document.getElementById('group_piechart'));
-        chart.draw(data, options);
-        }
-
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawPersonalChart);
-
-        // Draw the chart and set the chart values
-        function drawPersonalChart() {
-        var datalist = {{per_ex_data_for_chart|safe}};
-        var data = google.visualization.arrayToDataTable(datalist);
-        
-        // Optional; add a title and set the width and height of the chart
-        var options = {
-            legend:'left',
-            pieSliceText: 'percentage',
-            is3D: true,
-            backgroundColor: { fill:'transparent' }};
-        
-        // Display the chart inside the <div> element with id="pers_piechart"
-        var chart = new google.visualization.PieChart(document.getElementById('pers_piechart'));
-        chart.draw(data, options);
-        }
-
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawUserSplitChart);
-
-        // Draw the chart and set the chart values
-        function drawUserSplitChart() {
-        var datalist = {{group_user_exp_chart|safe}};
-        var data = google.visualization.arrayToDataTable(datalist);
-
-        // Optional; add a title and set the width and height of the chart
-        var options = {
-            legend:'left',
-            pieSliceText: 'percentage',
-            is3D: true,
-            backgroundColor: { fill:'transparent' }};
-        
-        // Display the chart inside the <div> element with id="pers_piechart"
-        var chart = new google.visualization.PieChart(document.getElementById('usersplit_piechart'));
-        chart.draw(data, options);
-        }
-
-    </script>
     <script src="/static/js/jquery.slim.min.js"></script>
     <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
     <script src="/static/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
