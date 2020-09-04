@@ -50,7 +50,7 @@ def signup(request):
         email = request.POST.get('email')
         firstname = request.POST.get('firstname')
         lastname = request.POST.get('lastname')
-        data_file = open(os.path.join(settings.BASE_DIR+'\\templates', 'welcome-email-template.txt'))
+        data_file = open(os.path.join(settings.BASE_DIR+'/templates', 'welcome-email-template.txt'))
         temp_msg = '''Hi {},\n\nYour User ID: {},\n\n'''.format(firstname,newuserid) + data_file.read()
 
         try:
