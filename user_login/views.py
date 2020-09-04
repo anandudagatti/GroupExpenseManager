@@ -55,13 +55,18 @@ def signup(request):
 
         
         for user in User.objects.all():
-            if email == user.email:
-                logmsg = "Error: Email Already Exist! Try With New Email."
+            if email == user.email and newuserid == user.username: 
+                logmsg = "Error: User already exist! Try forgot password if dont remember password"
                 logging.info(logmsg)
                 messages.error(request,logmsg)
                 return render(request, 'signup.html')
             elif newuserid == user.username:
-                logmsg = "Error:Userid Already Exists! Try With New Userid."
+                logmsg = "Error:Userid already exist! Try with new userid."
+                logging.info(logmsg)
+                messages.error(request,logmsg)
+                return render(request, 'signup.html')
+            elif email == user.email:
+                logmsg = "Error: Email already exist! Try with new email."
                 logging.info(logmsg)
                 messages.error(request,logmsg)
                 return render(request, 'signup.html')
@@ -74,7 +79,7 @@ def signup(request):
                                     last_name=lastname)
 
         user.save()
-        logmsg = "Successfully Signed Up!, Login to Start Adding Expenses."
+        logmsg = "Successfully signed up!, Login to start adding expenses."
         logging.info(logmsg)
         messages.success(request,logmsg)
         send_mail(
