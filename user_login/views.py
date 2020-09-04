@@ -357,11 +357,16 @@ def nogroup_account(request):
         per_header = ['Total','Income','Expense']
         per_rows = Get_Personal_Exp_Summary(userid)
             
-        trans_header = ['Date', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+        trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
         trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
+        data_for_chart = Get_Category_Sum_For_PieChart(sel_group,request)
+        mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
+        per_ex_data_for_chart = Get_Category_Sum_For_PieChart("Personal Expenses",request)
+
     return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(),"from_to_date": from_to_date, 
-                "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows})
+                "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
+                "mini_trans_summary":mini_trans_summary,})
 
 @csrf_exempt
 @login_required(login_url='home')

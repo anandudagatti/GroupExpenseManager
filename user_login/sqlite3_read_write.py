@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from operator import itemgetter
 import calendar
 import re
+import pygal
+from pygal.style import Style
 
 def Write_to_DB(dictionary,table_name):
     conn = sqlite3.connect("db.sqlite3")
@@ -568,8 +570,7 @@ def Get_Categorywise_Summary(group_name, request):
     data_dict["sub_category_list"]=sub_category_list
     data_dict["amount_list"]=amount_list
     return data_dict
-import pygal
-from pygal.style import Style
+
 def Get_Category_Sum_For_PieChart(group_name, request):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
