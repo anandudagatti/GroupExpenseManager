@@ -16,7 +16,7 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
     Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart, Update_UserDate_to_SessionMaster, \
-    Get_FromToDate_From_SessionID
+    Get_FromToDate_From_SessionID,password_check
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -52,8 +52,8 @@ def signup(request):
         lastname = request.POST.get('lastname')
         data_file = open(os.path.join(settings.BASE_DIR+'/templates', 'welcome-email-template.txt'))
         temp_msg = '''Hi {},\n\nYour User ID: {},\n\n'''.format(firstname,newuserid) + data_file.read()
+        password_validation = password_check(newpassword)
 
-        
         for user in User.objects.all():
             if email == user.email and newuserid == user.username: 
                 logmsg = "Error: User already exist! Try forgot password if dont remember password"
@@ -70,8 +70,14 @@ def signup(request):
                 logging.info(logmsg)
                 messages.error(request,logmsg)
                 return render(request, 'signup.html')
+            elif password_validation!="Success!":
+                logmsg = password_validation
+                logging.info(logmsg)
+                messages.error(request,logmsg)
+                return render(request, 'signup.html')
             else:
                 pass
+
         user = User.objects.create_user(username=newuserid, 
                                     password=newpassword,
                                     email=email,

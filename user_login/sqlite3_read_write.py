@@ -15,6 +15,31 @@ def Write_to_DB(dictionary,table_name):
     conn.commit()
     conn.close()
 
+def password_check(passwd): 
+      
+    SpecialSym =['$', '@', '#', '%', '!', '&'] 
+    val = "Success!"
+      
+    if len(passwd) < 8: 
+        val ='length should be at least 8' 
+          
+    if len(passwd) > 20: 
+        val ='length should be not be greater than 20' 
+          
+    if not any(char.isdigit() for char in passwd): 
+        val ='Password should have at least one numeral' 
+          
+    if not any(char.isupper() for char in passwd): 
+        val ='Password should have at least one uppercase letter' 
+          
+    if not any(char.islower() for char in passwd): 
+        val ='Password should have at least one lowercase letter' 
+          
+    if not any(char in SpecialSym for char in passwd): 
+        val ='Password should have at least one of the symbols $ @ # % ! &' 
+ 
+    return val 
+
 def Get_Income_Category():
     conn = sqlite3.connect("db.sqlite3")
     with conn:

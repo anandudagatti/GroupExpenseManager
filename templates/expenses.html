@@ -69,7 +69,7 @@
                                     {% if not sub_categories %}
                                     <div>Category</div>
                                     {% for category in categories %}
-                                    <button name="category-btn" value={{category}} type="submit" onclick="take_to_subcat()" class="btn btn-light">
+                                    <button name="category-btn" value={{category}} type="submit" style="padding: 15px; margin-bottom: 5px;"  onclick="take_to_subcat()" class="btn btn-light">
                                         <img width="100px" height="80px" src="/static/{{category}}.svg" alt="No Image" onerror="this.src='/static/NoImage.jpg';"/><br>
                                         {{ category }}
                                     </button>
@@ -81,7 +81,7 @@
                                     <h6><a href=""><<< Back to Category</a></h6>
                                     <div>Sub Category</div>
                                     {% for subcategory in sub_categories %}
-                                    <button name="sub-category-btn" value={{subcategory}} type="submit" onclick="show_exp_details()" class="btn btn-light">
+                                    <button name="sub-category-btn" value={{subcategory}} type="submit" onclick="show_exp_details()" style="padding: 15px; margin-bottom: 5px;" class="btn btn-light">
                                         <img width="100px" height="80px" src="/static/{{subcategory}}.svg" alt="No Image" onerror="this.src='/static/NoImage.jpg';"/><br>
                                         {{ subcategory }}
                                     </button>

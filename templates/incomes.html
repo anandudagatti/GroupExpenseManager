@@ -45,7 +45,7 @@
     </form>    
     <div class="row">
         <div class="container card-body add-income col-sm-12 col-lg-7">
-            <div class="card text-left text-black bg-light mb-3">
+            <div class="card text-left text-black mb-3">
                 <h5 class="card-header">
                     <div class="row">
                         <div class="col-8">
@@ -53,7 +53,7 @@
                             <font size="4px">Add Income</font>
                         </div>
                         <div class="col-4 text-right">
-                            <h6><a href="{% url 'account' %}">Back to Account</a></h6>
+                            <h6><a href="{% url 'account' %}"><i class="fas fa-chevron-circle-left"></i> Back to Account</a></h6>
                         </div>
                     </div>   
                 </h5>
@@ -67,10 +67,11 @@
                         {% endfor %}
                         {% endif %}
                         <div id="select-category" class="select-category">
+                            <div>Category</div><br>
                             <div class="category-card">
                                 {% for category in categories %}
-                                    <button name="category-btn" value={{category}} type="submit" class="btn btn-light">
-                                        <img width="100px" height="80px" src="/static/{{category}}.svg"/><br>
+                                    <button name="category-btn" style="padding: 15px; margin-bottom: 5px;" value={{category}} type="submit" class="btn btn-light">
+                                        <img width="100px" height="100px" src="/static/{{category}}.svg"/><br>
                                         <font size="2px">{{ category }}</font>
                                     </button>
                                 {% endfor %}                

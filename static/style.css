@@ -68,7 +68,15 @@ body, html {
 .card-header {
     border-block-end-color: rgb(0, 153, 255);
     border-block-end-width: 4px;
+    
   }
+
+.category-card{
+  margin-left: 20px;
+}
+.subcategory-card{
+  margin-left: 20px;
+}
 
 .bg-dark{
     opacity: .95;
