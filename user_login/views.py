@@ -544,8 +544,9 @@ def incomes(request):
             print(category_selected)
             fullname = request.user.get_full_name()
             payer_list = Get_Payer_List()
+            exp_mode = "Personal"
             return render(request, 'income_details.html',{"userid":fullname, "logintype":login_type.capitalize(), 
-             "cat_crumb":request.session.get('cat_sel'), "payerlist": payer_list})
+             "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'), "payerlist": payer_list})
         elif request.POST.get('save'):
             info = 'Income Saved!!'
             logmsg = "Save Button Clicked"
@@ -561,7 +562,8 @@ def incomes(request):
             tag = request.POST.get('tag')
             description = request.POST.get('description')
             recurring = request.POST.get('recurring')
-            income_data = {'trans_type':['Income'],'user':[userid],'category':[category], 'sub_category':[subcategory],\
+            exp_mode = "Personal"
+            income_data = {'trans_type':['Income'],'user':[userid], "exp_mode":exp_mode, 'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payer], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
             print(income_data)
@@ -578,8 +580,9 @@ def incomes(request):
 
     income_cat = Get_Income_Category()
     categories = income_cat
+    exp_mode = "Personal"
     info=""
-    return render(request,'incomes.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
+    return render(request,'incomes.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -618,7 +621,7 @@ def group_expenses(request):
             tag = request.POST.get('tag')
             description = request.POST.get('description')
             recurring = request.POST.get('recurring')
-            expense_data = {'trans_type':['Expense'],'user':[userid],'category':[category], 'sub_category':[subcategory],\
+            expense_data = {'trans_type':['Expense'],'user':[userid], 'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payee], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
             print(expense_data)
@@ -634,7 +637,8 @@ def group_expenses(request):
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
                 sub_categories = ''
-                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                exp_mode = "Group"
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
             else:
                 Edit_Transaction(tran_id,expense_data)
                 request.session['edit_trans']=None
@@ -646,8 +650,9 @@ def group_expenses(request):
             fullname = request.user.get_full_name()
             exp_cat = Get_Exp_Category()
             categories = exp_cat
+            exp_mode = "Group"
             sub_categories = Get_SubCategoryTable(category_selected)
-            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('sub-category-btn'):
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
@@ -657,7 +662,8 @@ def group_expenses(request):
             grouplist = list(get_groups) 
             payee_list = Get_Payee_List()
             payment_methods = Get_Payment_Method()
-            return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
+            exp_mode = "Group"
+            return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'),
              "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('create-group'):
             group_name = request.POST.get('groupname')
@@ -669,6 +675,7 @@ def group_expenses(request):
             trans = Get_Transaction_By_Id(tran_id)
             if tran_id!=None and len(trans)>0:
                 edit_mode = "True"
+                exp_mode = "Group"
                 exp_cat = Get_Exp_Category()
                 print(trans)
                 request.session['cat_sel'] = trans[0][3]
@@ -687,18 +694,19 @@ def group_expenses(request):
                 payee_list = Get_Payee_List()
                 payment_methods = Get_Payment_Method()
 
-                return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
+                return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'),
                 "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods,
                 'edit_group':edit_group,'edit_date':edit_date,'edit_amount':edit_amount,'edit_payee':edit_payee,'edit_pay_type':edit_pay_type,
                 'edit_tag':edit_tag,'edit_desc':edit_desc, 'edit_mode':edit_mode})
             else:
                 edit_mode = "False"
+                exp_mode = "Group"
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
                 sub_categories = ''
                 info=""
-            return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(),  "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')
 
@@ -756,7 +764,8 @@ def personal_expenses(request):
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
                 sub_categories = ''
-                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                exp_mode = "Personal"
+                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
             else:
                 Edit_Transaction(tran_id,expense_data)
                 request.session['edit_trans']=None
@@ -764,7 +773,8 @@ def personal_expenses(request):
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
                 sub_categories = ''
-                return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                exp_mode = "Personal"
+                return render(request, 'expenses.html',{"userid":fullname, "exp_mode":exp_mode, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
@@ -773,7 +783,8 @@ def personal_expenses(request):
             exp_cat = Get_Exp_Category()
             categories = exp_cat
             sub_categories = Get_SubCategoryTable(category_selected)
-            return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+            exp_mode = "Personal"
+            return render(request, 'expenses.html',{"userid":fullname, "exp_mode":exp_mode, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('sub-category-btn'):
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
@@ -783,8 +794,9 @@ def personal_expenses(request):
             grouplist = list(get_groups) 
             payee_list = Get_Payee_List()
             payment_methods = Get_Payment_Method()
+            exp_mode = "Personal"
             return render(request, 'expense_details_personal.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
-             "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
+             "exp_mode":exp_mode, "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('create-group'):
             group_name = request.POST.get('groupname')
             group_data = {'name':group_name}
@@ -794,6 +806,7 @@ def personal_expenses(request):
             trans = Get_Transaction_By_Id(tran_id)
             if tran_id!=None and len(trans)>0:
                 edit_mode = "True"
+                exp_mode = "Personal"
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 print(trans)
@@ -810,16 +823,17 @@ def personal_expenses(request):
                 payee_list = Get_Payee_List()
                 payment_methods = Get_Payment_Method()
                 return render(request, 'expense_details_personal.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
-                "subcat_crumb":request.session.get('sub_cat_sel'), "payeelist": payee_list, "payment_meth":payment_methods,
+                "exp_mode":exp_mode, "subcat_crumb":request.session.get('sub_cat_sel'), "payeelist": payee_list, "payment_meth":payment_methods,
                 'edit_date':edit_date,'edit_amount':edit_amount,'edit_payee':edit_payee,'edit_pay_type':edit_pay_type,
                 'edit_tag':edit_tag,'edit_desc':edit_desc, 'edit_mode':edit_mode})
             else:
                 edit_mode = "False"
+                exp_mode = "Personal"
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
                 categories = exp_cat
                 sub_categories = '' #Get_SubCategoryTable("Food")
                 info=""
-                return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                return render(request, 'expenses.html',{"info":info, "userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
     else:
         return redirect('home')

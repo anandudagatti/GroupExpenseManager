@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:svg="http://www.w3.org/2000/svg" id="Layer_1" xml:space="preserve" viewBox="0 0 198.882 384.359" version="1.0" y="0px" x="0px" enable-background="new 0 0 198.882 384.359">
+<g id="g236" fill="#1a1a1a">
+	<path id="path238" d="m198.88 355.36c0 16.016-12.983 29-29 29h-140.88c-16.016 0-29-12.984-29-29v-326.36c0-16.016 12.984-29 29-29h140.88c16.017 0 29 12.984 29 29v326.36z" fill="#1a1a1a"/>
+</g>
+<g id="g240">
+	<path id="path242" d="m191.71 349.71c0 16.346-13.681 29.595-30.561 29.595h-124.92c-16.878 0-30.561-13.249-30.561-29.595v-313.67c0-16.345 13.682-29.595 30.561-29.595h124.92c16.88 0 30.561 13.25 30.561 29.595v313.68z"/>
+</g>
+<path id="path244" stroke="#000" fill="#fff" d="m184.2 341.28c0 16.017-12.983 29-29 29h-112c-16.016 0-29-12.983-29-29v-300c0-16.016 12.984-29 29-29h112c16.017 0 29 12.984 29 29v300z"/>
+<linearGradient id="SVGID_1_" y2="330.24" gradientUnits="userSpaceOnUse" y1="42.244" x2="97.03" x1="101.53">
+	<stop id="stop247" stop-color="#AFDFE5" offset="0"/>
+	<stop id="stop249" stop-color="#81B5D5" offset=".1189"/>
+	<stop id="stop251" stop-color="#5D97C9" offset=".2404"/>
+	<stop id="stop253" stop-color="#3E83C1" offset=".3514"/>
+	<stop id="stop255" stop-color="#2879BD" offset=".4471"/>
+	<stop id="stop257" stop-color="#1B75BC" offset=".5165"/>
+	<stop id="stop259" stop-color="#1D7BC0" offset=".5659"/>
+	<stop id="stop261" stop-color="#228DCD" offset=".6545"/>
+	<stop id="stop263" stop-color="#29AAE2" offset=".7637"/>
+	<stop id="stop265" stop-color="#AFDFE5" offset="1"/>
+</linearGradient>
+<path id="path267" fill="url(#SVGID_1_)" d="m184.2 341.28c0 16.017-12.983 29-29 29h-112c-16.016 0-29-12.983-29-29v-300c0-16.016 12.984-29 29-29h112c16.017 0 29 12.984 29 29v300z"/>
+<linearGradient id="SVGID_2_" y2="248.87" gradientUnits="userSpaceOnUse" y1="74.873" x2="101" x1="98.502">
+	<stop id="stop270" stop-color="#AFDFE5" offset="0"/>
+	<stop id="stop272" stop-color="#81B5D5" offset=".1189"/>
+	<stop id="stop274" stop-color="#5D97C9" offset=".2404"/>
+	<stop id="stop276" stop-color="#3E83C1" offset=".3514"/>
+	<stop id="stop278" stop-color="#2879BD" offset=".4471"/>
+	<stop id="stop280" stop-color="#1B75BC" offset=".5165"/>
+	<stop id="stop282" stop-color="#1D7BC0" offset=".5659"/>
+	<stop id="stop284" stop-color="#228DCD" offset=".6545"/>
+	<stop id="stop286" stop-color="#29AAE2" offset=".7637"/>
+	<stop id="stop288" stop-color="#AFDFE5" offset="1"/>
+</linearGradient>
+<path id="path290" d="m184.2 213.38v-172.1c0-16.016-12.983-29-29-29h-112c-16.016 0-29 12.984-29 29v164.64c43.649 16.15 107.52 29.9 170 7.46z" fill="url(#SVGID_2_)"/>
+<path id="path292" stroke="#000" stroke-width="4" fill="#1a1a1a" d="m14.201 343.9c0 16.226 12.984 29.378 29 29.378h112c16.017 0 29-13.152 29-29.378v-26.847h-170v26.85zm141-333.29h-112c-16.016 0-29 13.153-29 29.378v17.728h170v-17.728c0-16.224-12.98-29.378-29-29.378z"/>
+<ellipse id="ellipse294" cy="342.4" cx="97.576" rx="18.25" ry="16.75"/>
+<path id="path296" d="m118.2 42.777c0 1.657-1.343 3-3 3h-30c-1.657 0-3-1.343-3-3v-0.5c0-1.657 1.343-3 3-3h30c1.657 0 3 1.343 3 3v0.5z"/>
+<path id="path298" d="m79.844 346.3c1.918 7.365 9.119 12.848 17.731 12.848 8.387 0 15.434-5.198 17.57-12.271-14.02 3.74-26.134 2.26-35.296-0.58z" fill="#808080"/>
+<path id="path300" fill="#1a1a1a" d="m104.83 346.65c0 1.657-1.343 3-3 3h-8.5c-1.657 0-3-1.343-3-3v-8.5c0-1.657 1.343-3 3-3h8.5c1.657 0 3 1.343 3 3v8.5z"/>
+<path id="path302" fill="#B3B3B3" d="m82.201 42.568v0.209c0 1.657 1.343 3 3 3h30c1.657 0 3-1.343 3-3v-0.209h-35.999z"/>
+<metadata><rdf:RDF><cc:Work><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/><cc:license rdf:resource="http://creativecommons.org/licenses/publicdomain/"/><dc:publisher><cc:Agent rdf:about="http://openclipart.org/"><dc:title>Openclipart</dc:title></cc:Agent></dc:publisher><dc:title>modern touch phone mobile</dc:title><dc:date>2008-10-01T17:46:18</dc:date><dc:description>clip art, clipart, computer, computer, mobile, mobile, phone, phone, photorealistic, photorealistic, tool, tool, touchphone, touchphone, </dc:description><dc:source>http://openclipart.org/detail/19480/modern-touch-phone-mobile-by-shokunin</dc:source><dc:creator><cc:Agent><dc:title>shokunin</dc:title></cc:Agent></dc:creator><dc:subject><rdf:Bag><rdf:li>clip art</rdf:li><rdf:li>clipart</rdf:li><rdf:li>computer</rdf:li><rdf:li>mobile</rdf:li><rdf:li>phone</rdf:li><rdf:li>photorealistic</rdf:li><rdf:li>tool</rdf:li><rdf:li>touchphone</rdf:li></rdf:Bag></dc:subject></cc:Work><cc:License rdf:about="http://creativecommons.org/licenses/publicdomain/"><cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction"/><cc:permits rdf:resource="http://creativecommons.org/ns#Distribution"/><cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks"/></cc:License></rdf:RDF></metadata></svg>

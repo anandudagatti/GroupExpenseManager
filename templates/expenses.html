@@ -47,11 +47,18 @@
                     <h5 class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <i class="fas fa-user-minus"></i>
-                                <font size="4px">Add Expense</font>
+                                <h6>
+                                    {% if exp_mode == "Group" %}
+                                    <i class="fas fa-users"></i>
+                                    {% else %}
+                                    <i class="fas fa-user"></i>
+                                    {% endif %}
+                                    <i style="color:red" class="fas fa-rupee-sign"></i>
+                                    Add {{exp_mode}} Expense    
+                                </h6>
                             </div>
                             <div class="col-4 text-right">
-                                <h6><a href="{% url 'account' %}"><i class="fas fa-chevron-circle-left"></i> Back to Account</a></h6>
+                                <h6><a href="{% url 'account' %}"><i class="fas fa-chevron-circle-left"></i> Account</a></h6>
                             </div>
                         </div>       
                     </h5>
