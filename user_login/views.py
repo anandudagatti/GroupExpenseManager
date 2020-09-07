@@ -37,6 +37,25 @@ def terms(request):
     return render(request, 'terms_of_use.html')
 
 @csrf_exempt
+def myprofile(request):
+    firstname = request.user.first_name
+    lastname = request.user.last_name
+    email = request.user.email
+    
+    if request.POST.get('edit_submit'):
+        edited_firstname = request.POST.get("firstname")
+        edited_lastname = request.POST.get("lastname")
+        edited_email = request.POST.get("email")
+        user = User.objects.update(first_name=edited_firstname, last_name=edited_lastname, email=edited_email)
+
+        firstname = edited_firstname
+        lastname = edited_lastname
+        email = edited_email
+        return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email})
+    
+    return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email})
+
+@csrf_exempt
 def signup(request):       
     if request.POST.get('sign-up'):
         logmsg = "singup view: Rendering singup page"
