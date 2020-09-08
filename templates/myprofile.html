@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="text-center">
-        <input class="btn btn-primary" name="edit_submit" type="submit" value="Submit"></input>
+        <input id="edit_submit" class="btn btn-primary" name="edit_submit" type="submit" value="Submit" disabled></input>
       </div>
     </form>
   </div>
@@ -53,10 +53,12 @@
       document.getElementById("firstname").disabled = false
       document.getElementById("lastname").disabled = false
       document.getElementById("email").disabled = false
+      document.getElementById("edit_submit").disabled = false
     } else {
       document.getElementById("firstname").disabled = true
       document.getElementById("lastname").disabled = true
       document.getElementById("email").disabled = true
+      document.getElementById("edit_submit").disabled = true
     }
   }
 </script>
