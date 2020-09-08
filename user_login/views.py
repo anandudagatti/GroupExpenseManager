@@ -259,7 +259,7 @@ def account(request):
                 Delete_Transaction_By_Id(tran_id)
             else:
                 info = 'Invalid User! You are not the user to delete this transaction!'
-                messages.error(request,info)        
+                messages.error(request,info) 
 
     if request.session.get('user-date'):
         from_to_date = request.session.get('user-date')
@@ -381,11 +381,43 @@ def nogroup_account(request):
     logmsg = "account view: Rendering account page template"
     logging.info(logmsg)
     userid = request.session.get('userid')
+    logmsg = "User ID :" + str(userid)
+    logging.info(logmsg)
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
     login_type = request.session.get('login_typ')
-    sel_group = request.POST.getlist('group_name')
     
+    if request.POST.get('delete-btn'):
+        tran_id = request.POST.get('del_trans_id')
+        logmsg = "Delete button clicked: Trans ID: "+tran_id
+        logging.info(logmsg)
+        trans = Get_Transaction_By_Id(tran_id)
+        if tran_id!=None and len(trans)>0:
+            edit_group = trans[0][5]
+            tran_user = trans[0][2]
+            if edit_group=="Personal Expenses" and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            elif edit_group=="Group Expenses" and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            else:
+                info = 'Invalid User! You are not the user to delete this transaction!'
+                messages.error(request,info) 
+
+    if request.POST.get('edit-btn'):
+        tran_id = request.POST.get('edit-btn')
+        request.session['edit_trans']=tran_id
+        trans = Get_Transaction_By_Id(tran_id)
+        if tran_id!=None and len(trans)>0:
+            edit_group = trans[0][5]
+            tran_user = trans[0][2]
+            if edit_group=="Personal Expenses" and tran_user==userid:
+                return redirect('personal_expenses')
+            elif edit_group!="Personal Expenses" and tran_user==userid:
+                return redirect('group_expenses')
+            else:
+                info = 'Invalid User to Edit Transaction!'
+                messages.error(request,info)
+
     if userid!=None:
         if request.POST.get('logout'):
             logmsg = "User logout by: "+str(userid)
@@ -432,7 +464,7 @@ def nogroup_account(request):
         per_rows = Get_Personal_Exp_Summary(userid)
             
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
-        trans_rows = Get_Transaction_Summary(request,"Personal Expenses",userid)
+        trans_rows = Get_Transaction_Summary(request,"Non Group",userid)
 
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
         personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
@@ -598,16 +630,16 @@ def incomes(request):
             tag = request.POST.get('tag')
             description = request.POST.get('description')
             recurring = request.POST.get('recurring')
-            exp_mode = "Personal"
-            income_data = {'trans_type':['Income'],'user':[userid], "exp_mode":exp_mode, 'category':[category], 'sub_category':[subcategory],\
+            income_data = {'trans_type':['Income'],'user':[userid], 'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payer], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
             print(income_data)
             try:
                 Insert_Transaction(income_data)
                 messages.success(request,'Income Added Succesfully!!')
-            except:
-                messages.error(request,"Unable to Insert!!")
+            except Exception as e:
+                messages.error(request, str(e))
+                logger.error('Failed to Insert: ' + str(e))
 
             fullname = request.user.get_full_name()
             income_cat = Get_Income_Category()

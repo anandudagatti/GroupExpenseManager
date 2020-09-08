@@ -8,6 +8,7 @@ urlpatterns = [
     path('account/', views.account, name='account'),
     path('account/myprofile',views.myprofile, name='myprofile'),
     path('nogroup_account/', views.nogroup_account, name='nogroup_account'),
+    path('nogroup_account/myprofile',views.myprofile, name='myprofile'),
     path('admin/', views.admin, name='admin'),
     path('groups/', views.groups, name='groups'),
     path('incomes/', views.incomes, name='incomes'),
