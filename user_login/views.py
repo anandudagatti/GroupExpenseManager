@@ -16,7 +16,7 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
     Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart, Update_UserDate_to_SessionMaster, \
-    Get_FromToDate_From_SessionID,password_check
+    Get_FromToDate_From_SessionID,password_check, Delete_Transaction_By_Id
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -245,6 +245,22 @@ def account(request):
     print("userdate", user_sel_date)
     request.session['user-date'] = user_sel_date
 
+    if request.POST.get('delete-btn'):
+        tran_id = request.POST.get('del_trans_id')
+        logmsg = "Delete button clicked: Trans ID: "+tran_id
+        logging.info(logmsg)
+        trans = Get_Transaction_By_Id(tran_id)
+        if tran_id!=None and len(trans)>0:
+            edit_group = trans[0][5]
+            tran_user = trans[0][2]
+            if edit_group=="Personal Expenses" and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            elif edit_group=="Group Expenses" and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            else:
+                info = 'Invalid User! You are not the user to delete this transaction!'
+                messages.error(request,info)        
+
     if request.session.get('user-date'):
         from_to_date = request.session.get('user-date')
     else:
@@ -348,6 +364,7 @@ def account(request):
                 else:
                     info = 'Invalid User to Edit Transaction!'
                     messages.error(request,info)
+            
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
@@ -606,7 +623,7 @@ def incomes(request):
 @csrf_exempt
 @login_required(login_url='home')
 def group_expenses(request):
-    logmsg = "group expenses view: Rendering expenses page"
+    logmsg = "group expenses view: Rendering group expenses page"
     logging.info(logmsg)
     userid = request.session.get('userid')
     logmsg = 'session id'+str(request.session.get('sessionid'))
@@ -732,7 +749,7 @@ def group_expenses(request):
 @csrf_exempt
 @login_required(login_url='home')
 def personal_expenses(request):
-    logmsg = "personal expenses view: Rendering expenses page"
+    logmsg = "personal expenses view: Rendering personal expenses page"
     logging.info(logmsg)
     userid = request.session.get('userid')
     logmsg = 'session id'+str(request.session.get('sessionid'))

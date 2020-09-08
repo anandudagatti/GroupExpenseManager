@@ -251,6 +251,17 @@ def Get_Transaction_By_Id(transaction_id):
     result = cur.fetchall()
     return result
 
+def Delete_Transaction_By_Id(transaction_id):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    query = '''DELETE FROM transaction_master WHERE transaction_id='{}';'''.format(transaction_id)
+    print(query)
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
 def Get_Transaction_Summary(request,group_name,userid):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
