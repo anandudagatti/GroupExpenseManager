@@ -231,6 +231,9 @@ def account(request):
     logmsg = 'Existing Group List: ' 
     logging.info(logmsg)
     print(grouplist)
+    
+    if (grouplist==[]):
+        return redirect('nogroup_account')
 
     user_opt = request.POST.get('user_opt')
     request.session['user_opt'] = user_opt
@@ -348,7 +351,7 @@ def account(request):
             request.session['user-date'] = user_sel_date
             from_to_date = request.session.get('user-date')
             user_exp_summary=group_user_exp[3]
-            
+
         elif request.POST.get('reset'):
             curdate = datetime.now()
             fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
@@ -380,7 +383,7 @@ def account(request):
                 else:
                     info = 'Invalid User to Edit Transaction!'
                     messages.error(request,info)
-            
+
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
@@ -458,10 +461,6 @@ def nogroup_account(request):
             messages.success(request,info)
             return redirect('home')
 
-        user_sel_date = request.POST.get('user_sel_date')
-        print("userdate", user_sel_date)
-        request.session['user-date'] = user_sel_date
-
         if request.session.get('user-date'):
             from_to_date = request.session.get('user-date')
         else:
@@ -470,6 +469,28 @@ def nogroup_account(request):
             lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
             from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
             request.session['user-date'] = from_to_date
+
+        if request.POST.get('save-date'):
+            logmsg = 'Custom Date Filter Applied'
+            logging.info(logmsg)
+            logmsg = "Custom Period Selected: "+from_to_date
+            logging.info(logmsg)
+            tempfrom_date = datetime.strptime(request.POST.get("from_date"),'%Y-%m-%d').date()
+            from_date = tempfrom_date.strftime('%d/%m/%Y')
+            tempto_date = datetime.strptime(request.POST.get("to_date"), '%Y-%m-%d').date()
+            to_date = tempto_date.strftime('%d/%m/%Y')
+            user_sel_date = "From "+from_date+" To "+to_date
+            logmsg = 'user date: '+user_sel_date
+            logging.info(logmsg)    
+            request.session['user-date'] = user_sel_date
+            from_to_date = request.session.get('user-date')
+            
+        if request.POST.get('reset'):
+            curdate = datetime.now()
+            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+            request.session['user-date'] = from_to_date        
 
         Update_UserDate_to_SessionMaster(request.session.get('sessionid'),from_to_date)
 

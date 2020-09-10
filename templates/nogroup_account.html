@@ -45,12 +45,10 @@
             document.getElementById("success").innerHTML = ""
             if(fromdate!="" & todate!=""){
                 document.getElementById("from_to_date").innerHTML = "From "+formatDate(fromdate)+" To "+formatDate(todate)
-                document.getElementById("user_sel_date").value = "From "+formatDate(fromdate)+" To "+formatDate(todate)
                 document.getElementById("saveicon").className = "fas fa-check"
                 document.getElementById("msg").className = "alert alert-success"
-                document.getElementById("success").innerHTML = "From and to date added to period, Click on Apply to update values"
+                document.getElementById("success").innerHTML = "From and to date updated!"
                 document.getElementById("change_btn").style.display="none"
-                document.getElementById("apply_btn").style.display=""
             }else{
                 document.getElementById("success").innerHTML="Input cannot be blank!!"
                 document.getElementById("msg").className = "alert alert-danger"
@@ -90,19 +88,18 @@
             <div data-aos="fade-right" data-aos-easing="linear" data-aos-duration="500">
                 <div class="row mb-2">
                     <div class="col-lg-4 col-md-6 col-sm-12">
-                        <div style="display: none;">
-                            <input type="text" name="user_sel_date" id="user_sel_date">
-                        </div>
                         <div class="input-group-prepend form-control-md mb-2">
                             <label for="from_to_date" class="input-group-text" style="font-size: 12px;"><b><i class="fas fa-calendar-alt"></i> Date</b></label>
                             <label id="from_to_date" class="input-group-text" style="font-size: 12px;">{{from_to_date}}</label>
-                            <div id="change_btn">
-                                <input type="button" value="Change" name="change_btn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
-                                </input>   
+                            <div class="filter-reset" id="change_btn">
+                                <button type="button" value="Change" name="change_btn" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#change-period">
+                                    <i class="fas fa-filter"></i>
+                                </button>   
                             </div>
-                            <div style="display: none;" id="apply_btn">
-                                <input value="Apply" class="btn btn-primary btn-sm" type="submit" name="apply_btn">
-                                </input>        
+                            <div class="filter-reset" id="reset">
+                                <button value="Reset" class="btn btn-primary btn-sm" type="submit" name="reset">
+                                    <i class="fas fa-redo-alt"></i>
+                                </button>        
                             </div>
                         </div>
                     </div>
@@ -382,7 +379,7 @@
             </div>
         </div>
     </div><br>
-    <form id="form-navbar" method="POST">
+    <form id="model-form-navbar" method="POST">
         <div class="modal fade" id="change-period" tabindex="1" role="dialog" aria-labelledby="change-periodlabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -398,13 +395,13 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="from_date">From</span>
                                 </div>
-                                <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date" onfocus="Clearmsg()">
+                                <input type="Date" id="from-date" name="from_date" class="form-control" aria-label="from_date" aria-describedby="from_date" onfocus="Clearmsg()"required>
                             </div>
                             <div class="input-group col-xs-12 col-sm-6 mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="to_date">To</span>
                                 </div>
-                                <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date" onfocus="Clearmsg()">
+                                <input type="Date" id="to-date" name="to_date" class="form-control" aria-label="to_date" aria-describedby="to_date" onfocus="Clearmsg()" required>
                             </div>
                         </div>
                         <div id="msg" role="alert">
@@ -413,7 +410,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> 
-                        <button type="button" class="btn btn-secondary" name="save-date" data-dismiss="modal" onclick="set_date()">
+                        <button type="submit" name="save-date" value="Save" class="btn btn-primary" onclick="set_date()">
                             <i id="saveicon" class="fas fa-sign-in-alt"></i> Save
                         </button>
                     </div>
