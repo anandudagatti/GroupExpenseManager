@@ -13,7 +13,7 @@ body, html {
     background-size: cover;
   }
   .forgot-card{
-    opacity: .9;
+     opacity: 1;
     margin: 0;
     width: 370px;
     position: relative;
@@ -22,7 +22,7 @@ body, html {
     transform: translate(-50%, -50%);
   }
   .login-card{
-    opacity: .9;
+     opacity: 1;
     width: 370px;
     margin: 0;
     position: relative;
@@ -31,7 +31,7 @@ body, html {
     transform: translate(-50%, -50%);
   }
 .sign-up{
-    opacity: .9;
+     opacity: 1;
     width: 350px;
     margin: 0;
     position: absolute;
@@ -40,24 +40,24 @@ body, html {
     transform: translate(-50%, -50%);
   }
 .expense-card{
-  opacity: .9;
+   opacity: 1;
   position: absolute;
   top: 15%;
 }
 .expdetail-card{
-  opacity: .9;
+   opacity: 1;
   position: relative;
 }
 .incdetail-card{
-  opacity: .9;
+   opacity: 1;
   position: relative;
 }
 .add-income{
-  opacity: .9;
+   opacity: 1;
   position: relative;
 }
 .create-group{
-  opacity: .9;
+   opacity: 1;
   width: 350px;
   margin: 0;
   position: absolute;
@@ -154,7 +154,7 @@ body, html {
 }
 
 .trans-summary{
-  opacity: .9;
+   opacity: 1;
   margin: 0;
 }
 
@@ -170,10 +170,14 @@ body, html {
 
 .trans-summary-mini{
   width: 380px;
-  opacity: .9;
+   opacity: 1;
   margin: 0;
   position: relative;
   top: 4%;
+}
+
+.form-check .form-check-label{
+  cursor: pointer;
 }
 
 .form-control:focus {

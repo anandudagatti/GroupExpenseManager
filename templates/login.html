@@ -23,7 +23,7 @@
 </head>
 <body>
     <nav class="navbar navbar-light bg-dark">
-        <a class="navbar-brand text-white" href="#">
+        <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
             <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
              Group Expense Manager
         </a>
@@ -38,7 +38,7 @@
                 <form id="login-form" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
-                        <input type="text" class="form-control" name="userid" id="userid" placeholder="User ID" onclick="clearmsg()">
+                        <input type="text" class="form-control" name="userid" id="userid" placeholder="User ID" onclick="clearmsg()" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <input type="password" class="form-control" name="password" id="password" placeholder="Password" onclick="clearmsg()">
