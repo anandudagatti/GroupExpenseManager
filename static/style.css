@@ -12,6 +12,9 @@ body, html {
     /*background-repeat: no-repeat;*/
     background-size: cover;
   }
+  .filter-reset{
+    margin-left:5px;
+  }
   .forgot-card{
      opacity: 1;
     margin: 0;

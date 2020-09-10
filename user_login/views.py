@@ -241,10 +241,6 @@ def account(request):
     logmsg = 'selected group: '+str(sess_group)
     logging.info(logmsg)
 
-    user_sel_date = request.POST.get('user_sel_date')
-    print("userdate", user_sel_date)
-    request.session['user-date'] = user_sel_date
-
     if request.POST.get('delete-btn'):
         tran_id = request.POST.get('del_trans_id')
         logmsg = "Delete button clicked: Trans ID: "+tran_id
@@ -316,6 +312,7 @@ def account(request):
         group_rows = Get_Group_Exp_Summary(sel_group)
 
         user_exp_summary=group_user_exp[2]
+
         if request.POST.get('update_useropt'):
             curdate = datetime.now()
             fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
@@ -335,10 +332,29 @@ def account(request):
                 logmsg = "Period Selected : This Month"
                 logging.info(logmsg)
                 user_exp_summary=group_user_exp[2]
-        elif request.POST.get('apply_btn'):
+
+        elif request.POST.get('save-date'):
+            logmsg = 'Custom Date Filter Applied'
+            logging.info(logmsg)
             logmsg = "Custom Period Selected: "+from_to_date
             logging.info(logmsg)
+            tempfrom_date = datetime.strptime(request.POST.get("from_date"),'%Y-%m-%d').date()
+            from_date = tempfrom_date.strftime('%d/%m/%Y')
+            tempto_date = datetime.strptime(request.POST.get("to_date"), '%Y-%m-%d').date()
+            to_date = tempto_date.strftime('%d/%m/%Y')
+            user_sel_date = "From "+from_date+" To "+to_date
+            logmsg = 'user date: '+user_sel_date
+            logging.info(logmsg)
+            request.session['user-date'] = user_sel_date
+            from_to_date = request.session.get('user-date')
             user_exp_summary=group_user_exp[3]
+            
+        elif request.POST.get('reset'):
+            curdate = datetime.now()
+            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+            request.session['user-date'] = from_to_date
             
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
 
