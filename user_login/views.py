@@ -412,30 +412,14 @@ def nogroup_account(request):
         logging.info(logmsg)
         trans = Get_Transaction_By_Id(tran_id)
         if tran_id!=None and len(trans)>0:
-            edit_group = trans[0][5]
-            tran_user = trans[0][2]
-            if edit_group=="Personal Expenses" and tran_user==userid:
-                Delete_Transaction_By_Id(tran_id)
-            elif edit_group=="Group Expenses" and tran_user==userid:
-                Delete_Transaction_By_Id(tran_id)
-            else:
-                info = 'Invalid User! You are not the user to delete this transaction!'
-                messages.error(request,info) 
+            Delete_Transaction_By_Id(tran_id)
 
     if request.POST.get('edit-btn'):
         tran_id = request.POST.get('edit-btn')
         request.session['edit_trans']=tran_id
         trans = Get_Transaction_By_Id(tran_id)
         if tran_id!=None and len(trans)>0:
-            edit_group = trans[0][5]
-            tran_user = trans[0][2]
-            if edit_group=="Personal Expenses" and tran_user==userid:
-                return redirect('personal_expenses')
-            elif edit_group!="Personal Expenses" and tran_user==userid:
-                return redirect('group_expenses')
-            else:
-                info = 'Invalid User to Edit Transaction!'
-                messages.error(request,info)
+            return redirect('personal_expenses')
 
     if userid!=None:
         if request.POST.get('logout'):
