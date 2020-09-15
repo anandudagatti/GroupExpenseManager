@@ -649,14 +649,17 @@
                 </div>
             </div>
         </div>
+    </form>
+    <form id="model-form-navbar" method="POST">
         <div id="delete-confirm" class="modal fade" tabindex="2" role="dialog" aria-labelledby="delete-confirmlabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="change-periodlabel">Delete ?</h5>
+                        <h5 class="modal-title" id="change-periodlabel">Confirm Delete?</h5>
                     </div>
                     <div class="modal-body">
-                        Are you Sure You Want to Delete Transaction ID : <input style="width: 70px; border: 0px solid;" type="text" name="del_trans_id" id="del_trans_id" readonly></input>
+                        <div> Do you want to delete this transaction ? </div>
+                        <div> Trans ID: <input style="width: 70px; border: 0px solid;" type="text" name="del_trans_id" id="del_trans_id" readonly></input></div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
@@ -665,19 +668,19 @@
                 </div>
             </div>
         </div>
-        <a class="circle-div" onclick="showlinks()">
-            <i id="circle-btn" class="fas fa-plus" style="color: white; font-size: 20px;"></i>
-        </a>
-        <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
-        </a>
-        <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
-        </a>
-        <a id="group-exp" href="{% url 'group_expenses' %}" class="group-exp-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-users"></i> <i class="fas fa-rupee-sign"></i></span>
-        </a>
     </form>
+    <a class="circle-div" onclick="showlinks()">
+        <i id="circle-btn" class="fas fa-plus" style="color: white; font-size: 20px;"></i>
+    </a>
+    <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;">
+        <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
+    </a>
+    <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;">
+        <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
+    </a>
+    <a id="group-exp" href="{% url 'group_expenses' %}" class="group-exp-circle" style="display: none;">
+        <span style="font-size: 13px;"><i class="fas fa-users"></i> <i class="fas fa-rupee-sign"></i></span>
+    </a>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/static/js/jquery.slim.min.js"></script>
     <script src="/static/js/popper.js/1.15.0/umd/popper.min.js"></script>
@@ -685,7 +688,7 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
     <script>
-    AOS.init();
+        AOS.init();
     </script>
 </body>
 </html>

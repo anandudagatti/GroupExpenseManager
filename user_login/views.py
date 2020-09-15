@@ -244,22 +244,6 @@ def account(request):
     logmsg = 'selected group: '+str(sess_group)
     logging.info(logmsg)
 
-    if request.POST.get('delete-btn'):
-        tran_id = request.POST.get('del_trans_id')
-        logmsg = "Delete button clicked: Trans ID: "+tran_id
-        logging.info(logmsg)
-        trans = Get_Transaction_By_Id(tran_id)
-        if tran_id!=None and len(trans)>0:
-            edit_group = trans[0][5]
-            tran_user = trans[0][2]
-            if edit_group=="Personal Expenses" and tran_user==userid:
-                Delete_Transaction_By_Id(tran_id)
-            elif edit_group=="Group Expenses" and tran_user==userid:
-                Delete_Transaction_By_Id(tran_id)
-            else:
-                info = 'Invalid User! You are not the user to delete this transaction!'
-                messages.error(request,info) 
-
     if request.session.get('user-date'):
         from_to_date = request.session.get('user-date')
     else:
@@ -281,6 +265,23 @@ def account(request):
             sel_group= sel_group[0]
         except:
             return redirect('home')
+
+    if request.POST.get('delete-btn'):
+        tran_id = request.POST.get('del_trans_id')
+        logmsg = "Delete button clicked: Trans ID: "+tran_id
+        logging.info(logmsg)
+        trans = Get_Transaction_By_Id(tran_id)
+        if tran_id!=None and len(trans)>0:
+            edit_group = trans[0][5]
+            tran_user = trans[0][2]
+
+            if edit_group=="Personal Expenses" and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            elif edit_group==sel_group and tran_user==userid:
+                Delete_Transaction_By_Id(tran_id)
+            else:
+                info = 'Invalid User! You can not delete other users transaction!'
+                messages.error(request,info) 
 
     if userid!=None:
         if request.POST.get('logout'):
@@ -362,7 +363,6 @@ def account(request):
         trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
 
         trans_rows = Get_Transaction_Summary(request,sel_group,userid)
-
         category_summary = Get_Categorywise_Summary(sel_group,request)
         group_exp_by_category = Get_Category_Sum_For_PieChart(sel_group,request)
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
