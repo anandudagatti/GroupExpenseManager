@@ -125,7 +125,7 @@
                                 <label class="input-group-text" style="font-size: 12px;" for="select-group"><i class="fas fa-users"> Group </i></label>
                                 <select style="width:130px" name="group_name" id="group_name">
                                     {% for group in grouplist %}
-                                        {% if sess_group == group %}
+                                        {% if sel_group == group %}
                                             <option selected value="{{group}}">{{group}}</option>
                                         {% else %}
                                             <option value="{{group}}">{{group}}</option>
@@ -413,15 +413,15 @@
                                         <div class="input-group-prepend form-control-md">
                                             <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
                                             <select style="width:120px" name="user_opt" id="user_opt">
-                                                {% if sess_user_opt == "Today" %}
+                                                {% if user_opt == "Today" %}
                                                     <option selected value="Today">Today</option>
                                                     <option value="This Week">This Week</option>
                                                     <option value="This Month">This Month</option>
-                                                {% elif sess_user_opt == "This Week"%}
+                                                {% elif user_opt == "This Week"%}
                                                     <option value="Today">Today</option>
                                                     <option selected value="This Week">This Week</option>
                                                     <option value="This Month">This Month</option>
-                                                {% elif sess_user_opt == "This Month" %}
+                                                {% elif user_opt == "This Month" %}
                                                     <option value="Today">Today</option>
                                                     <option value="This Week">This Week</option>
                                                     <option selected value="This Month">This Month</option>

@@ -216,34 +216,69 @@ def authentication(request):
 @csrf_exempt
 @login_required(login_url='home')
 def account(request):
+    # Get Logged in User Details
     fullname = request.user.get_full_name()
     login_type = request.session.get('login_typ')
     userid = request.session.get('userid')
     request.session['edit_trans']=None
-
+    
+    # Write Log info for session id
     logmsg = "account view: Rendering account page template"
     logging.info(logmsg)
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
 
-    get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
+    # Get grouplist for the current logged in user. 
+    get_groups = request.user.groups.values_list('name',flat = True) 
     grouplist = list(get_groups)
-    logmsg = 'Existing Group List: ' 
+    logmsg = 'Logged-in User Group List: ' + str(grouplist)
     logging.info(logmsg)
-    print(grouplist)
     
+    # Redirect to nongroup view if its new user or not part of any group.
     if (grouplist==[]):
         return redirect('nogroup_account')
 
-    user_opt = request.POST.get('user_opt')
-    request.session['user_opt'] = user_opt
-    sess_user_opt = request.session.get('user_opt')
+    #Logout current user on click of logout button.
+    if request.POST.get('logout'):
+        logmsg = "User logout by: "+str(userid)
+        logging.info(logmsg)
+        img_name_list = ["GroupExpensesByCategory.svg", "GroupExpensesByUsers.svg", "PersonalExpensesByCategory.svg"]
+        sess_id = request.session.get('sessionid')
+        for each_img in img_name_list:
+            del_img_name = str(sess_id[0]) + each_img
+            if os.path.exists('static/charts/'+ del_img_name):
+                os.remove('static/charts/'+ del_img_name)
+                logmsg = "Static Chart Deleted: " + del_img_name
+                logging.info(logmsg)
+            else:
+                logmsg = "Error In Static Chart Delete: " + del_img_name
+                logging.info(logmsg)
+        
+        try:
+            logout(request)
+            del request.session[userid]
+        except KeyError:
+            pass
+        info = "User Logged Out Successfully!"
+        messages.success(request,info)
+        return redirect('home')    
+
+    # Get user selection for group name from Group combobox
     sel_group = request.POST.getlist('group_name')
     request.session['group_name']= sel_group
-    sess_group = request.session.get('group_name')
-    logmsg = 'selected group: '+str(sess_group)
+    logmsg = 'selected group: '+str(sel_group)
     logging.info(logmsg)
 
+    # If user selection for group name not set then set it to first group in the gruop list else redirect to home.
+    if(sel_group==[] and len(grouplist)>0):
+        sel_group = grouplist[0]
+    else:
+        try:
+            sel_group= sel_group[0]
+        except:
+            return redirect('home')
+
+    # Check if custom date filter applied by user else set date to current month.
     if request.session.get('user-date'):
         from_to_date = request.session.get('user-date')
     else:
@@ -253,142 +288,137 @@ def account(request):
         from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
         request.session['user-date'] = from_to_date
 
+    # Update date filter value to db in session master table.
     Update_UserDate_to_SessionMaster(request.session.get('sessionid'),from_to_date)
 
-    logmsg = 'user date: '+request.session.get('user-date')
+    # Print log msg for filtered date value. 
+    logmsg = 'Filtered Date: '+request.session.get('user-date')
     logging.info(logmsg)
 
-    if(sel_group==[] and len(grouplist)>0):
-        sel_group = grouplist[0]
-    else:
-        try:
-            sel_group= sel_group[0]
-        except:
-            return redirect('home')
-
+    # Delete selected trasaction on clicking of delete button.
     if request.POST.get('delete-btn'):
         tran_id = request.POST.get('del_trans_id')
         logmsg = "Delete button clicked: Trans ID: "+tran_id
         logging.info(logmsg)
         trans = Get_Transaction_By_Id(tran_id)
         if tran_id!=None and len(trans)>0:
-            edit_group = trans[0][5]
+            delete_group = trans[0][5]
             tran_user = trans[0][2]
 
-            if edit_group=="Personal Expenses" and tran_user==userid:
+            if delete_group=="Personal Expenses" and tran_user==userid:
                 Delete_Transaction_By_Id(tran_id)
-            elif edit_group==sel_group and tran_user==userid:
+            elif delete_group==sel_group and tran_user==userid:
                 Delete_Transaction_By_Id(tran_id)
             else:
                 info = 'Invalid User! You can not delete other users transaction!'
                 messages.error(request,info) 
 
-    if userid!=None:
-        if request.POST.get('logout'):
-            logmsg = "User logout by: "+str(userid)
+    # Get data for Personal Expense Summary
+    per_header = ['Total','Income','Expense']
+    per_rows = Get_Personal_Exp_Summary(userid)
+
+    # Set header for both Group Expense Summary & Group Expense: User Wise Summary
+    group_header = ['Total','Expense']
+
+    # Get data for Group Expense Summary
+    group_rows = Get_Group_Exp_Summary(sel_group)
+
+    # Get data for Group Expense: User Wise Summary
+    group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
+    user_exp_summary=group_user_exp[2]
+
+    # Get user selection for period from Group Expense: User Wise Summary
+    user_opt = request.POST.get('user_opt')
+    request.session['user_opt'] = user_opt
+    if request.POST.get('update_useropt'):
+        curdate = datetime.now()
+        fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+        lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+        from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+        request.session['user-date'] = from_to_date
+
+        if user_opt == "Today":
+            logmsg = "Period Selected : Today"
             logging.info(logmsg)
-            img_name_list = ["GroupExpensesByCategory.svg", "GroupExpensesByUsers.svg", "PersonalExpensesByCategory.svg"]
-            sess_id = request.session.get('sessionid')
-            for each_img in img_name_list:
-                del_img_name = str(sess_id[0]) + each_img
-                if os.path.exists('static/charts/'+ del_img_name):
-                    os.remove('static/charts/'+ del_img_name)
-                    logmsg = "Static Chart Deleted: " + del_img_name
-                    logging.info(logmsg)
-                else:
-                    logmsg = "Error In Static Chart Delete: " + del_img_name
-                    logging.info(logmsg)
-           
-            try:
-                logout(request)
-                del request.session[userid]
-            except KeyError:
-                pass
-            info = "User Logged Out Successfully!"
-            messages.success(request,info)
-            return redirect('home')
+            user_exp_summary=group_user_exp[0]
+        elif user_opt == "This Week":
+            logmsg = "Period Selected : This Week"
+            logging.info(logmsg)
+            user_exp_summary=group_user_exp[1]
+        else:
+            logmsg = "Period Selected : This Month"
+            logging.info(logmsg)
+            user_exp_summary=group_user_exp[2]
 
-        per_header = ['Total','Income','Expense']
-        per_rows = Get_Personal_Exp_Summary(userid)
-
-        group_header = ['Total','Expense']
+    # Get value for Filter Date from the model dialog box 
+    if request.POST.get('save-date'):
+        logmsg = 'Custom Date Filter Applied'
+        logging.info(logmsg)
+        logmsg = "Custom Period Selected: "+from_to_date
+        logging.info(logmsg)
+        tempfrom_date = datetime.strptime(request.POST.get("from_date"),'%Y-%m-%d').date()
+        from_date = tempfrom_date.strftime('%d/%m/%Y')
+        tempto_date = datetime.strptime(request.POST.get("to_date"), '%Y-%m-%d').date()
+        to_date = tempto_date.strftime('%d/%m/%Y')
+        user_sel_date = "From "+from_date+" To "+to_date
+        logmsg = 'user date: '+user_sel_date
+        logging.info(logmsg)
+        request.session['user-date'] = user_sel_date
+        from_to_date = request.session.get('user-date')
         group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
-        group_rows = Get_Group_Exp_Summary(sel_group)
+        user_exp_summary=group_user_exp[3]
 
-        user_exp_summary=group_user_exp[2]
+    # Reset account page to default view.
+    if request.POST.get('reset'):
+        logmsg = 'Reset Button Clicked '
+        logging.info(logmsg)        
+        curdate = datetime.now()
+        fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
+        lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
+        from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
+        request.session['user-date'] = from_to_date
 
-        if request.POST.get('update_useropt'):
-            curdate = datetime.now()
-            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
-            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
-            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
-            request.session['user-date'] = from_to_date
+    # Set header & data for transaction summary desktop version of website.
+    trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+    trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
-            if user_opt == "Today":
-                logmsg = "Period Selected : Today"
-                logging.info(logmsg)
-                user_exp_summary=group_user_exp[0]
-            elif user_opt == "This Week":
-                logmsg = "Period Selected : This Week"
-                logging.info(logmsg)
-                user_exp_summary=group_user_exp[1]
+    # Get data for transaction summary mobile version of website.
+    mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
+
+    # Get data for Group Expense: By Category
+    category_summary = Get_Categorywise_Summary(sel_group,request)
+
+    # Chart : Generate Personal Expense Pie Chart
+    personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
+
+    # Chart : Generate Group Expense Pie Chart
+    group_exp_by_category = Get_Category_Sum_For_PieChart(sel_group,request)
+
+    # Chart : Generate Group Expense: User Wise Pie Chart
+    group_exp_by_users = Get_User_Exp_For_PieChart(sel_group,request)
+
+    # Redirect to Group or Personal Expense view to edit the selected transaction.
+    if request.POST.get('edit-btn'):
+        tran_id = request.POST.get('edit-btn')
+        logmsg = 'Edit Button Clicked for Transaction ID ' + str(tran_id)
+        logging.info(logmsg)        
+        request.session['edit_trans']=tran_id
+        trans = Get_Transaction_By_Id(tran_id)
+        if tran_id!=None and len(trans)>0:
+            edit_group = trans[0][5]
+            tran_user = trans[0][2]
+            if edit_group=="Personal Expenses" and tran_user==userid:
+                return redirect('personal_expenses')
+            elif edit_group!="Personal Expenses" and tran_user==userid:
+                return redirect('group_expenses')
             else:
-                logmsg = "Period Selected : This Month"
-                logging.info(logmsg)
-                user_exp_summary=group_user_exp[2]
-
-        elif request.POST.get('save-date'):
-            logmsg = 'Custom Date Filter Applied'
-            logging.info(logmsg)
-            logmsg = "Custom Period Selected: "+from_to_date
-            logging.info(logmsg)
-            tempfrom_date = datetime.strptime(request.POST.get("from_date"),'%Y-%m-%d').date()
-            from_date = tempfrom_date.strftime('%d/%m/%Y')
-            tempto_date = datetime.strptime(request.POST.get("to_date"), '%Y-%m-%d').date()
-            to_date = tempto_date.strftime('%d/%m/%Y')
-            user_sel_date = "From "+from_date+" To "+to_date
-            logmsg = 'user date: '+user_sel_date
-            logging.info(logmsg)
-            request.session['user-date'] = user_sel_date
-            from_to_date = request.session.get('user-date')
-            group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
-            user_exp_summary=group_user_exp[3]
-
-        elif request.POST.get('reset'):
-            curdate = datetime.now()
-            fromdt = curdate.replace(day = 1).strftime('%d/%m/%Y')
-            lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
-            from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
-            request.session['user-date'] = from_to_date
-            
-        trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
-
-        trans_rows = Get_Transaction_Summary(request,sel_group,userid)
-        category_summary = Get_Categorywise_Summary(sel_group,request)
-        group_exp_by_category = Get_Category_Sum_For_PieChart(sel_group,request)
-        mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
-        personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
-        group_exp_by_users = Get_User_Exp_For_PieChart(sel_group,request)
-
-        if request.POST.get('edit-btn'):
-            tran_id = request.POST.get('edit-btn')
-            request.session['edit_trans']=tran_id
-            trans = Get_Transaction_By_Id(tran_id)
-            if tran_id!=None and len(trans)>0:
-                edit_group = trans[0][5]
-                tran_user = trans[0][2]
-                if edit_group=="Personal Expenses" and tran_user==userid:
-                    return redirect('personal_expenses')
-                elif edit_group!="Personal Expenses" and tran_user==userid:
-                    return redirect('group_expenses')
-                else:
-                    info = 'Invalid User to Edit Transaction!'
-                    messages.error(request,info)
+                info = 'Invalid User to Edit Transaction!'
+                messages.error(request,info)
 
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
-                "group_user_exp":user_exp_summary, "sess_user_opt":sess_user_opt, "sess_group":sess_group,
+                "group_user_exp":user_exp_summary, "user_opt":user_opt, "sel_group":sel_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date, 'group_exp_by_category': group_exp_by_category, 
                 'personal_exp_by_category': personal_exp_by_category,"group_exp_by_users":group_exp_by_users})

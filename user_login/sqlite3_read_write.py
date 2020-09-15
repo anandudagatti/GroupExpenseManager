@@ -98,7 +98,6 @@ def Update_UserDate_to_SessionMaster(session_id,from_to_date):
     conn = sqlite3.connect("db.sqlite3")
     sql = ''' UPDATE session_master SET from_to_date = '{}'
             WHERE session_id = {};'''.format(from_to_date,session_id[0])
-    print(sql)
     cur = conn.cursor()
     cur.execute(sql)
     conn.commit()
@@ -257,7 +256,6 @@ def Delete_Transaction_By_Id(transaction_id):
         cur = conn.cursor() 
 
     query = '''DELETE FROM transaction_master WHERE transaction_id='{}';'''.format(transaction_id)
-    print(query)
     cur.execute(query)
     conn.commit()
     conn.close()
@@ -425,7 +423,6 @@ def Get_Personal_Exp_Summary(userid):
     current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 
     'throw':['Group Expense',user_group_exp[0]], 'fourthrow':['Cash Balance',cur_bal]}
     summary_list = [total_today,total_thisWeek, total_thisMonth, current_balance]
-    print(summary_list)
     return summary_list
 
 def Get_User_Exp_Summary(trans_type,from_date,to_date):
