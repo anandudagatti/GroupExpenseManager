@@ -59,7 +59,7 @@
             document.getElementById("del_trans_id").value = trans_id
         }
    
-        function showlinks(){
+        function showbuttons(){
             var firstbtn = document.getElementById("pers-inc").style.display;
             var secondbtn = document.getElementById("pers-exp").style.display;
             var thirdbtn = document.getElementById("group-exp").style.display;
@@ -67,12 +67,10 @@
                 document.getElementById("pers-inc").style.display="block"
                 document.getElementById("pers-exp").style.display="block"
                 document.getElementById("group-exp").style.display="block"
-                document.getElementById("circle-btn").className="fas fa-times"
             } else {
                 document.getElementById("pers-inc").style.display="none"
                 document.getElementById("pers-exp").style.display="none"
                 document.getElementById("group-exp").style.display="none"
-                document.getElementById("circle-btn").className="fas fa-plus"
             }
         }
     </script>
@@ -665,17 +663,17 @@
                 </div>
             </div>
         </div>
-        <a class="circle-div" onclick="showlinks()">
-            <i id="circle-btn" class="fas fa-plus" style="color: white; font-size: 20px;"></i>
+        <a class="circle-div" onclick="showbuttons()">
+            <i class="fas fa-plus" style="color: white;"></i>
         </a>
         <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
+            <i class="fas fa-user-plus"></i>
         </a>
         <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
+            <i class="fas fa-user-minus"></i>
         </a>
         <a id="group-exp" href="{% url 'group_expenses' %}" class="group-exp-circle" style="display: none;">
-            <span style="font-size: 13px;"><i class="fas fa-users"></i> <i class="fas fa-rupee-sign"></i></span>
+            <i class="fas fa-users"><span style="font-size: 25px;">-</span></i>
         </a>
     </form>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
