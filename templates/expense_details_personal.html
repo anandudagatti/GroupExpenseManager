@@ -107,19 +107,19 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="date">Date</span>
                                     </div>
-                                    <input type="Date" name="date" value="{{edit_date}}" class="form-control" aria-label="date" aria-describedby="date">
+                                    <input type="Date" name="date" value="{{edit_date}}" class="form-control" aria-label="date" aria-describedby="date" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">₹</span>
                                     </div>
-                                    <input type="number" value="{{edit_amount}}" name="amount" placeholder="0.00" class="form-control" aria-label="Amount">
+                                    <input type="number" value="{{edit_amount}}" name="amount" placeholder="0.00" class="form-control" aria-label="Amount" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="payee">Payee</label>
                                     </div>
-                                    <input type="text" id="payee-name" value="{{edit_payee}}" name="payee-name" autocomplete="off" class="form-control" aria-label="Payee Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default">   
+                                    <input type="text" id="payee-name" value="{{edit_payee}}" name="payee-name" autocomplete="off" class="form-control" aria-label="Payee Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default" required>   
                                     <div style="display: none;"> 
                                         <input type="text" id="newpayee-list" name="newpayee-list">
                                     </div>
