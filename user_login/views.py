@@ -351,6 +351,7 @@ def account(request):
             logging.info(logmsg)
             request.session['user-date'] = user_sel_date
             from_to_date = request.session.get('user-date')
+            group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
             user_exp_summary=group_user_exp[3]
 
         elif request.POST.get('reset'):
