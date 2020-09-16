@@ -75,6 +75,15 @@
                 document.getElementById("circle-btn").className="fas fa-plus"
             }
         }
+        
+        function enable_combo(){
+            var combo_status = document.getElementById("user_opt_combo").style.display
+            if (combo_status=="none"){
+                document.getElementById("user_opt_combo").style.display="block"            
+            }else{
+                document.getElementById("user_opt_combo").style.display="none"            
+            }
+        }
     </script>
     <title>Group Expense Manager : Account</title>
 </head>
@@ -409,9 +418,19 @@
                         <div class="card-body">
                             <div class="container">
                                 <form id="form-sub" method="POST">
-                                    <div class="input-group mb-2">
+                                    <span style="font-size: 12px;">
+                                        <b><i style="font-size: 14px;" class="fas fa-calendar-alt"></i></b>
+                                        {% if user_opt %}
+                                            {{user_opt}}
+                                            <button class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
+                                        {% else %}
+                                            {{from_to_date}} 
+                                            <button class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
+                                        {% endif %}
+                                    </span>
+                                    <div id="user_opt_combo" class="input-group mb-2" style="display: none;">
                                         <div class="input-group-prepend form-control-md">
-                                            <label class="input-group-text"  style="font-size: 14px;" for="select-useropt"> Period</label>
+                                            <label class="input-group-text" style="font-size: 14px;" for="select-useropt"> Period</label>
                                             <select style="width:120px" name="user_opt" id="user_opt">
                                                 {% if user_opt == "Today" %}
                                                     <option selected value="Today">Today</option>
@@ -431,8 +450,8 @@
                                                     <option selected value="This Month">This Month</option>
                                                 {% endif %}                                                                    
                                             </select>
+                                            <input id="update_useropt" class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt">
                                         </div>
-                                        <input class="btn btn-primary btn-sm" type="submit" value="Update" name="update_useropt"></input>        
                                     </div>
                                 </form>
                                 <div class="scroll-catwise">

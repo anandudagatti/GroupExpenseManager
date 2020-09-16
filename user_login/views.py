@@ -325,7 +325,7 @@ def account(request):
 
     # Get data for Group Expense: User Wise Summary
     group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
-    user_exp_summary=group_user_exp[2]
+    user_exp_summary=group_user_exp[3]
 
     # Get user selection for period from Group Expense: User Wise Summary
     user_opt = request.POST.get('user_opt')
@@ -377,6 +377,7 @@ def account(request):
         lastdt = curdate.replace(day = calendar.monthrange(curdate.year, curdate.month)[1]).strftime('%d/%m/%Y')
         from_to_date ='''From {} To {}'''.format(fromdt, lastdt)
         request.session['user-date'] = from_to_date
+        user_exp_summary=group_user_exp[2]
 
     # Set header & data for transaction summary desktop version of website.
     trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
