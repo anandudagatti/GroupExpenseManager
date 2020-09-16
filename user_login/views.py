@@ -41,12 +41,18 @@ def myprofile(request):
     firstname = request.user.first_name
     lastname = request.user.last_name
     email = request.user.email
-    
+    user = request.user.username
+    print(user)
     if request.POST.get('edit_submit'):
         edited_firstname = request.POST.get("firstname")
         edited_lastname = request.POST.get("lastname")
         edited_email = request.POST.get("email")
-        user = User.objects.update(first_name=edited_firstname, last_name=edited_lastname, email=edited_email)
+        cur_user =  User.objects.get(username=user)
+        print("cur usr", cur_user)
+        cur_user.first_name = edited_firstname
+        cur_user.last_name = edited_lastname
+        cur_user.email = edited_email
+        cur_user.save()
 
         firstname = edited_firstname
         lastname = edited_lastname
