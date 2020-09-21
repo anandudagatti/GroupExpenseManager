@@ -17,7 +17,11 @@
              Group Expense Manager
         </a>
         <div class="text-center">
-            <a style="color:white" href="javascript:history.go(-1)"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+            {% if cur_view %}
+                <a style="color:white" href="{% url cur_view %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+            {% else %}
+                <a style="color:white" href="{% url 'home' %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+            {% endif %}
         </div>
     </nav>
     <div class='container forgot-card'>

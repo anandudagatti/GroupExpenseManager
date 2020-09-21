@@ -30,6 +30,7 @@ logging.basicConfig(level=logging.DEBUG)
 def home(request):
     logmsg = "home view: Rendering login page template"
     logging.info(logmsg)
+    request.session['cur_view']="home"
     return render(request, 'login.html')
 
 @csrf_exempt
@@ -42,13 +43,17 @@ def myprofile(request):
     lastname = request.user.last_name
     email = request.user.email
     user = request.user.username
-    print(user)
+    cur_view = request.session.get('cur_view')
+    logmsg = "Rendering MyProfile For User"+str(user)
+    logging.info(logmsg)
+
     if request.POST.get('edit_submit'):
         edited_firstname = request.POST.get("firstname")
         edited_lastname = request.POST.get("lastname")
         edited_email = request.POST.get("email")
         cur_user =  User.objects.get(username=user)
-        print("cur usr", cur_user)
+        logmsg = "Edited MyProfile For User"+str(cur_user)
+        logging.info(logmsg)
         cur_user.first_name = edited_firstname
         cur_user.last_name = edited_lastname
         cur_user.email = edited_email
@@ -57,9 +62,9 @@ def myprofile(request):
         firstname = edited_firstname
         lastname = edited_lastname
         email = edited_email
-        return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email})
+        return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email, "cur_view":cur_view})
     
-    return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email})
+    return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email, "cur_view":cur_view})
 
 @csrf_exempt
 def signup(request):       
@@ -227,6 +232,7 @@ def account(request):
     login_type = request.session.get('login_typ')
     userid = request.session.get('userid')
     request.session['edit_trans']=None
+    request.session['cur_view']="account"
     
     # Write Log info for session id
     logmsg = "account view: Rendering account page template"
@@ -443,6 +449,8 @@ def nogroup_account(request):
     logmsg = 'session id'+str(request.session.get('sessionid'))
     logging.info(logmsg)
     login_type = request.session.get('login_typ')
+    request.session['cur_view'] = "nogroup_account"
+    
     
     if request.POST.get('delete-btn'):
         tran_id = request.POST.get('del_trans_id')
@@ -611,6 +619,7 @@ def groups(request):
         userid = request.POST.get('userid')
         password = request.POST.get('password')
         groupname = request.POST.get('groupname')
+        
         if(groupname!=""):
             user = authenticate(request, username=userid, password=password)
             if user is not None:
@@ -638,8 +647,8 @@ def groups(request):
         else:
             error="Group name cannot be blank!"
             messages.error(request,error)
-
-    return render(request,'create_group.html')
+    cur_view = request.session.get('cur_view')
+    return render(request,'create_group.html',{"cur_view":cur_view})
 
 @csrf_exempt
 @login_required(login_url='home')
