@@ -334,7 +334,6 @@ def account(request):
 
     # Get data for Group Expense Summary
     group_rows = Get_Group_Exp_Summary(sel_group)
-    print(group_rows)
 
     # Get data for Group Expense: User Wise Summary
     group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
@@ -398,7 +397,7 @@ def account(request):
 
     # Get data for transaction summary mobile version of website.
     mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
-    print(mini_trans_summary)
+
     # Get data for Group Expense: By Category
     category_summary = Get_Categorywise_Summary(sel_group,request)
 
