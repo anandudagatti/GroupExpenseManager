@@ -722,12 +722,6 @@ def Get_Mini_Tran_Summary(trans_summary_dic):
     trans_summary_mini=[]
     for dic in trans_summary_dic:
         shallow_copy = dict(dic)
-        del shallow_copy['user']
-        del shallow_copy['category']
-        del shallow_copy['sub_cat']
-        del shallow_copy['group']
-        del shallow_copy['payee']
-        del shallow_copy['pay_meth']
         del shallow_copy['tag']
         trans_summary_mini.append(shallow_copy)
     return trans_summary_mini
