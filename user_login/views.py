@@ -134,6 +134,7 @@ def authentication(request):
     authentication = ''
     logmsg = "authentication view: Authentication Veiw Entered"
     logging.info(logmsg)
+    request.session.clear_expired()
 
     if request.POST.get('login'):
         userid = request.POST.get('userid')
@@ -172,7 +173,7 @@ def authentication(request):
 
         if (admin=='on' and authentication=='Success' and superuser==True):
             request.session['login_typ'] = 'admin'
-            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['admin']}
+            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['admin'],'dj_session_id':request.session.session_key}
             Write_to_DB(session_data,'session_master')
             sessionid=Get_SessionID(session_data)
             request.session['sessionid'] = sessionid 
@@ -189,7 +190,7 @@ def authentication(request):
             return redirect('home')
         elif (group_exist==True and admin==None and authentication=='Success'):
             request.session['login_typ'] = 'user'
-            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user']}
+            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user'], 'dj_session_id':request.session.session_key}
             Write_to_DB(session_data,'session_master')
             sessionid=Get_SessionID(session_data)
             request.session['sessionid'] = sessionid 
@@ -199,7 +200,7 @@ def authentication(request):
             return redirect('account')
         elif (group_exist==False and admin==None and authentication=='Success'):
             request.session['login_typ'] = 'user'
-            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user']}
+            session_data = {'date':[str(login_date)], 'user_id':[str(userid)], 'loggin_type':['user'],'dj_session_id':request.session.session_key}
             Write_to_DB(session_data,'session_master')
             sessionid=Get_SessionID(session_data)
             request.session['sessionid'] = sessionid 

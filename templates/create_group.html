@@ -28,7 +28,11 @@
                     Group Expense Manager
             </a>
             <div class="text-center">
-                <a style="color:white" href="{% url cur_view %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+                {% if cur_view %}
+                    <a style="color:white" href="{% url cur_view %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+                {% else %}
+                    <a style="color:white" href="{% url 'home' %}"><b><i class="fas fa-chevron-circle-left"></i> Back </b></a>
+                {% endif %}
             </div>
         </nav>
         <div class="container create-group">
@@ -40,9 +44,15 @@
                             Create Group
                         </div>
                         <div class="col-2">
-                            <a style="color:white" href="{% url cur_view %}">
-                                <i style="font-size:20px" class="fas fa-times"></i>
-                            </a>                            
+                            {% if cur_view %}
+                                <a style="color:white" href="{% url cur_view %}">
+                                    <i style="font-size:20px" class="fas fa-times"></i>
+                                </a>
+                            {% else %}
+                                <a style="color:white" href="{% url 'home' %}">
+                                    <i style="font-size:20px" class="fas fa-times"></i>
+                                </a>
+                            {% endif %}
                         </div>    
                     </div>
                 </h5>

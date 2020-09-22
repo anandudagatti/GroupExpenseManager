@@ -80,6 +80,8 @@ MESSAGE_TAGS = {
 }
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 86400 #Expire in 1 day (in seconds)
 
 WSGI_APPLICATION = 'expenses.wsgi.application'
 
