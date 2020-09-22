@@ -297,7 +297,7 @@ def Get_Transaction_Summary(request,group_name,userid):
                         'payee':'', 'pay_meth':'', 'tag':'', 'description':'', 'expense':''}
         row_tup = result[i]
         trans_dict['id']=str(row_tup[0])
-        trans_dict['date']=str(row_tup[1])
+        trans_dict['date']=str( datetime.strptime(row_tup[1], '%Y-%m-%d').strftime('%d %b %Y'))
         trans_dict['user']=str(Get_FirstName_of_User(row_tup[2]))
         trans_dict['category']=str(row_tup[3])
         trans_dict['sub_cat']=str(row_tup[4])

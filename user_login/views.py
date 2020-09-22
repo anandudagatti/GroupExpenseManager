@@ -886,7 +886,6 @@ def personal_expenses(request):
             expense_data = {'trans_type':['Expense'],'user':[userid],'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payee], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
-            print(expense_data)
 
             tran_id = request.session.get('edit_trans')
             if tran_id==None:
@@ -914,7 +913,6 @@ def personal_expenses(request):
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
-            print(category_selected)
             fullname = request.user.get_full_name()
             exp_cat = Get_Exp_Category()
             categories = exp_cat
@@ -924,7 +922,6 @@ def personal_expenses(request):
         elif request.POST.get('sub-category-btn'):
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
-            print(sub_category_selected)
             fullname = request.user.get_full_name()
             get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
             grouplist = list(get_groups) 
@@ -945,7 +942,6 @@ def personal_expenses(request):
                 exp_mode = "Personal"
                 fullname = request.user.get_full_name()
                 exp_cat = Get_Exp_Category()
-                print(trans)
                 request.session['cat_sel'] = trans[0][3]
                 request.session['sub_cat_sel'] = trans[0][4]                
                 edit_date = trans[0][6]

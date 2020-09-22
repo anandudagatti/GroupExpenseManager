@@ -427,7 +427,7 @@
                         <div class="card-body">
                             <div class="container">
                                 <form id="form-sub" method="POST">
-                                    <span style="font-size: 12px;">
+                                    <span style="font-size: 12px; margin-left: 20px;">
                                         <b><i style="font-size: 14px;" class="fas fa-calendar-alt"></i></b>
                                         {% if user_opt %}
                                             {{user_opt}}
@@ -528,14 +528,14 @@
                                     <thead>
                                         <tr style="text-align: left">
                                             <th><font size="3px"><i class="fas fa-user-edit"></i></font></th>
-                                            <th><font size="2px">Date</font></th>
+                                            <th><font size="2px">Date </font></th>
                                             <th><font size="2px">Details</font></th>
                                             <th><font size="2px">Amount</font></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for rw in mini_trans_summary %}
-                                            <tr class="separated">
+                                            <tr>
                                                 <td style="width: 15%; font-size: 12px;">
                                                     <button class="btn btn-xs" type="submit" name="edit-btn" value="{{rw.id}}">
                                                         <i style="font-size: 15px; color:blue" class="fas fa-edit"></i> 
@@ -545,23 +545,29 @@
                                                         <i style="font-size: 15px; color: red;" class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
-                                                <td style="width: 15%; font-size: 12px; word-break:break-all;">{{rw.date}}</td>
-                                                <td style="width: 30%;font-size: 12px;">
+                                                <td style="width: 20%; font-size: 12px;">
+                                                    <div style="width: 100%; ">{{rw.date}}</div>
+                                                </td>
+                                                <td style="width: 30%;font-size: 12px; text-align: left; ">
                                                     <button class="btn btn-link btn-sm" type="button" value="{{rw.id}}" onclick="expand_details(this.value)" style="text-align: left; font-size: 13px;">
-                                                        {{rw.category}} : {{rw.sub_cat}} <i class="fas fa-angle-double-down"></i>
+                                                        {{rw.category}}<b>:</b> {{rw.sub_cat}} <i class="fas fa-angle-double-down"></i>
                                                     </button>
-                                                    <div class="card" id="{{rw.id}}" style="display: none;">
-                                                        <div><b>Trans ID:</b> {{rw.id}}</div>
-                                                        <div><b>User:</b> {{rw.user}}</div>
-                                                        <div><b>Group:</b> {{rw.group}}</div>
-                                                        <div><b>Description:</b> {{rw.description}}</div>
-                                                        <div><b>Payee:</b> {{rw.payee}}</div>
-                                                        <div><b>Pymt Method:</b> {{rw.pay_meth}}</div>
-                                                    </div>
                                                 </td>
                                                 <td style="width: 20%; font-size: 12px; text-align: right;">
                                                     {{rw.expense}}
                                                 </td>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <div class="card" id="{{rw.id}}" style="display: none; padding: 10px;">
+                                                            <div><b>Trans ID:</b> {{rw.id}}</div>
+                                                            <div><b>User:</b> {{rw.user}}</div>
+                                                            <div><b>Group:</b> {{rw.group}}</div>
+                                                            <div><b>Description:</b> {{rw.description}}</div>
+                                                            <div><b>Payee:</b> {{rw.payee}}</div>
+                                                            <div><b>Pymt Method:</b> {{rw.pay_meth}}</div>
+                                                        </div>        
+                                                    </td>
+                                                </tr>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
