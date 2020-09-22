@@ -245,7 +245,7 @@ table {
 }
 
 .per-inc-circle {
-  background-color: #314963;
+  transition: transform .2s; /* Animation */
   padding: 10px;
   text-align: center;
   height: 50px;
@@ -259,7 +259,12 @@ table {
   background-color: rgb(17, 226, 17);
 }
 
+.per-inc-circle:hover{
+  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
 .per-exp-circle {
+  transition: transform .2s; /* Animation */
   background-color: rgb(247, 103, 103);
   text-align: center;
   padding: 10px;
@@ -273,7 +278,12 @@ table {
   color: white;
 }
 
+.per-exp-circle:hover {
+  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
 .group-exp-circle {
+  transition: transform .2s; /* Animation */
   background-color: rgb(247, 103, 103);
   text-align: center;
   padding: 10px;
@@ -287,3 +297,6 @@ table {
   color: white;
 }
 
+.group-exp-circle:hover {
+  transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
