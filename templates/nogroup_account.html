@@ -183,7 +183,7 @@
                 <div class="container personal-account">
                     <div class="card text-left text-black bg-light mb-3" style="height: 420px;">
                         <h6 class="card-header">
-                            <i class="fas fa-user-minus"></i>
+                            <i class="fas fa-user"></i>
                             Personal Expense Summary
                         </h6>
                         <div class="card-body ">
@@ -207,22 +207,38 @@
                                                 {% if r %}
                                                 <tr bgcolor="#f1d0cf">
                                                     {% for j in r.firstrow %}
+                                                        {% if j <= 0 or j >= 0 %}
+                                                        <td align="right" colspan="2">{{j}}</td>
+                                                        {% else %}
                                                         <td align="left" colspan="2">{{j}}</td>
+                                                        {% endif %}
                                                     {% endfor %}
                                                 </tr>
                                                 <tr bgcolor="#f1d0cf">
                                                     {% for k in r.secrow %}
+                                                        {% if k <= 0 or k >= 0 %}
+                                                        <td align="right" colspan="2">{{k}}</td>
+                                                        {% else %}
                                                         <td align="left" colspan="2">{{k}}</td>
+                                                        {% endif %}
                                                     {% endfor %} 
                                                 </tr>
                                                 <tr bgcolor="#f1d0cf">
                                                     {% for l in r.throw %}
+                                                        {% if l <= 0 or l >= 0 %}
+                                                        <td align="right" colspan="2">{{l}}</td>
+                                                        {% else %}
                                                         <td align="left" colspan="2">{{l}}</td>
+                                                        {% endif %}
                                                     {% endfor %} 
                                                 </tr>
                                                 <tr bgcolor="#cff1d1">
                                                     {% for m in r.fourthrow %}
-                                                        <td align="left" colspan="2"><b>{{m}}</b></td>
+                                                        {% if m <= 0 or m >= 0 %}
+                                                        <td align="right" colspan="2">{{m}}</td>
+                                                        {% else %}
+                                                        <td align="left" colspan="2">{{m}}</td>
+                                                        {% endif %}
                                                     {% endfor %} 
                                                 </tr>
                                                 {% endif %}
@@ -280,55 +296,74 @@
             </div>
             <div class="row">
                 <div id="TransSummary" class="container trans-summary-mini d-block d-sm-none">
-                        <form id="form-sub" method="POST">
-                            <div class="card text-left text-black bg-light sm-1">
-                                <h6 class="card-header">
-                                    <font size="4px">
-                                        <i class="fas fa-list-alt"></i>
-                                        Transaction Summary
-                                    </font> 
-                                </h6>
-                                <div class="card-body scroll-trans">
-                                    {% if messages %}
-                                    {% for message in messages %}
-                                    <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
-                                        {{message}}
-                                    </div>
-                                    {% endfor %}
-                                    {% endif %}
-                                    <table class="table">
-                                        <thead>
-                                            <tr style="text-align: left">
-                                                <th><font size="3px"><i class="fas fa-user-edit"></i></font></th>
-                                                <th><font size="2px">Date</font></th>
-                                                <th><font size="2px">Description</font></th>
-                                                <th><font size="2px">Amount</font></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {% for rw in mini_trans_summary %}
-                                                <tr class="separated">
-                                                    <td style="width: 30%;">
-                                                        <button class="btn btn-xs" type="submit" name="edit-btn" value="{{rw.id}}">
-                                                            <i style="font-size: 15px; color:blue" class="fas fa-edit"></i> 
-                                                        </button><br><br>
-                                                        <button data-placement="top" title="Delete" data-toggle="modal" data-target="#delete-confirm" id="delete-btn-mini" class="btn btn-xs" 
-                                                            onclick="delete_confirm(this.value)" type="button" value="{{rw.id}}">
-                                                            <i style="font-size: 15px; color: red;" class="fas fa-trash-alt"></i>
-                                                        </button>
-                                                    </td>
-                                                    <td style="width: 20%;"><font size="2px">{{rw.date}}</font></td>
-                                                    <td style="width: 40%;"><font size="2px">{{rw.description}}</font></td>
-                                                    <td style="width: 20%;"><font size="2px">{{rw.expense}}</font></td>
-                                                </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
+                    <form id="form-sub" method="POST">
+                        <div class="card text-left text-black bg-light sm-1">
+                            <h6 class="card-header">
+                                <font size="4px">
+                                    <i class="fas fa-list-alt"></i>
+                                    Transaction Summary
+                                </font> 
+                            </h6>
+                            <div class="card-body scroll-trans">
+                                {% if messages %}
+                                {% for message in messages %}
+                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                    {{message}}
                                 </div>
+                                {% endfor %}
+                                {% endif %}
+                                <table class="table">
+                                    <thead>
+                                        <tr style="text-align: left">
+                                            <th><font size="3px"><i class="fas fa-user-edit"></i></font></th>
+                                            <th><font size="2px">Date </font></th>
+                                            <th><font size="2px">Details</font></th>
+                                            <th><font size="2px">Amount</font></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for rw in mini_trans_summary %}
+                                            <tr>
+                                                <td style="width: 15%; font-size: 12px;">
+                                                    <button class="btn btn-xs" type="submit" name="edit-btn" value="{{rw.id}}">
+                                                        <i style="font-size: 15px; color:blue" class="fas fa-edit"></i> 
+                                                    </button><br><br>
+                                                    <button data-placement="top" title="Delete" data-toggle="modal" data-target="#delete-confirm" id="delete-btn-mini" class="btn btn-xs" 
+                                                        onclick="delete_confirm(this.value)" type="button" value="{{rw.id}}">
+                                                        <i style="font-size: 15px; color: red;" class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </td>
+                                                <td style="width: 20%; font-size: 12px;">
+                                                    <div style="width: 100%; ">{{rw.date}}</div>
+                                                </td>
+                                                <td style="width: 30%;font-size: 12px; text-align: left; ">
+                                                    <button class="btn btn-link btn-sm" type="button" value="{{rw.id}}" onclick="expand_details(this.value)" style="text-align: left; font-size: 13px;">
+                                                        {{rw.category}}<b>:</b> {{rw.sub_cat}} <i class="fas fa-angle-double-down"></i>
+                                                    </button>
+                                                </td>
+                                                <td style="width: 20%; font-size: 12px; text-align: right;">
+                                                    {{rw.expense}}
+                                                </td>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <div class="card" id="{{rw.id}}" style="display: none; padding: 10px;">
+                                                            <div><b>Trans ID:</b> {{rw.id}}</div>
+                                                            <div><b>User:</b> {{rw.user}}</div>
+                                                            <div><b>Group:</b> {{rw.group}}</div>
+                                                            <div><b>Description:</b> {{rw.description}}</div>
+                                                            <div><b>Payee:</b> {{rw.payee}}</div>
+                                                            <div><b>Pymt Method:</b> {{rw.pay_meth}}</div>
+                                                        </div>        
+                                                    </td>
+                                                </tr>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
                             </div>
-                        </form>           
-                    </div><br>
-                </div>
+                        </div>
+                    </form>           
+                </div><br>
             </div>
             <div class="row">
                 <div id="TransSummary" class="container trans-summary d-none d-lg-block">
@@ -365,10 +400,10 @@
                                             <tr>
                                                 <td>
                                                     <button data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-xs" type="submit" name="edit-btn" value="{{r.id}}">
-                                                        <i style="font-size: 15px; color:blue" class="fas fa-edit"></i> 
+                                                        <i style="font-size: 15px; color:blue" class="fas fa-edit" ></i> 
                                                     </button>
                                                     <button data-placement="top" title="Delete" data-toggle="modal" data-target="#delete-confirm" id="delete-btn" class="btn btn-xs" 
-                                                        onclick="delete_confirm(this.value)" type="button" value="{{r.id}}">
+                                                    onclick="delete_confirm(this.value)" type="button" value="{{r.id}}">
                                                         <i style="font-size: 15px; color: red;" class="fas fa-trash-alt"></i>
                                                     </button>
                                                 </td>
@@ -380,7 +415,11 @@
                                                 <td><i>{{r.payee}}</i></td>
                                                 <td><i>{{r.pay_meth}}</i></td>
                                                 <td><i>{{r.tag}}</i></td>
-                                                <td class="text-right"><i>{{r.expense}}</i></td>
+                                                {% if r.sub_cat == "NA" %}
+                                                    <td class="text-right" style="color: green;"><i>{{r.expense}}</i></td>
+                                                {% else %}
+                                                    <td class="text-right" style="color: red;"><i>{{r.expense}}</i></td>
+                                                {% endif %}
                                             </tr>
                                         {% endfor %}
                                     </tbody>
