@@ -777,9 +777,10 @@ def group_expenses(request):
                 exp_mode = "Group"
                 return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
             else:
-                Edit_Transaction(tran_id,expense_data)
+                edit_status = Edit_Transaction(tran_id,expense_data)
                 request.session['edit_trans']=None
-                return redirect('account')
+                messages.success(request,edit_status)
+                return redirect(account)
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
@@ -903,14 +904,10 @@ def personal_expenses(request):
                 exp_mode = "Personal"
                 return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
             else:
-                Edit_Transaction(tran_id,expense_data)
+                edit_status = Edit_Transaction(tran_id,expense_data)
                 request.session['edit_trans']=None
-                fullname = request.user.get_full_name()
-                exp_cat = Get_Exp_Category()
-                categories = exp_cat
-                sub_categories = ''
-                exp_mode = "Personal"
-                return render(request, 'expenses.html',{"userid":fullname, "exp_mode":exp_mode, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
+                messages.success(request,edit_status)
+                return redirect(account)
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected

@@ -233,12 +233,18 @@ def Edit_Transaction(transaction_id,edited_data):
     for key,value in edited_data.items():
         if str(value[0]) not in exist_data[0]:
             conn = sqlite3.connect("db.sqlite3")
-            sql = ''' UPDATE transaction_master SET {} = '{}'
-                    WHERE transaction_id = {};'''.format(key,value[0],transaction_id)
-            cur = conn.cursor()
-            cur.execute(sql, edited_data)
-            conn.commit()
-            conn.close()            
+            try:
+                sql = ''' UPDATE transaction_master SET {} = '{}'
+                        WHERE transaction_id = {};'''.format(key,value[0],transaction_id)
+                cur = conn.cursor()
+                cur.execute(sql, edited_data)
+                conn.commit()
+                conn.close()
+                status_msg = "Edited Transaction Saved Successfully!"
+            except error as e:
+                status_msg = "Received error:"+e.data
+                conn.close()
+    return status_msg
 
 def Get_Transaction_By_Id(transaction_id):
     conn = sqlite3.connect("db.sqlite3")

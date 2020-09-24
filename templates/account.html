@@ -543,8 +543,11 @@
                             <div class="card-body scroll-trans">
                                 {% if messages %}
                                 {% for message in messages %}
-                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                <div id="alert" class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                                     {{message}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 {% endfor %}
                                 {% endif %}
@@ -625,8 +628,11 @@
                             <div class="card-body scroll-trans">
                                 {% if messages %}
                                 {% for message in messages %}
-                                <div id="alert" class="alert alert-{{ message.tags }}" role="alert">
+                                <div id="alert" class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                                     {{message}}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 {% endfor %}
                                 {% endif %}
