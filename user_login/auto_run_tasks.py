@@ -1,0 +1,3 @@
+from sqlite3_read_write import Delete_Expired_Session_Data
+
+Delete_Expired_Session_Data()

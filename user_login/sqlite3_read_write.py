@@ -7,6 +7,7 @@ import calendar
 import re
 import pygal
 from pygal.style import Style
+import os
 
 def Write_to_DB(dictionary,table_name):
     conn = sqlite3.connect("db.sqlite3")
@@ -94,6 +95,42 @@ def Get_SessionID(session_data):
         session_id.append(r[0])
     return session_id
 
+
+def Delete_Expired_Session_Data():
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor()
+    select_query = """SELECT session_id, dj_session_id FROM session_master;"""
+    cur.execute(select_query)
+    session_master = cur.fetchall()
+
+    select_query = """SELECT session_key, expire_date FROM django_session;"""
+    cur.execute(select_query)
+    django_session = cur.fetchall()
+
+    conn.close()
+
+    delete_sessid = []
+    active_sessid = []
+    for row in session_master:
+        sess_id = row[0]
+        sess_key = row[1]
+        if (any(sess_key in i for i in django_session)):
+            active_sessid.append(sess_id)
+        else:
+            delete_sessid.append(sess_id)
+
+    img_name_list = ["GroupExpensesByCategory.svg", "GroupExpensesByUsers.svg", "PersonalExpensesByCategory.svg"]
+    for sess_id in delete_sessid:
+        for each_img in img_name_list:
+            del_img_name = str(sess_id) + each_img
+            if os.path.exists('static/charts/'+ del_img_name):
+                os.remove('static/charts/'+ del_img_name)
+            else:
+                pass
+
+    return delete_sessid
+
 def Update_UserDate_to_SessionMaster(session_id,from_to_date):
     conn = sqlite3.connect("db.sqlite3")
     sql = ''' UPDATE session_master SET from_to_date = '{}'
@@ -101,7 +138,7 @@ def Update_UserDate_to_SessionMaster(session_id,from_to_date):
     cur = conn.cursor()
     cur.execute(sql)
     conn.commit()
-    conn.close()            
+    conn.close()
 
 def Get_FromToDate_From_SessionID(session_id):
     conn = sqlite3.connect("db.sqlite3")
