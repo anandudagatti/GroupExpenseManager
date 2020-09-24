@@ -394,7 +394,7 @@ def account(request):
         user_exp_summary=group_user_exp[2]
 
     # Set header & data for transaction summary desktop version of website.
-    trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+    trans_header = ['Edit', 'Date', 'User', 'Group Name', 'Category', 'Sub Category', 'Payee', 'Payement Method', 'Amount']
     trans_rows = Get_Transaction_Summary(request,sel_group,userid)
 
     # Get data for transaction summary mobile version of website.
@@ -532,7 +532,7 @@ def nogroup_account(request):
         per_header = ['Total','Income','Expense']
         per_rows = Get_Personal_Exp_Summary(userid)
             
-        trans_header = ['Edit', 'Date', 'User', 'Category', 'Sub Category', 'Group Name', 'Payee', 'Payement Method', 'Tag#', 'Amount']
+        trans_header = ['Edit', 'Date', 'User', 'Group Name', 'Category', 'Sub Category', 'Payee', 'Payement Method', 'Amount']
         trans_rows = Get_Transaction_Summary(request,"Non Group",userid)
 
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
