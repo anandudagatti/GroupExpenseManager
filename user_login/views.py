@@ -135,6 +135,7 @@ def authentication(request):
     logmsg = "authentication view: Authentication Veiw Entered"
     logging.info(logmsg)
     request.session.clear_expired()
+    Delete_Expired_Session_Data()
 
     if request.POST.get('login'):
         userid = request.POST.get('userid')
