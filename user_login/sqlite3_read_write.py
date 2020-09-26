@@ -382,7 +382,7 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
             tran_type_2 = result[1][0].lower()
         except:
             tran_type_1 = result[0][0].lower()
-            tran_type_2 = "Income"
+            tran_type_2 = "Balance"
 
         if(len(result)==1):
             tran_dict[str(tran_type_1)]= result[0][1]
@@ -390,8 +390,40 @@ def Get_Exp_Summary(trans_type,from_date,to_date,userid):
         else:
             tran_dict[str(tran_type_1)]= result[0][1]
             tran_dict[str(tran_type_2)]= result[1][1]
+    print(tran_dict)
     return tran_dict
 
+def Get_Total_Cash_Balance(userid):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+
+    query = '''SELECT sum(amount) as Total_Amount FROM transaction_master 
+    WHERE trans_type="Income" and group_name="Personal Expenses" and user="{}";'''.format(userid)
+    cur.execute(query)
+    result = cur.fetchall()
+
+    if result[0][0]:
+        income_result = result[0][0]
+    else:
+        income_result = 0
+
+    query = '''SELECT sum(amount) as Total_Amount FROM transaction_master 
+    WHERE trans_type="Expense" and group_name="Personal Expenses" and user="{}" 
+    and payment_method NOT IN ("Credit Card", "Digital Wallet");'''.format(userid)
+
+    cur.execute(query)
+    result = cur.fetchall()
+
+    if result[0][0]:
+        exp_result = result[0][0]
+    else:
+        exp_result = 0
+    
+    balance = income_result-exp_result
+
+    return balance
+    
 def Get_Cash_Exp_Summary(from_date,to_date,userid,group):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
@@ -400,11 +432,11 @@ def Get_Cash_Exp_Summary(from_date,to_date,userid,group):
     if userid=="All":
         query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
         WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
-        "{}" AND "{}" and payment_method<>"Credit Card";'''.format(group,from_date,to_date)
+        "{}" AND "{}" and payment_method NOT IN ("Credit Card", "Digital Wallet");'''.format(group,from_date,to_date)
     else:
         query = '''SELECT sum(amount) as Total_Amount FROM transaction_master
         WHERE group_name="{}" and trans_type="Expense" and trans_date BETWEEN 
-        "{}" AND "{}" and user="{}" and payment_method<>"Credit Card";'''.format(group,from_date,to_date,userid)
+        "{}" AND "{}" and user="{}" and payment_method NOT IN ("Credit Card", "Digital Wallet");'''.format(group,from_date,to_date,userid)
 
     cur.execute(query)
     result = cur.fetchall()
@@ -461,10 +493,15 @@ def Get_Personal_Exp_Summary(userid):
     cashexp = Get_Cash_Exp_Summary(from_date,to_date,userid,"Personal Expenses")
 
     user_group_exp = Get_Total_Group_Expense(from_date, to_date, userid)
-    cur_bal = total_thisMonth['income']-(cashexp+float(user_group_exp[0]))
+    #cur_bal = total_thisMonth['income']-(cashexp+user_group_exp[0])
+
+    #current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 
+    #'throw':['Group Expense',user_group_exp[0]], 'fourthrow':['Cash Balance ',cur_bal]}
+
+    total_balance = Get_Total_Cash_Balance(userid)
 
     current_balance ={'firstrow':['Cash Expense',cashexp], 'secrow':['Credit Card Expense',credit_exp], 
-    'throw':['Group Expense',user_group_exp[0]], 'fourthrow':['Cash Balance',cur_bal]}
+    'throw':['Group Expense',user_group_exp[0]], 'fourthrow':['Total Cash Balance ',total_balance]}
     summary_list = [total_today,total_thisWeek, total_thisMonth, current_balance]
     return summary_list
 

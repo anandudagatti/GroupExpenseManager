@@ -16,7 +16,8 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Get_Transaction_Summary, Get_Personal_Exp_Summary,Get_Group_Exp_Summary,Get_Group_User_Exp_Summary, \
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
     Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart, Update_UserDate_to_SessionMaster, \
-    Get_FromToDate_From_SessionID,password_check, Delete_Transaction_By_Id, Delete_Expired_Session_Data
+    Get_FromToDate_From_SessionID,password_check, Delete_Transaction_By_Id, Delete_Expired_Session_Data, \
+    Get_Total_Cash_Balance    
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -330,7 +331,7 @@ def account(request):
     # Get data for Personal Expense Summary
     per_header = ['Total','Income','Expense']
     per_rows = Get_Personal_Exp_Summary(userid)
-
+    
     # Set header for both Group Expense Summary & Group Expense: User Wise Summary
     group_header = ['Total','Expense']
 
@@ -432,7 +433,7 @@ def account(request):
 
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
-                "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist, 
+                "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist,
                 "group_user_exp":user_exp_summary, "user_opt":user_opt, "sel_group":sel_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date, 'group_exp_by_category': group_exp_by_category, 
