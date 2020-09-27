@@ -423,10 +423,13 @@ def account(request):
         if tran_id!=None and len(trans)>0:
             edit_group = trans[0][5]
             tran_user = trans[0][2]
-            if edit_group=="Personal Expenses" and tran_user==userid:
+            trans_type = trans[0][1]
+            if edit_group=="Personal Expenses" and tran_user==userid and trans_type!="Income":
                 return redirect('personal_expenses')
-            elif edit_group!="Personal Expenses" and tran_user==userid:
+            elif edit_group!="Personal Expenses" and tran_user==userid and trans_type!="Income":
                 return redirect('group_expenses')
+            elif trans_type=="Income":
+                return redirect("personal_expenses")
             else:
                 info = 'Invalid User to Edit Transaction!'
                 messages.error(request,info)
@@ -678,6 +681,7 @@ def incomes(request):
             messages.success(request,info)
             return redirect('home')
         elif request.POST.get('category-btn'):
+            edit_date = str(datetime.date(datetime.now()))
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
             print(category_selected)
@@ -685,7 +689,7 @@ def incomes(request):
             payer_list = Get_Payer_List()
             exp_mode = "Personal"
             return render(request, 'income_details.html',{"userid":fullname, "logintype":login_type.capitalize(), 
-             "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'), "payerlist": payer_list})
+             "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'), "edit_date":edit_date, "payerlist": payer_list})
         elif request.POST.get('save'):
             info = 'Income Saved!!'
             logmsg = "Save Button Clicked"
@@ -794,6 +798,7 @@ def group_expenses(request):
             sub_categories = Get_SubCategoryTable(category_selected)
             return render(request, 'expenses.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('sub-category-btn'):
+            edit_date = str(datetime.date(datetime.now())) 
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
             print(sub_category_selected)
@@ -804,7 +809,7 @@ def group_expenses(request):
             payment_methods = Get_Payment_Method()
             exp_mode = "Group"
             return render(request, 'expense_details_group.html',{"userid":fullname, "logintype":login_type.capitalize(), "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'),
-             "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
+             "subcat_crumb":request.session.get('sub_cat_sel'), "edit_date":edit_date, "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('create-group'):
             group_name = request.POST.get('groupname')
             group_data = {'name':group_name}
@@ -920,6 +925,7 @@ def personal_expenses(request):
             exp_mode = "Personal"
             return render(request, 'expenses.html',{"userid":fullname, "exp_mode":exp_mode, "logintype":login_type.capitalize(), "categories":categories, "sub_categories":sub_categories})
         elif request.POST.get('sub-category-btn'):
+            edit_date = str(datetime.date(datetime.now())) 
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
             fullname = request.user.get_full_name()
@@ -929,7 +935,7 @@ def personal_expenses(request):
             payment_methods = Get_Payment_Method()
             exp_mode = "Personal"
             return render(request, 'expense_details_personal.html',{"userid":fullname, "logintype":login_type.capitalize(), "cat_crumb":request.session.get('cat_sel'),
-             "exp_mode":exp_mode, "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
+             "exp_mode":exp_mode, "edit_date":edit_date, "subcat_crumb":request.session.get('sub_cat_sel'), "grouplist":grouplist, "payeelist": payee_list, "payment_meth":payment_methods})
         elif request.POST.get('create-group'):
             group_name = request.POST.get('groupname')
             group_data = {'name':group_name}
