@@ -171,7 +171,7 @@ def authentication(request):
         else:
             group_exist = False
 
-        logmsg = "groups exist"+group_exist
+        logmsg = "groups exist"+str(group_exist)
         logging.info(logmsg)
 
         if (admin=='on' and authentication=='Success' and superuser==True):

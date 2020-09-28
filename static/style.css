@@ -5,10 +5,10 @@ body, html {
     padding: 0px;
     overflow-x: hidden;
     /* The image used */
-    background-image: url("/static/background-1.4.jpg");
+    background-image: url("/static/background-5.jpg");
   
     /* Center and scale the image nicely */
-    background-position: top;
+    background-position: center;
     /*background-repeat: no-repeat;*/
     background-size: cover;
   }
