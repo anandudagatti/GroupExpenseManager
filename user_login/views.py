@@ -171,7 +171,8 @@ def authentication(request):
         else:
             group_exist = False
 
-        print("groups exist", group_exist)
+        logmsg = "groups exist"+group_exist
+        logging.info(logmsg)
 
         if (admin=='on' and authentication=='Success' and superuser==True):
             request.session['login_typ'] = 'admin'
@@ -179,7 +180,8 @@ def authentication(request):
             Write_to_DB(session_data,'session_master')
             sessionid=Get_SessionID(session_data)
             request.session['sessionid'] = sessionid 
-            print(request.session.get('sessionid'))
+            logmsg = "session ID: "+str((request.session.get('sessionid'))
+            logging.info(logmsg)
             fullname = request.user.get_full_name()
             logmsg = "Admin login by: "+str(userid)+": "+str(fullname)
             logging.info(logmsg)
@@ -747,7 +749,6 @@ def incomes(request):
                 return render(request, 'income_details.html',{"userid":fullname, "logintype":login_type.capitalize(), "edit_amount":edit_amount,
                 "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'), "edit_date":edit_date, "edit_payer": edit_payer, "payerlist": payer_list, \
                 "edit_desc":edit_desc, "edit_tag":edit_tag})
- 
 
     income_cat = Get_Income_Category()
     categories = income_cat
@@ -795,7 +796,7 @@ def group_expenses(request):
             expense_data = {'trans_type':['Expense'],'user':[userid], 'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payee], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
-            print(expense_data)
+
             tran_id = request.session.get('edit_trans')
             if tran_id==None:
                 try:
@@ -818,7 +819,7 @@ def group_expenses(request):
         elif request.POST.get('category-btn'):
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
-            print(category_selected)
+
             fullname = request.user.get_full_name()
             exp_cat = Get_Exp_Category()
             categories = exp_cat
@@ -829,7 +830,6 @@ def group_expenses(request):
             edit_date = str(datetime.date(datetime.now())) 
             sub_category_selected=request.POST.get('sub-category-btn')
             request.session['sub_cat_sel'] = sub_category_selected
-            print(sub_category_selected)
             fullname = request.user.get_full_name()
             get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
             grouplist = list(get_groups) 
@@ -850,7 +850,6 @@ def group_expenses(request):
                 edit_mode = "True"
                 exp_mode = "Group"
                 exp_cat = Get_Exp_Category()
-                print(trans)
                 request.session['cat_sel'] = trans[0][3]
                 request.session['sub_cat_sel'] = trans[0][4]
                 edit_group = trans[0][5]
