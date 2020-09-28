@@ -12,6 +12,7 @@ body, html {
     /*background-repeat: no-repeat;*/
     background-size: cover;
   }
+  
   .filter-reset{
     margin-left:5px;
   }
@@ -299,4 +300,18 @@ table {
 
 .group-exp-circle:hover {
   transform: scale(1.1); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+@media (min-width: 1000px)
+{
+  .pos-f-t {
+        display: none;
+    }
+}
+
+@media (max-width: 1000px)
+{
+  .pos-big {
+        display: none;
+    }
 }

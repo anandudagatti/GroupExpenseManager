@@ -54,6 +54,30 @@
 </head>
 <body>
     <form id="form-navbar" method="POST">
+        <div class="pos-big">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
+                    <img src="/static/icon.jpg" width="50" height="50" class="d-inline-block align-center rounded-circle" alt="">
+                    Group Expense Manager
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+                  <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         <span class="text-white" id="userid"> <i style="color: white; font-size: 18px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <div><a style="font-size: 15px" href="{% url 'myprofile' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> My Profile</a></div>
+                        <button type="submit" name='logout' value="Submit" class="btn btn-link btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="3"> Logout</font></button> 
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+            </nav>   
+        </div>
         <div class="pos-f-t">
             <nav class="navbar navbar-dark bg-dark">
                 <a class="navbar-brand text-white" href="#" style="font-size: 18px;">
@@ -67,7 +91,8 @@
             <div class="collapse align-center text-right" id="navbarToggleExternalContent">
                 <div class="bg-dark p-3">
                     <span class="text-white" id="userid"> <i style="color: white; font-size: 15px" class="fas fa-user"></i> {{logintype}} : {{userid}}</span>
-                    <button type="submit" name='logout' value="Submit" class="btn btn-primary btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="2">Logout</font></button>   
+                    <div><a style="color: white; font-size: 15px" href="{% url 'myprofile' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> My Profile</a></div>
+                    <button type="submit" name='logout' value="Submit" class="btn btn-dark btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="3"> Logout</font></button> 
                 </div>
             </div>
         </div>
