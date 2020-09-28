@@ -64,19 +64,19 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="date">Date</span>
                                     </div>
-                                    <input type="Date" name="date" value="{{date}}" class="form-control" aria-label="date" aria-describedby="date" required>
+                                    <input type="Date" name="date" value="{{edit_date}}" class="form-control" aria-label="date" aria-describedby="date" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">₹</span>
                                     </div>
-                                    <input type="number" name="amount" placeholder="0.00" class="form-control" aria-label="Amount" required>
+                                    <input type="number" value="{{edit_amount}}" name="amount" placeholder="0.00" class="form-control" aria-label="Amount" required>
                                 </div>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="payer">Payer</label>
                                     </div>
-                                    <input type="text" id="payer-name" name="payer-name" autocomplete="off" class="form-control" aria-label="payer Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default" required>
+                                    <input type="text" id="payer-name" value="{{edit_payer}}" name="payer-name" autocomplete="off" class="form-control" aria-label="payer Name" onclick="clearMsg()" aria-describedby="inputGroup-sizing-default" required>
                                     <div style="display: none;"> 
                                         <input type="text" id="newpayer-list" name="newpayer-list">
                                     </div>
@@ -85,13 +85,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="tag">#Tag</span>
                                     </div>
-                                    <input type="text" class="form-control" name="tag" aria-label="tag" aria-describedby="tag incomes">
+                                    <input type="text" class="form-control" value="{{edit_tag}}" name="tag" aria-label="tag" aria-describedby="tag incomes">
                                 </div>    
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Description</span>
                                     </div>
-                                    <textarea class="form-control" name="description" aria-label="Enter Description of Expenses"></textarea>
+                                    <textarea class="form-control" name="description" aria-label="Enter Description of Expenses">{{edit_desc}}</textarea>
                                 </div>
                                 <span id="errorvalue" style="color:red">{{errorvalue}}</span>
                                 <span id="info" style="color:rgb(52, 185, 52)">{{info}}</span><br>

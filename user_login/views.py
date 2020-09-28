@@ -429,7 +429,7 @@ def account(request):
             elif edit_group!="Personal Expenses" and tran_user==userid and trans_type!="Income":
                 return redirect('group_expenses')
             elif trans_type=="Income":
-                return redirect("personal_expenses")
+                return redirect("incomes")
             else:
                 info = 'Invalid User to Edit Transaction!'
                 messages.error(request,info)
@@ -470,8 +470,14 @@ def nogroup_account(request):
         tran_id = request.POST.get('edit-btn')
         request.session['edit_trans']=tran_id
         trans = Get_Transaction_By_Id(tran_id)
-        if tran_id!=None and len(trans)>0:
+        trans_type = trans[0][1]
+        if tran_id!=None and len(trans)>0 and trans_type!="Income":
             return redirect('personal_expenses')
+        elif trans_type=="Income":
+            return redirect("incomes")
+        else:
+            logmsg = 'Error: Edit Transaction Error'
+            logging.info(logmsg)
 
     if userid!=None:
         if request.POST.get('logout'):
@@ -684,7 +690,6 @@ def incomes(request):
             edit_date = str(datetime.date(datetime.now()))
             category_selected=request.POST.get('category-btn')
             request.session['cat_sel'] = category_selected
-            print(category_selected)
             fullname = request.user.get_full_name()
             payer_list = Get_Payer_List()
             exp_mode = "Personal"
@@ -708,18 +713,41 @@ def incomes(request):
             income_data = {'trans_type':['Income'],'user':[userid], 'category':[category], 'sub_category':[subcategory],\
                             'group_name':[group], 'trans_date':[date], 'amount':[amount], 'payee': [payer], 'payment_method': [payment],\
                             'tag':[tag], 'description':[description], 'recurring':[recurring]}
-            print(income_data)
-            try:
-                Insert_Transaction(income_data)
-                messages.success(request,'Income Added Succesfully!!')
-            except Exception as e:
-                messages.error(request, str(e))
-                logger.error('Failed to Insert: ' + str(e))
+            tran_id = request.session.get('edit_trans')
+            if tran_id==None:
+                try:
+                    Insert_Transaction(income_data)
+                    messages.success(request,'Income Added Succesfully!!')
+                except Exception as e:
+                    messages.error(request, str(e))
+                    logger.error('Failed to Insert: ' + str(e))
 
+                fullname = request.user.get_full_name()
+                income_cat = Get_Income_Category()
+                categories = income_cat
+                return render(request, 'incomes.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
+            else:
+                edit_status = Edit_Transaction(tran_id,income_data)
+                request.session['edit_trans']=None
+                messages.success(request,edit_status)
+                return redirect(account)
+        else:
             fullname = request.user.get_full_name()
-            income_cat = Get_Income_Category()
-            categories = income_cat
-            return render(request, 'incomes.html',{"userid":fullname, "logintype":login_type.capitalize(), "categories":categories})
+            tran_id = request.session.get('edit_trans')
+            trans = Get_Transaction_By_Id(tran_id)
+            if tran_id!=None and len(trans)>0:
+                edit_date = trans[0][6]
+                request.session['cat_sel'] = trans[0][3]
+                edit_payer = trans[0][8]
+                edit_amount = trans[0][7]
+                edit_tag = trans[0][10]
+                edit_desc = trans[0][11]
+                exp_mode = "Personal"
+                payer_list = Get_Payer_List()
+                return render(request, 'income_details.html',{"userid":fullname, "logintype":login_type.capitalize(), "edit_amount":edit_amount,
+                "exp_mode":exp_mode, "cat_crumb":request.session.get('cat_sel'), "edit_date":edit_date, "edit_payer": edit_payer, "payerlist": payer_list, \
+                "edit_desc":edit_desc, "edit_tag":edit_tag})
+ 
 
     income_cat = Get_Income_Category()
     categories = income_cat
