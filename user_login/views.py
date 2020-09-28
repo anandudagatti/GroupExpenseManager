@@ -180,7 +180,7 @@ def authentication(request):
             Write_to_DB(session_data,'session_master')
             sessionid=Get_SessionID(session_data)
             request.session['sessionid'] = sessionid 
-            logmsg = "session ID: "+str((request.session.get('sessionid'))
+            logmsg = "session ID: "+str(sessionid)
             logging.info(logmsg)
             fullname = request.user.get_full_name()
             logmsg = "Admin login by: "+str(userid)+": "+str(fullname)
