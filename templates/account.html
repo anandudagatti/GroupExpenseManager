@@ -79,9 +79,11 @@
         function enable_combo(){
             var combo_status = document.getElementById("user_opt_combo").style.display
             if (combo_status=="none"){
-                document.getElementById("user_opt_combo").style.display="block"            
+                document.getElementById("user_opt_combo").style.display="block"    
+                document.getElementById("change_period").innerHTML = "Hide"
             }else{
                 document.getElementById("user_opt_combo").style.display="none"            
+                document.getElementById("change_period").innerHTML = "Change"
             }
         }
 
@@ -117,6 +119,7 @@
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <div><a style="font-size: 15px" href="{% url 'myprofile' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> My Profile</a></div>
+                        <div><a style="font-size: 15px" href="{% url 'changepassword' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> Change Password</a></div>
                         <button type="submit" name='logout' value="Submit" class="btn btn-link btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="3"> Logout</font></button> 
                       </div>
                     </li>
@@ -481,10 +484,10 @@
                                         <b><i style="font-size: 14px;" class="fas fa-calendar-alt"></i></b>
                                         {% if user_opt %}
                                             {{user_opt}}
-                                            <button class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
+                                            <button id="change_period" class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
                                         {% else %}
                                             {{from_to_date}} 
-                                            <button class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
+                                            <button id="change_period" class="btn btn-info btn-xs" type="button" onclick="enable_combo()">Change</button>
                                         {% endif %}
                                     </span>
                                     <div id="user_opt_combo" class="input-group mb-2" style="display: none;">

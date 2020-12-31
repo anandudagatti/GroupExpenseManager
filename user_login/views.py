@@ -68,6 +68,15 @@ def myprofile(request):
     return render(request, 'myprofile.html', {"firstname":firstname,"lastname":lastname,"email":email, "cur_view":cur_view})
 
 @csrf_exempt
+@login_required(login_url='home')
+def changepassword(request):
+    user = request.user.username
+    cur_view = request.session.get('cur_view')
+    logmsg = "Rendering Change Password For User"+str(user)
+    logging.info(logmsg)
+    return render(request, 'password_change.html', {"cur_view":cur_view})
+
+@csrf_exempt
 def signup(request):       
     if request.POST.get('sign-up'):
         logmsg = "singup view: Rendering singup page"
@@ -228,6 +237,7 @@ def authentication(request):
         info = "User Logged Out Successfully!"
         messages.success(request,info)
         return render(request, 'login.html')
+
 
 @csrf_exempt
 @login_required(login_url='home')
