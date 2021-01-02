@@ -72,8 +72,30 @@ def myprofile(request):
 def changepassword(request):
     user = request.user.username
     cur_view = request.session.get('cur_view')
-    logmsg = "Rendering Change Password For User"+str(user)
+    logmsg = "Rendering Change Password For User :"+str(user)
     logging.info(logmsg)
+    if request.POST.get('changepass_submit'):
+        exist_password = request.POST.get('exist_password')
+        password = request.POST.get('password')
+        user = authenticate(request, username=user, password=exist_password)
+        if user is not None:
+            cur_user =  User.objects.get(username=user)
+            cur_user.set_password(password)
+            cur_user.save()
+            login(request, user)
+            authentication='Success'
+            logging.debug("Authentication : %s",authentication)
+            logmsg = "Password Change Successfull!"
+            messages.success(request,logmsg)
+            logging.info(logmsg)
+        else:
+            authentication='Failed'
+            logging.debug("Authentication : %s",authentication)
+            logmsg = "Existing password did not match!"
+            messages.error(request,logmsg)
+            logging.info(logmsg)
+
+        return render(request, 'password_change.html', {"cur_view":cur_view})
     return render(request, 'password_change.html', {"cur_view":cur_view})
 
 @csrf_exempt
@@ -445,14 +467,15 @@ def account(request):
             else:
                 info = 'Invalid User to Edit Transaction!'
                 messages.error(request,info)
-
+    cur_view = request.session.get('cur_view')
     return render(request,'account.html', {"userid":fullname, "logintype":login_type.capitalize(), 
                 "per_header":per_header, "per_rows":per_rows, "group_header":group_header,"group_rows":group_rows,
                 "trans_header":trans_header,"trans_rows":trans_rows, "grouplist":grouplist,
                 "group_user_exp":user_exp_summary, "user_opt":user_opt, "sel_group":sel_group,
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date, 'group_exp_by_category': group_exp_by_category, 
-                'personal_exp_by_category': personal_exp_by_category,"group_exp_by_users":group_exp_by_users})
+                'personal_exp_by_category': personal_exp_by_category, "cur_view":cur_view,
+                "group_exp_by_users":group_exp_by_users})
 
 @csrf_exempt
 @login_required(login_url='home')
@@ -559,10 +582,10 @@ def nogroup_account(request):
 
         mini_trans_summary = Get_Mini_Tran_Summary(trans_rows)
         personal_exp_by_category = Get_Category_Sum_For_PieChart("Personal Expenses",request)
-
+    cur_view = request.session.get('cur_view')
     return render(request,'nogroup_account.html', {"userid":fullname, "logintype":login_type.capitalize(),"from_to_date": from_to_date, 
                 "per_header":per_header, "per_rows":per_rows, "trans_header":trans_header,"trans_rows":trans_rows, 
-                "mini_trans_summary":mini_trans_summary, 'personal_exp_by_category': personal_exp_by_category})
+                "mini_trans_summary":mini_trans_summary, 'personal_exp_by_category': personal_exp_by_category, "cur_view":cur_view,})
 
 @csrf_exempt
 @login_required(login_url='home')
