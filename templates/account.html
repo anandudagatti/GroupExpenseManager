@@ -788,13 +788,13 @@
     <a class="circle-div" onclick="showlinks()">
         <i id="circle-btn" class="fas fa-plus" style="color: white; font-size: 20px;"></i>
     </a>
-    <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;">
+    <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;" data-toggle="tooltip" title="Add Personal Income">
         <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
     </a>
-    <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;">
+    <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;"  data-toggle="tooltip" title="Add Personal Expenses">
         <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
     </a>
-    <a id="group-exp" href="{% url 'group_expenses' %}" class="group-exp-circle" style="display: none;">
+    <a id="group-exp" href="{% url 'group_expenses' %}" class="group-exp-circle" style="display: none;"  data-toggle="tooltip" title="Add Group Income">
         <span style="font-size: 13px;"><i class="fas fa-users"></i> <i class="fas fa-rupee-sign"></i></span>
     </a>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>

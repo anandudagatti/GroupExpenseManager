@@ -105,6 +105,7 @@
                       </a>
                       <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <div><a style="font-size: 15px" href="{% url 'ngmyprofile' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> My Profile</a></div>
+                        <div><a style="font-size: 15px" href="{% url 'changepassword' %}"><i style="color: white; font-size: 15px" class="far fa-id-card"></i> Change Password</a></div>
                         <button type="submit" name='logout' value="Submit" class="btn btn-link btn-sm" onclick="LoadMain()"><i class="fas fa-sign-in-alt"></i><font size="3"> Logout</font></button> 
                       </div>
                     </li>
@@ -558,10 +559,10 @@
     <a class="circle-div" onclick="showlinks()">
         <i id="circle-btn" class="fas fa-plus" style="color: white; font-size: 20px;"></i>
     </a>
-    <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;">
+    <a id="pers-inc" href="{% url 'incomes' %}" class="per-inc-circle" style="display: none;"  data-toggle="tooltip" title="Add Personal Income">
         <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
     </a>
-    <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;">
+    <a id="pers-exp" href="{% url 'personal_expenses' %}" class="per-exp-circle" style="display: none;"  data-toggle="tooltip" title="Add Personal Expense">
         <span style="font-size: 13px;"><i class="fas fa-user"></i> <i class="fas fa-rupee-sign"></i></span>
     </a>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
