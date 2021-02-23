@@ -605,11 +605,17 @@ def Get_Group_User_Exp(group_name,from_date,to_date):
     result = cur.fetchall()
     
     userlist = []
-    exp_list =[]
+    exp_list = []
+    percent_list = []
     for r in result:
         userlist.append(Get_FirstName_of_User(r[0]))
         exp_list.append(r[1])
-    dictionary = {'user':userlist, 'expenses':exp_list}
+    total_exp = sum(exp_list)
+    for r in result:
+        perc = round((r[1]/total_exp)*100,2)
+        percent_list.append(perc)
+    
+    dictionary = {'user':userlist, 'expenses':exp_list, 'percent':percent_list}
     return dictionary
 
 def Get_Group_User_Exp_Summary(group_name, request):

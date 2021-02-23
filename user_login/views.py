@@ -368,6 +368,7 @@ def account(request):
     
     # Set header for both Group Expense Summary & Group Expense: User Wise Summary
     group_header = ['Total','Expense']
+    group_header_user = ['Total','Expense','Exp. in %']
 
     # Get data for Group Expense Summary
     group_rows = Get_Group_Exp_Summary(sel_group)
@@ -415,6 +416,7 @@ def account(request):
         request.session['user-date'] = user_sel_date
         from_to_date = request.session.get('user-date')
         group_user_exp = Get_Group_User_Exp_Summary(sel_group, request)
+        print(group_user_exp)
         user_exp_summary=group_user_exp[3]
 
     # Reset account page to default view.
@@ -475,7 +477,7 @@ def account(request):
                 "category_summary":category_summary, "mini_trans_summary":mini_trans_summary,
                 "from_to_date": from_to_date, 'group_exp_by_category': group_exp_by_category, 
                 'personal_exp_by_category': personal_exp_by_category, "cur_view":cur_view,
-                "group_exp_by_users":group_exp_by_users})
+                "group_exp_by_users":group_exp_by_users, 'group_header_user':group_header_user})
 
 @csrf_exempt
 @login_required(login_url='home')

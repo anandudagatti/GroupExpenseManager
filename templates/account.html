@@ -520,7 +520,7 @@
                                     <table class="table table-sm group-summary-user">
                                         <thead>
                                             <tr style="text-align: left">
-                                                {% for k in group_header %}
+                                                {% for k in group_header_user %}
                                                 <th>{{k}}</th>
                                                 {% endfor %}
                                             </tr>
@@ -532,11 +532,16 @@
                                                         <i><p>&nbsp;&nbsp;&nbsp;{{usrid}}</p></i>
                                                     {% endfor %}
                                                 </td>
-                                                <td style="width: 11%;">
+                                                <td style="width: 25%;">
                                                     {% for exp in group_user_exp.expenses %}
                                                         <p style="width: 50%; color: red" align="right">{{exp}}</p>
                                                     {% endfor %}
                                                 </td>
+                                                <td style="width: 25%;">
+                                                    {% for perc in group_user_exp.percent %}
+                                                        <p style="width: 60%; color: red" align="right">{{perc}}%</p>
+                                                    {% endfor %}
+                                                </td>                                                
                                             </tr>   
                                         </tbody>
                                     </table><br>
