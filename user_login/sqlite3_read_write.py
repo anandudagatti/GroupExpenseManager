@@ -614,8 +614,25 @@ def Get_Group_User_Exp(group_name,from_date,to_date):
     for r in result:
         perc = round((r[1]/total_exp)*100,2)
         percent_list.append(perc)
+    try:
+        avg_spend = sum(exp_list)/len(exp_list) 
+    except:
+        avg_spend = 0
+
+    contrib_list = []
+    i = 0
+    for exp in exp_list:
+        contrib = exp-avg_spend
+        if contrib<0:
+            mask_contrib = '{:,.2f}'.format(abs(contrib))
+            contrib_list.append(userlist[i]+" has to contribute ₹"+str(mask_contrib)+" to the common pool")
+        else:
+            mask_contrib = '{:,.2f}'.format(contrib)
+            contrib_list.append(userlist[i]+" has to withdraw ₹"+str(mask_contrib)+" from the common pool")
+        i=i+1
+
+    dictionary = {'user':userlist, 'expenses':exp_list, 'percent':percent_list, 'contrib_list':contrib_list}
     
-    dictionary = {'user':userlist, 'expenses':exp_list, 'percent':percent_list}
     return dictionary
 
 def Get_Group_User_Exp_Summary(group_name, request):

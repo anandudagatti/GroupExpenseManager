@@ -545,6 +545,8 @@
                                             </tr>   
                                         </tbody>
                                     </table><br>
+                                    <button data-placement="top" title="Settlement" data-toggle="modal" data-target="#settle-spend"
+                                     id="setle-btn-mini" class="btn btn-xs" onclick="" type="button" value="">Split Expense Equally by Settling Up</button>
                                 </div>
                             </div>
                         </div>
@@ -785,6 +787,31 @@
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-secondary" data-dismiss="modal">No</button>
                         <input type="submit" name="delete-btn" value="Yes" class="btn btn-primary"></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form id="model-form-navbar" method="POST">
+        <div id="settle-spend" class="modal fade" tabindex="2" role="dialog" aria-labelledby="settle-spend" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="settle">Settle Up</h5>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            {% if group_user_exp.contrib_list %}
+                            {% for c in group_user_exp.contrib_list %}
+                            <li class="list-group-item">{{c}}</li>
+                            {% endfor %}
+                            {%else%}
+                            <div>Nothing to display</div>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-secondary" data-dismiss="modal">OK</button>
                     </div>
                 </div>
             </div>
