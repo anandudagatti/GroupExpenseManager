@@ -364,7 +364,7 @@ def account(request):
 
     # Get data for Personal Expense Summary
     per_header = ['Total','Income','Expense']
-    per_rows = Get_Personal_Exp_Summary(userid)
+    per_rows = Get_Personal_Exp_Summary(userid,from_to_date)
     
     # Set header for both Group Expense Summary & Group Expense: User Wise Summary
     group_header = ['Total','Expense']
