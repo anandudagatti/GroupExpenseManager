@@ -4,8 +4,9 @@ body, html {
     margin: 0px;
     padding: 0px;
     overflow-x: hidden;
-    /* The image used */
-    background-image: url("/static/background-5.jpg");
+    /* The image used 
+    background-image: url("/static/background-5.jpg");*/
+    background-color: whitesmoke;
   
     /* Center and scale the image nicely */
     background-position: center;
