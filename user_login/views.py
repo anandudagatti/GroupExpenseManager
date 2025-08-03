@@ -577,7 +577,7 @@ def nogroup_account(request):
         logging.info(logmsg)
 
         per_header = ['Total','Income','Expense']
-        per_rows = Get_Personal_Exp_Summary(userid)
+        per_rows = Get_Personal_Exp_Summary(userid,from_to_date)
             
         trans_header = ['Edit', 'Date', 'User', 'Group Name', 'Category', 'Sub Category', 'Payee', 'Payement Method', 'Amount']
         trans_rows = Get_Transaction_Summary(request,"Non Group",userid)
