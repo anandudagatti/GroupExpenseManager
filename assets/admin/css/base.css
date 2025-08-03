@@ -975,9 +975,34 @@ table#change-history tbody th {
 }
 
 .popup #container {
-    min-width: 0;
+    min-width: 5;
 }
 
 .popup #header {
     padding: 10px 20px;
 }
+
+.user-dropdown-menu {
+    z-index: 2000 !important;
+    position: absolute !important;
+    right: 0;
+    top: 100%;
+    background-color: #343a40;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 180px;
+  }
+  
+  .user-dropdown-menu a,
+  .user-dropdown-menu button {
+    color: white !important;
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+  
+  .navbar-nav {
+    position: relative;
+  }
+  
+
