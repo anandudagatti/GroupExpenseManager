@@ -13,7 +13,11 @@ body, html {
     /*background-repeat: no-repeat;*/
     background-size: cover;
   }
-  
+  .rounded-square {
+    border-radius: 8px; /* Adjust for desired corner roundness */
+    object-fit: cover;
+  }
+
   .filter-reset{
     margin-left:5px;
   }

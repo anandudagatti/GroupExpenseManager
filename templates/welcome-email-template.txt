@@ -6,4 +6,4 @@ Link: https://groupexpensemanager.pythonanywhere.com/
 Reply to this email if you have any questions. We are here to help you!
 
 Best Regards,
-Team Group Expense Manager
+Team JointPocket
