@@ -2,7 +2,7 @@ asgiref==3.7.2
 backports.entry-points-selectable==1.2.0
 Django==3.2.25
 django-crispy-forms==2.0
-importlib-metadata==8.7.0
+importlib-metadata==4.7.1
 numpy==1.21.6
 pandas==1.1.5
 pygal==3.0.1
