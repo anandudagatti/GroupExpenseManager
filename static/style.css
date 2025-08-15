@@ -92,12 +92,17 @@ body, html {
     opacity: .95;
   }
 
-.add-user{
-  width: 380px;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+
+.add-user {
+    max-width: 600px;         /* keeps it from stretching too wide */
+    margin: 40px auto;        /* 40px gap below navbar + horizontal centering */
+    padding: 20px;            /* space inside card */
+    position: relative;       /* stays in document flow */
+}
+
+
+.add-user table {
+      width: auto;            /* fit table width to content */
   }
 
   th, td, select   {

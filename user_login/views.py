@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import Group
 from django.db import IntegrityError
+from django.urls import reverse
 import json
 import logging
 from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category, Get_SubCategoryTable, \
@@ -17,7 +18,7 @@ from user_login.sqlite3_read_write import Get_Income_Category, Get_Exp_Category,
     Insert_Payee,Get_Categorywise_Summary,Get_Mini_Tran_Summary,Get_Transaction_By_Id, Edit_Transaction, \
     Get_Category_Sum_For_PieChart,Insert_Payer,Get_User_Exp_For_PieChart, Update_UserDate_to_SessionMaster, \
     Get_FromToDate_From_SessionID,password_check, Delete_Transaction_By_Id, Delete_Expired_Session_Data, \
-    Get_Total_Cash_Balance    
+    Get_Total_Cash_Balance,Get_User_list    
 from datetime import datetime
 import calendar
 from django.views.generic import CreateView
@@ -150,13 +151,17 @@ def signup(request):
         logmsg = "Successfully signed up!, Login to start adding expenses."
         logging.info(logmsg)
         messages.success(request,logmsg)
-        send_mail(
-            subject = "Welcome to Group Expense Manger",
-            message = temp_msg,
-            from_email = "groupexpensemanager@gmail.com",
-            recipient_list = [email,],
-            fail_silently = False,
-        )
+        try:
+            send_mail(
+                subject = "Welcome to Group Expense Manger",
+                message = temp_msg,
+                from_email = "groupexpensemanager@gmail.com",
+                recipient_list = [email,],
+                fail_silently = False,
+            )
+        except:
+            pass
+            
 
     return render(request, 'signup.html')
 
@@ -596,14 +601,26 @@ def admin(request):
     logmsg = "admin view: Rendering admin page"
     logging.info(logmsg)
     userid = request.session.get('userid')
-    logmsg = 'session id'+str(request.session.get('sessionid'))
+    logmsg = 'session id' + str(request.session.get('sessionid'))
     logging.info(logmsg)
     login_type = request.session.get('login_typ')
-    get_groups = request.user.groups.values_list('name',flat = True) # QuerySet Object
-    grouplist = list(get_groups) 
-    if (userid!=None and auth_type=='admin'):
+
+    get_groups = request.user.groups.values_list('name', flat=True)  # QuerySet Object
+    grouplist = list(get_groups)
+
+    # Ensure single-element tuple keeps the trailing comma
+    if len(grouplist) == 1:
+        groups_tuple = f"('{grouplist[0]}')"   # ('Banglore_Home')
+    else:
+        groups_tuple = tuple(grouplist)        # ('Banglore_Home', 'second_value')
+
+    print(groups_tuple)
+    user_groups = Get_User_list(groups_tuple)
+    print(user_groups)
+
+    if userid is not None and auth_type == 'admin':
         if request.POST.get('logout'):
-            logmsg = "Admin logout by: "+str(userid)
+            logmsg = "Admin logout by: " + str(userid)
             logging.info(logmsg)
 
             try:
@@ -612,46 +629,71 @@ def admin(request):
             except KeyError:
                 pass
             info = "User Logged Out Successfully!"
-            messages.success(request,info)
+            messages.success(request, info)
             return redirect('home')
+
         elif request.POST.get('add-user'):
             sel_group = request.POST.get('group_name')
             new_user = request.POST.get('newuserid')
             fullname = request.user.get_full_name()
+
             try:
                 uid = User.objects.get(username=new_user).id
-                my_group = Group.objects.get(name=sel_group) 
+                my_group = Group.objects.get(name=sel_group)
                 my_group.user_set.add(uid)
                 permissions_list = Permission.objects.all()
                 my_group.permissions.set(permissions_list)
-                logmsg="User added successfully!!"
-                errorvalue=""
+                request.session['info_msg'] = "User added successfully!!"
+                request.session['error_msg'] = ""
             except:
-                logmsg=""
-                errorvalue="User already exist!!"
-            return render(request, 'admin.html',{"info":logmsg, "errorvalue":errorvalue, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+                request.session['info_msg'] = ""
+                request.session['error_msg'] = "User already exist!!"
+
+            # Save the selected group so dropdown stays the same after reload
+            request.session['selected_group'] = sel_group
+
+            return redirect(reverse('admin'))
+
         elif request.POST.get('remove-user'):
             sel_group = request.POST.get('group_name')
             sel_user = request.POST.get('newuserid')
             fullname = request.user.get_full_name()
-            my_group = Group.objects.get(name=sel_group) 
+            my_group = Group.objects.get(name=sel_group)
             uid = User.objects.get(username=sel_user).id
+
             try:
                 if User.objects.filter(pk=uid, groups__name=sel_group).exists():
                     my_group.user_set.remove(uid)
-                    logmsg="User removed successfully!!"
-                    errorvalue=""
+                    request.session['info_msg'] = "User removed successfully!!"
+                    request.session['error_msg'] = ""
                 else:
-                    logmsg=""
-                    errorvalue="User doesn't exist!!"
+                    request.session['info_msg'] = ""
+                    request.session['error_msg'] = "User doesn't exist!!"
             except:
-                logmsg=""
-                errorvalue="User doesn't exist!!"
-            return render(request, 'admin.html',{"info":logmsg, "errorvalue":errorvalue, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+                request.session['info_msg'] = ""
+                request.session['error_msg'] = "User doesn't exist!!"
+
+            # Keep selected group after reload
+            request.session['selected_group'] = sel_group
+
+            return redirect(reverse('admin'))
+
         else:
-            logmsg=""
+            logmsg = request.session.pop('info_msg', "")
+            errorvalue = request.session.pop('error_msg', "")
+            selected_group = request.session.pop('selected_group', grouplist[0] if grouplist else "")
+
             fullname = request.user.get_full_name()
-            return render(request, 'admin.html',{"info":logmsg, "userid":fullname, "grouplist":grouplist, "logintype":login_type.capitalize()})
+            return render(request, 'admin.html', {
+                "info": logmsg,
+                "errorvalue": errorvalue,
+                "userid": fullname,
+                "grouplist": grouplist,
+                "selected_group": selected_group,
+                "user_groups": user_groups,
+                "logintype": login_type.capitalize()
+            })
+
     else:
         try:
             logout(request)
@@ -659,7 +701,7 @@ def admin(request):
         except KeyError:
             pass
         info = "User Logged Out Successfully!"
-        messages.success(request,info)
+        messages.success(request, info)
         return redirect('home')
 
 @csrf_exempt

@@ -596,6 +596,19 @@ def Get_FirstName_of_User(username):
 
     return FirstName
 
+def Get_User_list(groups_tuple):
+    conn = sqlite3.connect("db.sqlite3")
+    with conn:
+        cur = conn.cursor() 
+    dictionary = {}
+    query = """SELECT username, first_name, last_name, 
+            ag.name as group_name from auth_user as au
+            JOIN auth_user_groups aug on au.id=aug.user_id
+            JOIN auth_group ag on aug.group_id=ag.id WHERE group_name in {} """.format(groups_tuple)
+    cur.execute(query)
+    result = cur.fetchall() 
+    return result
+
 def Get_Group_User_Exp(group_name,from_date,to_date):
     conn = sqlite3.connect("db.sqlite3")
     with conn:
